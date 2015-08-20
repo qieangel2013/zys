@@ -1,5 +1,30 @@
-yaf项目快速开发，集成了db操作类支持链式操作，支持pdo，mysqli，mongo，upload操作，加入redis操作以及微信分享，随后会加入微信支付
+yaf项目快速开发，集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，加入redis操作以及微信分享，随后会加入微信支付
 ===================================
+###db操作类读写分离配置如下：
+	;数据库驱动类型
+	database.config.type='mysql'
+	;服务器地址
+	database.config.host='192.168.0.1,192.168.0.2'
+	;数据库名
+	database.config.name='root'
+	;用户名
+	database.config.user='user1,user2'
+	;密码
+	database.config.pwd='pwd1,pwd2'
+	;端口
+	database.config.port= '3306'
+	;启用字段缓存
+	database.config.fields_cache=false
+	;数据库编码默认采用utf8
+	database.config.charset='UTF-8'
+	;数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)
+	database.config.deploy_type=1
+	;数据库读写是否分离 主从式有效
+	database.config.rw_separate=true
+	;读写分离后 主服务器数量
+	database.config.master_num=1
+	;指定从服务器序号
+	database.config.slave_no=''
 ###db操作类使用方法如下：
 	  $where=array('id' =>37936);
    	  $user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
