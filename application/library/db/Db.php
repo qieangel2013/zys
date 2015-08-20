@@ -39,6 +39,7 @@ class db_Db {
     // 参数绑定
     protected $bind       = array();
 
+    protected static $_instance =   array();
     /**
      * 取得数据库类实例
      * @static
@@ -46,7 +47,6 @@ class db_Db {
      * @return mixed 返回数据库驱动类
      */
     public static function getInstance($db_config='') {
-		static $_instance	=	array();
 		$config_str=$db_config;
 		if (is_object($config_str) && function_exists('spl_object_hash')) {
          		$guid= spl_object_hash($config_str);
@@ -56,11 +56,11 @@ class db_Db {
         	$config_str = serialize($config_str);
     	}
    		$guid= md5($config_str);
-		if(!isset($_instance[$guid])){
+		if(!isset(self::$_instance[$guid])){
 			$obj	=	new db_Db();
-			$_instance[$guid]	=	$obj->factory($db_config);
+			self::$_instance[$guid]	=	$obj->factory($db_config);
 		}
-		return $_instance[$guid];
+		return self::$_instance[$guid];
     }
 	
     /**
