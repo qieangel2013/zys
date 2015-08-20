@@ -31,4 +31,4 @@ yaf项目快速开发，集成了db操作类支持链式操作，支持pdo，mys
         $data['timestamp']=$signPackage['timestamp'];
         $data['signature']=$signPackage['signature'];
         $this->getView()->assign("token", json_encode($data));
-### 以上具体的使用方法，控制器里都有，随后会加入更多更能，有什么问题可以及时联系我 qieangel@hotmail.com
+### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
