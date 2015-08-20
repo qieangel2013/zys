@@ -2,7 +2,8 @@
 	yaf project rapid development, integration of the db action class support chain operation,
 	support separate read and write, pdo, mysqli, mongo, upload operation,
 	adding redis operations and weixin sharing, will then join weixin pay
-	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，加入redis操作以及微信分享，随后会加入微信支付
+	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
+	加入redis操作以及微信分享，随后会加入微信支付
 ===================================
 ###db操作类读写分离配置如下：
 	;数据库驱动类型
