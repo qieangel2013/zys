@@ -1,7 +1,7 @@
 yaf项目快速开发，集成了db操作类支持链式操作，支持pdo，mysqli，mongo，upload操作，加入redis操作以及微信分享，随后会加入微信支付
 ===================================
 ###db操作类使用方法如下：
-          $where=array('id' =>37936);
+       	  $where=array('id' =>37936);
    	  $user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 	  $result = $user->where($where)->select();//支持链式操作，支持pdo，mysqli，mongo
 	  echo $user->getlastsql();
