@@ -85,7 +85,7 @@
             $unifiedOrder->setParameter("body", "test"); //商品描述
             $unifiedOrder->setParameter("out_trade_no", "1111111111"); //商户订单号 
             $unifiedOrder->setParameter("total_fee", "0101"); //总金额 $total
-            $unifiedOrder->setParameter("notify_url", WxPayConf_pub::NOTIFY_URL); //通知地址 
+            $unifiedOrder->setParameter("notify_url", wx_pay_config::NOTIFY_URL); //通知地址 
             $unifiedOrder->setParameter("trade_type", "JSAPI"); //交易类型
             $unifiedOrder->setParameter("openid", $openid); //用户标识
             $prepay_id = $unifiedOrder->getPrepayId();
