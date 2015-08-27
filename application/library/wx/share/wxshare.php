@@ -1,5 +1,5 @@
 <?php
-class JSSDK {
+class wx_share_wxshare {
   private $appId;
   private $appSecret;
 

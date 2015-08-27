@@ -143,7 +143,7 @@ class IndexController extends Yaf_Controller_Abstract {
 	}
 	public function shareAction() {
         //微信分享
-        $jssdk = new JSSDK("你的appId", "你的appSecret");
+        $jssdk = new wx_share_wxshare("你的appId", "你的appSecret");
         $signPackage = $jssdk->GetSignPackage();
         $data['appId']=$signPackage['appId'];
         $data['nonceStr']=$signPackage['nonceStr'];
@@ -168,7 +168,7 @@ class IndexController extends Yaf_Controller_Abstract {
 	}
 	public function buyAction() {
         //微信分享
-        $jssdk = new JSSDK("你的appId", "你的appSecret");
+        $jssdk = new wx_share_wxshare("你的appId", "你的appSecret");
         $signPackage = $jssdk->GetSignPackage();;
         $data['appId']=$signPackage['appId'];
         $data['nonceStr']=$signPackage['nonceStr'];
