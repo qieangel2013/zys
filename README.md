@@ -3,7 +3,7 @@
 	support separate read and write, pdo, mysqli, mongo, upload operation,
 	adding redis operations and weixin sharing, will then join weixin pay
 	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
-	加入redis操作以及微信分享，随后会加入微信支付
+	加入redis操作以及微信分享，加入微信支付
 ===================================
 ###db操作类读写分离配置如下：
 	;数据库驱动类型
@@ -61,4 +61,34 @@
         $data['timestamp']=$signPackage['timestamp'];
         $data['signature']=$signPackage['signature'];
         $this->getView()->assign("token", json_encode($data));
+###微信支付操作使用方法如下：（具体操作在weixin控制器里）  
+	$jsApi = new wx_pay_JsApi();
+        $oid=123;//订单id
+        $userid=456;//用户id
+        $wx_openid='';//微信授权id
+        if(empty($wx_openid)){
+            if (!isset($_GET['code'])) {
+                $url = wx_pay_config::JS_API_CALL_URL;
+                $url = str_replace('%oid%', $oid, $url);
+                $url = str_replace('%uid%', $userid, $url);
+                $url = $jsApi->createOauthUrlForCode($url);
+                Header("Location: $url");
+                } else {
+                $code = $_GET['code'];
+                $jsApi->setCode($code);
+                $openid = $jsApi->getOpenId();
+                }            
+            }else{
+                $openid = $wx_openid;
+            }
+            $unifiedOrder = new wx_pay_UnifiedOrder();
+            $unifiedOrder->setParameter("body", "test"); //商品描述
+            $unifiedOrder->setParameter("out_trade_no", "1111111111"); //商户订单号 
+            $unifiedOrder->setParameter("total_fee", "0101"); //总金额 $total
+            $unifiedOrder->setParameter("notify_url", WxPayConf_pub::NOTIFY_URL); //通知地址 
+            $unifiedOrder->setParameter("trade_type", "JSAPI"); //交易类型
+            $unifiedOrder->setParameter("openid", $openid); //用户标识
+            $prepay_id = $unifiedOrder->getPrepayId();
+            $jsApi->setPrepayId($prepay_id);
+            $jsApiParameters = $jsApi->getParameters();
 ### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
