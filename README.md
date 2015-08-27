@@ -54,7 +54,7 @@
             }
 ###微信分享操作使用方法如下：
             //微信分享
-        $jssdk=new JSSDK("你的appId", "你的appSecret");
+        $jssdk=new wx_share_wxshare("你的appId", "你的appSecret");
         $signPackage=$jssdk->GetSignPackage();;
         $data['appId']=$signPackage['appId'];
         $data['nonceStr']=$signPackage['nonceStr'];
