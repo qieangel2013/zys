@@ -91,7 +91,7 @@
             $prepay_id = $unifiedOrder->getPrepayId();
             $jsApi->setPrepayId($prepay_id);
             $jsApiParameters = $jsApi->getParameters();
- ###swoole操作使用方法如下：
+###swoole操作使用方法如下：
 		根目录下有server集成了swoole服务端<br/>
  		HttpServer.php<br/>
  		TaskServer.php<br/>
