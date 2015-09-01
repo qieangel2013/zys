@@ -3,7 +3,7 @@
 	support separate read and write, pdo, mysqli, mongo, upload operation,
 	adding redis operations and weixin sharing, will then join weixin pay
 	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
-	加入redis操作以及微信分享，加入微信支付
+	加入redis操作以及微信分享，加入微信支付，加入swoole的支持（暂时还没开发完）
 ===================================
 ###db操作类读写分离配置如下：
 	;数据库驱动类型
@@ -21,7 +21,7 @@
 	;启用字段缓存
 	database.config.fields_cache=false
 	;数据库编码默认采用utf8
-	database.config.charset='UTF-8'
+	database.config.charset='utf8'
 	;数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)
 	database.config.deploy_type=1
 	;数据库读写是否分离 主从式有效
@@ -91,4 +91,31 @@
             $prepay_id = $unifiedOrder->getPrepayId();
             $jsApi->setPrepayId($prepay_id);
             $jsApiParameters = $jsApi->getParameters();
+ ###swoole操作使用方法如下： 
+ 	    根目录下有server集成了swoole服务端
+ 	    HttpServer.php
+ 	    TaskServer.php
+ 	    TCPServer.php
+ 	    WebSocketServer.php
+ 	    客户端的调用在library/swoole里
+ 	    控制器的调用如下：
+ 	    public function swoolehttpAction(){
+        	$ch = curl_init(); 
+        	// 设置URL和相应的选项 
+        	curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:9501"); //如果要用httpserver ，把端口改成80
+        	curl_setopt($ch, CURLOPT_HEADER, 0); 
+        	curl_setopt($ch, CURLOPT_POST, 1); //设置为POST方式 
+        	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
+        	curl_setopt($ch, CURLOPT_POSTFIELDS, array('test' => 'zqf'));//POST数据 
+        	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        	$return =curl_exec($ch);
+        	curl_close($ch);
+        	print_r(json_decode($return,true));
+        	exit;
+    		}
+    	     public function swooletcpAction(){
+		 $tcp_con=new swoole_tcp();
+		 exit;
+    	    }
+ 	    
 ### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
