@@ -7,9 +7,11 @@
 class IndexController extends Yaf_Controller_Abstract {
 	public function init() {
 		$this->_req = $this->getRequest();
+        ini_set("display_errors", "On");
+        error_reporting(E_ALL | E_STRICT);
 	}
 	public function indexAction() {
-		$where=array('id' =>37936);
+    	$where=array('id' =>37936);
    		$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		$result = $user->where($where)->select();
 		echo $user->getlastsql();
@@ -203,5 +205,23 @@ class IndexController extends Yaf_Controller_Abstract {
      private function create_unique() {
         $data = substr(date("ymdHis"), 2, 8) . mt_rand(100000, 999999);
         return $data;
+    }
+    public function swoolehttpAction(){
+        $ch = curl_init(); 
+        // 设置URL和相应的选项 
+        curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:9501"); //如果要用httpserver ，把端口改成80
+        curl_setopt($ch, CURLOPT_HEADER, 0); 
+        curl_setopt($ch, CURLOPT_POST, 1); //设置为POST方式 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array('test' => 'zqf'));//POST数据 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $return =curl_exec($ch);
+        curl_close($ch);
+        print_r(json_decode($return,true));
+        exit;
+    }
+    public function swooletcpAction(){
+       $tcp_con=new swoole_tcp();
+       exit;
     }
 }
