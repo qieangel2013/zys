@@ -92,8 +92,8 @@
             $jsApi->setPrepayId($prepay_id);
             $jsApiParameters = $jsApi->getParameters();
 ###swoole操作使用方法如下：
-		根目录下有server集成了swoole服务端 
- 		HttpServer.php 
+		根目录下有server集成了swoole服务端 (后台运行直接php执行)
+ 		HttpServer.php （linux环境下直接执行php HttpServer.php）
  		TaskServer.php 
  		TCPServer.php 
  		WebSocketServer.php 
