@@ -91,14 +91,14 @@
             $prepay_id = $unifiedOrder->getPrepayId();
             $jsApi->setPrepayId($prepay_id);
             $jsApiParameters = $jsApi->getParameters();
- ###swoole操作使用方法如下： 
- 	    根目录下有server集成了swoole服务端
- 	    HttpServer.php
- 	    TaskServer.php
- 	    TCPServer.php
- 	    WebSocketServer.php
- 	    客户端的调用在library/swoole里
- 	    控制器的调用如下：
+ ###swoole操作使用方法如下：<br/>
+		根目录下有server集成了swoole服务端<br/>
+ 		HttpServer.php<br/>
+ 		TaskServer.php<br/>
+ 		TCPServer.php<br/>
+ 		WebSocketServer.php<br/>
+		客户端的调用在library/swoole里<br/>
+### 控制器的调用如下：
  	    public function swoolehttpAction(){
         	$ch = curl_init(); 
         	// 设置URL和相应的选项 
@@ -113,9 +113,9 @@
         	print_r(json_decode($return,true));
         	exit;
     		}
-    	     public function swooletcpAction(){
-		 $tcp_con=new swoole_tcp();
-		 exit;
-    	    }
+    		public function swooletcpAction(){
+			$tcp_con=new swoole_tcp();
+			exit;
+    	 	}
  	    
 ### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
