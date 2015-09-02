@@ -8,10 +8,10 @@ class HttpServer
 		$http = new swoole_http_server("0.0.0.0", 9501);
 		$http->set(
 			array(
-				'worker_num' => 16,
-				'daemonize' => true,
-	            'max_request' => 10000,
-	            'dispatch_mode' => 1
+			'worker_num' => 16,
+			'daemonize' => true,
+	            	'max_request' => 10000,
+	            	'dispatch_mode' => 1
 			)
 		);
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
@@ -28,7 +28,7 @@ class HttpServer
 			try {
 				$yaf_request = new Yaf_Request_Http($ser['request_uri']);
 				$yaf_request->setBaseUri($hea['host']);
-			    $this->application->getDispatcher()->dispatch($yaf_request);
+			    	$this->application->getDispatcher()->dispatch($yaf_request);
 			} catch ( Yaf_Exception $e ) {
 				//var_dump( $e );
 			}
