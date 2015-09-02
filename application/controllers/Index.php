@@ -207,18 +207,13 @@ class IndexController extends Yaf_Controller_Abstract {
         return $data;
     }
     public function swoolehttpAction(){
-        $ch = curl_init(); 
-        // 设置URL和相应的选项 
-        curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:9501"); //如果要用httpserver ，把端口改成80
-        curl_setopt($ch, CURLOPT_HEADER, 0); 
-        curl_setopt($ch, CURLOPT_POST, 1); //设置为POST方式 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('test' => 'zqf'));//POST数据 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $return =curl_exec($ch);
-        curl_close($ch);
-        print_r(json_decode($return,true));
-        exit;
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $where=array('id' =>37936);
+        $user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
+        $result = $user->where($where)->select();
+        //echo $user->getlastsql();
+        // echo json_encode( $result);
+         echo json_encode( $where);//返回结果{"id":37936
     }
     public function swooletcpAction(){
        $tcp_con=new swoole_tcp();
