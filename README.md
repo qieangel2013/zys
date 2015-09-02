@@ -105,11 +105,7 @@
         		$result = $user->where($where)->select();
         		//echo $user->getlastsql();
         		// echo json_encode( $result);
-         		echo json_encode( $where);//返回结果{"id":37936｝
+         		echo json_encode( $where);//通过swoole返回给浏览器结果{"id":37936｝
     		}
-    		public function swooletcpAction(){
-			$tcp_con=new swoole_tcp();
-			exit;
-    	 	}
  	    
 ### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
