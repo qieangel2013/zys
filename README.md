@@ -107,7 +107,7 @@
         		// echo json_encode( $result);
          		echo json_encode( $where);//通过swoole返回给浏览器结果{"id":37936｝
     		}
- ###swoole作为websocket_server操作使用方法如下：
+###swoole作为websocket_server操作使用方法如下：
 		根目录下有server集成了swoole服务端 (后台运行直接php执行)
  		WebSocketServer.php （linux环境下直接执行php WebSocketServer.php）
  		websocket_server实现原理是把swoole作为websocket服务器，然后通过php-cli把参数传给
@@ -118,7 +118,7 @@
          		Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         		$this->getView()->display("index/swoolesocket.html");
     		}
-    		html请求websocket
+###html请求websocket
     		<html>
 		<head>
   		<title></title>
