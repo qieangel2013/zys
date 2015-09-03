@@ -107,5 +107,35 @@
         		// echo json_encode( $result);
          		echo json_encode( $where);//通过swoole返回给浏览器结果{"id":37936｝
     		}
- 	    
+ ###swoole作为websocket_server操作使用方法如下：
+		根目录下有server集成了swoole服务端 (后台运行直接php执行)
+ 		WebSocketServer.php （linux环境下直接执行php WebSocketServer.php）
+ 		websocket_server实现原理是把swoole作为websocket服务器，然后通过php-cli把参数传给
+ 		yaf来处理，yaf来处理逻辑
+### swoole作为websocket_server的调用如下：
+	在浏览器里输入http://www.xxx.com/index/swoolesocket
+ 	    public function swoolesocketAction(){
+         		Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        		$this->getView()->display("index/swoolesocket.html");
+    		}
+    		html请求websocket
+    		<html>
+		<head>
+  		<title></title>
+  		<meta charset="UTF-8">
+  		<script type="text/javascript">
+  		var exampleSocket = new WebSocket("ws://123.57.36.118:9503");//设为相应的监听ｉｐ及端口号
+  		exampleSocket.onopen = function (event) {
+    			exampleSocket.send("亲！我连上zqf了！"); 
+  		};
+  			exampleSocket.onmessage = function (event) {
+    			console.log(event.data);
+		 }
+  		</script>
+		</head>
+		<body>
+		<input  type="text" id="content">
+		<button  onclick="exampleSocket.send( document.getElementById('content').value )">发送</button>
+		</body>
+		</html>
 ### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
