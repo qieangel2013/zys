@@ -213,10 +213,10 @@ class IndexController extends Yaf_Controller_Abstract {
         $result = $user->where($where)->select();
         //echo $user->getlastsql();
         // echo json_encode( $result);
-         echo json_encode( $where);//返回结果{"id":37936
+         echo json_encode($result);//返回结果{"id":37936}
     }
-    public function swooletcpAction(){
-       $tcp_con=new swoole_tcp();
-       exit;
+    public function swoolesocketAction(){
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $this->getView()->display("index/swoolesocket.html");
     }
 }
