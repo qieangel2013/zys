@@ -124,7 +124,7 @@
   		<title></title>
   		<meta charset="UTF-8">
   		<script type="text/javascript">
-  		var exampleSocket = new WebSocket("ws://123.57.36.118:9503");//设为相应的监听ｉｐ及端口号
+  		var exampleSocket = new WebSocket("ws://127.0.0.0:9503");//设为相应的监听ｉｐ及端口号
   		exampleSocket.onopen = function (event) {
     			exampleSocket.send("亲！我连上zqf了！"); 
   		};
