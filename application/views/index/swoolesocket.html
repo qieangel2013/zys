@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  var exampleSocket = new WebSocket("ws://127.0.0.1:9503");//设为相应的监听ｉｐ及端口号
+  exampleSocket.onopen = function (event) {
+    exampleSocket.send("亲！我连上啦！"); 
+  };
+  exampleSocket.onmessage = function (event) {
+    console.log(event.data);
+  }
+  </script>
+</head>
+<body>
+<input  type="text" id="content">
+<button  onclick="exampleSocket.send( document.getElementById('content').value )">发送</button>
+</body>
+</html>
