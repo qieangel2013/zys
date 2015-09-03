@@ -1,31 +1,49 @@
 <?php
-
 class WebSocketServer
 {
 	public static $instance;
-
+	private $application;
 	public function __construct() {
-		$serv = new swoole_websocket_server("127.0.0.1", 9503);
-		$serv->set(
+		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
+		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+		$this->application->bootstrap();
+
+		$server = new swoole_websocket_server("0.0.0.0", 9503);
+
+		$server->set(
 			array(
-				'daemonize' => true,
+				'daemonize' => true
 			)
 		);
-		$serv->on('Open', function($server, $req) {
-    		echo "connection open: ".$req->fd;
-		});
 
-		$serv->on('Message', function($server, $frame) {
-    		$server->push($frame->fd, json_encode($frame->data));
-		});
+		$server->on('Open',array($this , 'onOpen'));
 
-		$serv->on('Close', function($server, $fd) {
-    		echo "connection close: ".$fd;
-		});
+		$server->on('Message',array($this , 'onMessage'));
 
-		$serv->start();
+		$server->on('Close',array($this , 'onClose'));
+
+		$server->start();
 	}
 
+	public function onOpen($server, $req) {
+		$this->application->execute(array('swoole_socket','savefd'),$req->fd);
+	}
+	public function onMessage($server, $frame) {
+		ob_start();
+		$this->application->execute(array('swoole_socket','getfd'));
+		$result = ob_get_contents();
+		ob_end_clean();
+		/*for($i=1 ; $i<= $result ; $i++) {
+        	$server->push($i, $frame->data);
+    	}*/
+		$result_fd=json_decode($result,true);
+		foreach($result_fd as $fd){
+        	$server->push($fd,$frame->data);
+    	}
+	}
+	public function onClose($server, $fd) {
+		$this->application->execute(array('swoole_socket','removefd'),$fd);
+	}
 	public static function getInstance() {
 		if (!self::$instance) {
             self::$instance = new WebSocketServer;
