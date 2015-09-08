@@ -16,6 +16,7 @@ class IndexController extends Yaf_Controller_Abstract {
 		$result = $user->where($where)->select();
 		echo $user->getlastsql();
 		print_r($result);
+		alert("3");
 		exit;
 	}
 
