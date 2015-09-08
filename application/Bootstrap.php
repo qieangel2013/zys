@@ -15,13 +15,11 @@ class Bootstrap extends Yaf_Bootstrap_Abstract{
 		$this->config = Yaf_Application::app()->getConfig();
 		Yaf_Registry::set("config", $this->config);
 	}
-	
 	public function _initPlugin(Yaf_Dispatcher $dispatcher) {
 		//注册一个插件
-		$objSamplePlugin = new UserPlugin();
-		$dispatcher->registerPlugin($objSamplePlugin);
+		$AutoloadPlugin = new AutoloadPlugin();
+		$dispatcher->registerPlugin($AutoloadPlugin);
 	}
-	
 	public function _initRoute(Yaf_Dispatcher $dispatcher) {
 		//echo "_initRoute call second<br/>\n";
 		//$router = Yaf_Dispatcher::getInstance()->getRouter();
