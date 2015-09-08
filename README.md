@@ -8,7 +8,9 @@
 	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 ===================================
 ###自定义自动加载配置如下：
-	;可以任意加载多个类和函数用,隔开例如：application.autolibrary='job,common';application.autofunction='pro,function'
+	;可以任意加载多个目录类和目录函数用,隔开
+	例如：application.autolibrary='job,common';application.autofunction='pro,function'
+	支持深度查找目录，如果不想开启可以不用配置
 	application.autolibrary='common'
 	application.autofunction='function'
 	;如果不想开启可以不用配置
