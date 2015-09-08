@@ -5,7 +5,13 @@
 	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
 	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 	已支持swoole_http_server，swoole_websocket_server
+	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 ===================================
+###自定义自动加载配置如下：
+	;可以任意加载多个类和函数用,隔开例如：application.autolibrary='job,common';application.autofunction='pro,function'
+	application.autolibrary='common'
+	application.autofunction='function'
+	;如果不想开启可以不用配置
 ###db操作类读写分离配置如下：
 	;数据库驱动类型
 	database.config.type='mysql'
