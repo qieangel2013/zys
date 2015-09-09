@@ -29,13 +29,13 @@ class Imagick{
      */
     public function open($imgname){
         //检测图像文件
-        if(!is_file($imgname)) E('不存在的图像文件');
+        if(!is_file($imgname)) throw new Exception('不存在的图像文件');
 
         //销毁已存在的图像
         empty($this->img) || $this->img->destroy();
 
         //载入图像
-        $this->img = new \Imagick(realpath($imgname));
+        $this->img = new Imagick(realpath($imgname));
 
         //设置图像信息
         $this->info = array(
@@ -54,7 +54,7 @@ class Imagick{
      * @param  boolean $interlace 是否对JPEG类型图像设置隔行扫描
      */
     public function save($imgname, $type = null, $quality=80,$interlace = true){
-        if(empty($this->img)) E('没有可以被保存的图像资源');
+        if(empty($this->img)) throw new Exception('没有可以被保存的图像资源');
 
         //设置图片类型
         if(is_null($type)){
@@ -89,7 +89,7 @@ class Imagick{
      * @return integer 图像宽度
      */
     public function width(){
-        if(empty($this->img)) E('没有指定图像资源');
+        if(empty($this->img)) throw new Exception('没有指定图像资源');
         return $this->info['width'];
     }
 
@@ -98,7 +98,7 @@ class Imagick{
      * @return integer 图像高度
      */
     public function height(){
-        if(empty($this->img)) E('没有指定图像资源');
+        if(empty($this->img)) throw new Exception('没有指定图像资源');
         return $this->info['height'];
     }
 
@@ -107,7 +107,7 @@ class Imagick{
      * @return string 图像类型
      */
     public function type(){
-        if(empty($this->img)) E('没有指定图像资源');
+        if(empty($this->img)) throw new Exception('没有指定图像资源');
         return $this->info['type'];
     }
 
@@ -116,7 +116,7 @@ class Imagick{
      * @return string 图像MIME类型
      */
     public function mime(){
-        if(empty($this->img)) E('没有指定图像资源');
+        if(empty($this->img)) throw new Exception('没有指定图像资源');
         return $this->info['mime'];
     }
 
@@ -125,7 +125,7 @@ class Imagick{
      * @return array 图像尺寸
      */
     public function size(){
-        if(empty($this->img)) E('没有指定图像资源');
+        if(empty($this->img)) throw new Exception('没有指定图像资源');
         return array($this->info['width'], $this->info['height']);
     }
 
@@ -139,7 +139,7 @@ class Imagick{
      * @param  integer $height 图像保存高度
      */
     public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null){
-        if(empty($this->img)) E('没有可以被裁剪的图像资源');
+        if(empty($this->img)) throw new Exception('没有可以被裁剪的图像资源');
 
         //设置保存尺寸
         empty($width)  && $width  = $w;
@@ -191,7 +191,7 @@ class Imagick{
      * @param  integer $type   缩略图裁剪类型
      */
     public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE){
-        if(empty($this->img)) E('没有可以被缩略的图像资源');
+        if(empty($this->img)) throw new Exception('没有可以被缩略的图像资源');
 
         //原图宽度和高度
         $w = $this->info['width'];
@@ -264,13 +264,13 @@ class Imagick{
                 $posy = ($height - $h * $scale)/2;
 
                 //创建一张新图像
-                $newimg = new \Imagick();
+                $newimg = new Imagick();
                 $newimg->newImage($width, $height, 'white', $this->info['type']);
 
 
                 if('gif' == $this->info['type']){
                     $imgs = $this->img->coalesceImages();
-                    $img  = new \Imagick();
+                    $img  = new Imagick();
                     $this->img->destroy(); //销毁原图
 
                     //循环填充每一帧
@@ -311,7 +311,7 @@ class Imagick{
                 break;
 
             default:
-                E('不支持的缩略图裁剪类型');
+                throw new Exception('不支持的缩略图裁剪类型');
         }
 
         /* 裁剪图像 */
@@ -323,7 +323,7 @@ class Imagick{
         is_null($img) && $img = $this->img;
 
         /* 将指定图片绘入空白图片 */
-        $draw  = new \ImagickDraw();
+        $draw  = new ImagickDraw();
         $draw->composite($img->getImageCompose(), $posx, $posy, $neww, $newh, $img);
         $image = $newimg->clone();
         $image->drawImage($draw);
@@ -340,11 +340,11 @@ class Imagick{
      */
     public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST,$alpha=80){
         //资源检测
-        if(empty($this->img)) E('没有可以被添加水印的图像资源');
-        if(!is_file($source)) E('水印图像不存在');
+        if(empty($this->img)) throw new Exception('没有可以被添加水印的图像资源');
+        if(!is_file($source)) throw new Exception('水印图像不存在');
 
         //创建水印图像资源
-        $water = new \Imagick(realpath($source));
+        $water = new Imagick(realpath($source));
         $info  = array($water->getImageWidth(), $water->getImageHeight());
 
         /* 设定水印位置 */
@@ -407,12 +407,12 @@ class Imagick{
                 if(is_array($locate)){
                     list($x, $y) = $locate;
                 } else {
-                    E('不支持的水印位置类型');
+                    throw new Exception('不支持的水印位置类型');
                 }
         }
 
         //创建绘图资源
-        $draw = new \ImagickDraw();
+        $draw = new ImagickDraw();
         $draw->composite($water->getImageCompose(), $x, $y, $info[0], $info[1], $water);
         
         if('gif' == $this->info['type']){
@@ -448,11 +448,10 @@ class Imagick{
      * @param  integer $offset 文字相对当前位置的偏移量
      * @param  integer $angle  文字倾斜角度
      */
-    public function text($text, $font, $size, $color = '#00000000', 
-        $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0){
+    public function text($text, $font, $size, $color = '#00000000', $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0){
         //资源检测
-        if(empty($this->img)) E('没有可以被写入文字的图像资源');
-        if(!is_file($font)) E("不存在的字体文件：{$font}");
+        if(empty($this->img)) throw new Exception('没有可以被写入文字的图像资源');
+        if(!is_file($font)) throw new Exception("不存在的字体文件：{$font}");
 
         //获取颜色和透明度
         if(is_array($color)){
@@ -462,14 +461,14 @@ class Imagick{
             }
             $color = '#' . implode('', $color);
         } elseif(!is_string($color) || 0 !== strpos($color, '#')) {
-            E('错误的颜色值');
+            throw new Exception('错误的颜色值');
         }
         $col = substr($color, 0, 7);
         $alp = strlen($color) == 9 ? substr($color, -2) : 0;
         
 
         //获取文字信息
-        $draw = new \ImagickDraw();
+        $draw = new ImagickDraw();
         $draw->setFont(realpath($font));
         $draw->setFontSize($size);
         $draw->setFillColor($col);
@@ -543,7 +542,7 @@ class Imagick{
                     $x += $posx;
                     $y += $posy;
                 } else {
-                    E('不支持的文字位置类型');
+                    throw new Exception('不支持的文字位置类型');
                 }
         }
 
