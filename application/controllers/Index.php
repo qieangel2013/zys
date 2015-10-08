@@ -12,10 +12,10 @@ class IndexController extends Yaf_Controller_Abstract {
 	}
 	public function indexAction() {
     	$where=array('id' =>37936);
-   		$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
-		$result = $user->where($where)->select();
-		echo $user->getlastsql();
-		print_r($result);
+   		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
+		//$result = $user->where($where)->select();
+		//echo $user->getlastsql();
+		//print_r($result);
 		alert("3");
 		exit;
 	}
