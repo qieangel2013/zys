@@ -1,4 +1,6 @@
 <?php
+ini_set("display_errors", "On");
+error_reporting(E_ALL | E_STRICT);
 class WebSocketServer
 {
 	public static $instance;
@@ -26,6 +28,7 @@ class WebSocketServer
 	}
 
 	public function onOpen($server, $req) {
+		//echo $req->fd;
 		$this->application->execute(array('swoole_socket','savefd'),$req->fd);
 	}
 	public function onMessage($server, $frame) {
@@ -34,11 +37,15 @@ class WebSocketServer
 		$result = ob_get_contents();
 		ob_end_clean();
 		/*for($i=1 ; $i<= $result ; $i++) {
-        	$server->push($i, $frame->data);
+        	$server->push($i,'游客'.$frame->fd.'说：' .$frame->data);
     	}*/
-		$result_fd=json_decode($result,true);
-		foreach($result_fd as $fd){
-        	$server->push($fd,$frame->data);
+    	if('smes_closed'==$frame->data){
+    		$server->Close($frame->fd);
+    	}else{
+			$result_fd=json_decode($result,true);
+		    foreach($result_fd as $id=>$fd){
+        		$server->push($fd,'游客'.$frame->fd.'说：' .$frame->data);
+    	    }
     	}
 	}
 	public function onClose($server, $fd) {
