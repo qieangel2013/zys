@@ -2,19 +2,30 @@
 <html>
 <head>
   <title></title>
+  <script type="text/javascript" src="/public/js/jquery-1.8.0.min.js"></script>
+<style>
+ #chatLog {width:440px; height:200px; border:1px solid #7F9DB9; overflow:auto;margin-bottom: 20px}
+</style>
   <meta charset="UTF-8">
   <script type="text/javascript">
-  var exampleSocket = new WebSocket("ws://127.0.0.1:9503");//设为相应的监听ｉｐ及端口号
+  var exampleSocket = new WebSocket("ws://192.168.1.46:9503");//设为相应的监听ｉｐ及端口号
   exampleSocket.onopen = function (event) {
     exampleSocket.send("亲！我连上啦！"); 
   };
   exampleSocket.onmessage = function (event) {
     console.log(event.data);
+      $('#chatLog').append('<br/>'+event.data);
   }
+   exampleSocket.onclose = function(event) { 
+    console.log('Client notified socket has closed',event); 
+  }; 
   </script>
 </head>
 <body>
+<div id="chatLog" ></div>
 <input  type="text" id="content">
 <button  onclick="exampleSocket.send( document.getElementById('content').value )">发送</button>
+<button  onclick="exampleSocket.send('smes_closed')">关闭</button>
 </body>
 </html>
+
