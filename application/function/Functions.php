@@ -549,3 +549,75 @@ function handleError($errorNo, $message, $filename, $lineNo) {
     throw new Exception ( 'PHP ' . $type . ' in file ' . $filename . ' (' . $lineNo . '): ' . $message, 0 );
   }
 }
+function encrypt($str,$toBase64=false,$key="www.smesauz.com20380201"){
+        $r = md5($key);
+        $c=0;
+        $v = "";
+        $len = strlen($str);
+        $l = strlen($r);
+        for ($i=0;$i<$len;$i++){
+         if ($c== $l) $c=0;
+         $v.= substr($r,$c,1) .
+             (substr($str,$i,1) ^ substr($r,$c,1));
+         $c++;
+        }
+        if($toBase64) {
+            return base64_encode(ed($v,$key));
+        }else {
+            return ed($v,$key);
+        }
+
+    }
+function decrypt($str,$toBase64=false,$key="www.smesauz.com20380201") {
+        if($toBase64) {
+            $str = ed(base64_decode($str),$key);
+        }else {
+            $str = ed($str,$key);
+        }
+        $v = "";
+        $len = strlen($str);
+        for ($i=0;$i<$len;$i++){
+         $md5 = substr($str,$i,1);
+         $i++;
+         $v.= (substr($str,$i,1) ^ $md5);
+        }
+        return $v;
+    }
+function ed($str,$key="www.smesauz.com20380201") {
+      $r = md5($key);
+      $c=0;
+      $v = "";
+      $len = strlen($str);
+      $l = strlen($r);
+      for ($i=0;$i<$len;$i++) {
+         if ($c==$l) $c=0;
+         $v.= substr($str,$i,1) ^ substr($r,$c,1);
+         $c++;
+      }
+      return $v;
+   }
+function addtask($data){
+	$task=new swoole_taskclient();
+	//拆分数据算法
+	$count_num_pre=$data['prenum'];
+        $count_num=$data['appendnum'];
+        $count_size=10000;//拆分数据算法
+        if($count_num>$count_size){
+              	$z_str=floor($count_num/$count_size);
+                $y_str=fmod($count_num,$count_size);
+                $data['explodenum']=$y_str==0?$z_str:$z_str+1;
+                for ($i=1; $i <$z_str+1 ; $i++) { 
+                $data['appendnum']=$count_size;
+                $data['explodecount']=$i;
+                $task->connect(json_encode($data));
+                $data['prenum'] +=$count_size;
+                }
+                if($y_str){
+                $data['appendnum']=$y_str;
+                $data['explodecount']=$z_str+1;
+                $task->connect(json_encode($data));
+                }
+                }else{
+                $task->connect(json_encode($data));
+                }
+}
