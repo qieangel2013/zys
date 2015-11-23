@@ -6,6 +6,38 @@
 	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 	已支持swoole_http_server，swoole_websocket_server
 	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
+	添加了swoole的task服务器，并实现拆包处理任务算法
+	$task=new swoole_taskclient();
+	//拆分数据算法
+	$count_num_pre=$data['prenum'];
+        $count_num=$data['appendnum'];
+        $count_size=10000;//拆分数据算法
+        if($count_num>$count_size){
+              	$z_str=floor($count_num/$count_size);
+                $y_str=fmod($count_num,$count_size);
+                $data['explodenum']=$y_str==0?$z_str:$z_str+1;
+                for ($i=1; $i <$z_str+1 ; $i++) { 
+                $data['appendnum']=$count_size;
+                $data['explodecount']=$i;
+                $task->connect(json_encode($data));
+                $data['prenum'] +=$count_size;
+                }
+                if($y_str){
+                $data['appendnum']=$y_str;
+                $data['explodecount']=$z_str+1;
+                $task->connect(json_encode($data));
+                }
+                }else{
+                $task->connect(json_encode($data));
+                }
+        添加了验证码类
+          $config =    array(
+            'fontSize'    =>    30,    // 验证码字体大小
+            'length'      =>    4,     // 验证码位数
+            'useNoise'    =>    true, // 关闭验证码杂点
+        );
+         $Verify = new Verify($config);
+         $Verify->entry();
 ===================================
 ###自定义自动加载配置如下：
 	;可以任意加载多个目录类和目录函数用,隔开
