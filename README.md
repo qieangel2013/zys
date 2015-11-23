@@ -12,24 +12,23 @@
 	$count_num_pre=$data['prenum'];
 	$count_num=$data['appendnum'];
 	$count_size=10000;//拆分数据算法
-        	if($count_num>$count_size){
-              		$z_str=floor($count_num/$count_size);
-                	$y_str=fmod($count_num,$count_size);
-                	$data['explodenum']=$y_str==0?$z_str:$z_str+1;
-                	for ($i=1; $i <$z_str+1 ; $i++) { 
-        	 	$data['appendnum']=$count_size;
-                	$data['explodecount']=$i;
-                	$task->connect(json_encode($data));
-                	$data['prenum'] +=$count_size;
-                	}
-                	if($y_str){
-                	$data['appendnum']=$y_str;
-                	$data['explodecount']=$z_str+1;
-                	$task->connect(json_encode($data));
-                	}
-        	 	}else{
-                	$task->connect(json_encode($data));
-                	}
+	if($count_num>$count_size){
+	$z_str=floor($count_num/$count_size);
+	$y_str=fmod($count_num,$count_size);
+	$data['explodenum']=$y_str==0?$z_str:$z_str+1;
+	for ($i=1; $i <$z_str+1 ; $i++) { 
+	$data['appendnum']=$count_size;
+	$data['explodecount']=$i;
+	$task->connect(json_encode($data));
+	$data['prenum'] +=$count_size;
+	}
+	if($y_str){
+	$data['appendnum']=$y_str;
+	$data['explodecount']=$z_str+1;
+	$task->connect(json_encode($data));
+	}}else{
+	$task->connect(json_encode($data));
+	}
         添加了验证码类
           $config =    array(
             'fontSize'    =>    30,    // 验证码字体大小
