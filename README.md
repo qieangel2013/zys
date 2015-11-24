@@ -6,6 +6,9 @@
 	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 	已支持swoole_http_server，swoole_websocket_server
 	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
+	添加了分页类
+	$Page = new Page($count,$pageoffset);
+        $show = $Page->show();
 	添加了swoole的task服务器，并实现拆包处理任务算法
 	$task=new swoole_taskclient();
 	//拆分数据算法
@@ -39,8 +42,7 @@
          $Verify->entry();
         添加了生成二维码功能（需要安装php扩展zqf，详情见：https://github.com/qieangel2013/php_ext_zqf）
        	$obj=new zqf();
-        $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数树二维码长和宽
-        
+        $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
 ===================================
 ###自定义自动加载配置如下：
 	;可以任意加载多个目录类和目录函数用,隔开
