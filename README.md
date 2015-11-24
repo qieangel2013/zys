@@ -8,7 +8,7 @@
 	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 	添加了分页类
 	$Page = new Page($count,$pageoffset);
-        $show = $Page->show();
+	$show = $Page->show();
 	添加了swoole的task服务器，并实现拆包处理任务算法
 	$task=new swoole_taskclient();
 	//拆分数据算法
