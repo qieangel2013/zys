@@ -1,17 +1,9 @@
 <?php
-class swoole_task extends Model {
-	private $table="smes_order";
-	public $user;
-	public function __construct() {
-		parent::__construct($this->table);
-		/*if (!isset($this->user)){  
-            $this->user = new swoole_socket();   
-        }  */
-	}
+class swoole_task{
 	public static function demcode($data){
 		$task=new swoole_task();
 		$redis_con= new phpredis();
-    $YMD=$data['Ymd'];
+    		$YMD=$data['Ymd'];
 		$numall=(int)($data['prenum']+$data['appendnum']);
 		$url="http://www.smesauz.com/index/showdemcode/?pi=";
 		if($data['is_pay']){
@@ -40,10 +32,24 @@ class swoole_task extends Model {
             //echo $cmd;
             //echo "<br/>";
             $result=exec($cmd); 
-        $dataarr['id']=$data['id'];
-        $dataarr['downurl']=$path.$YMD.'/'.$data['goods_id'].'/'.$data['id'].".zip";
-        $dataarr['is_down']=1;
-        $task->save($dataarr);
+        //连接数据库
+        $con = mysql_connect("192.168.1.20","root","root");
+        mysql_query("set names 'utf8'");//编码转化
+        $database='smes';
+        if(!$con)
+        {
+            die('Could not connect: ' . mysql_error());
+        }else{
+            $db_selecct=mysql_select_db($database,$con);//选择数据库
+            if(!$db_selecct)
+            {
+                die("could not to the database</br>".mysql_error());    
+            }
+           $query="UPDATE smes_order SET downurl='".$path.$YMD.'/'.$data['goods_id'].'/'.$data['id'].".zip"."',is_down=1 WHERE id=".$data['id'];
+           $result=mysql_query($query);//执行查询
+       }
+        mysql_close($con);
+    }
     }
       }else{
 			for ($i=$data['prenum']+1; $i <= $numall; $i++) { 
@@ -67,10 +73,24 @@ class swoole_task extends Model {
             //exit;
         //}
         
-        $dataarr['id']=$data['id'];
-        $dataarr['downurl']=$path.$YMD.'/'.$data['goods_id'].'/'.$data['id'].".zip";
-        $dataarr['is_down']=1;
-        $task->save($dataarr);
+        //连接数据库
+        $con = mysql_connect("192.168.1.20","root","root");
+        mysql_query("set names 'utf8'");//编码转化
+        $database='smes';
+        if(!$con)
+        {
+            die('Could not connect: ' . mysql_error());
+        }else{
+            $db_selecct=mysql_select_db($database,$con);//选择数据库
+            if(!$db_selecct)
+            {
+                die("could not to the database</br>".mysql_error());    
+            }
+           $query="UPDATE smes_order SET downurl='".$path.$YMD.'/'.$data['goods_id'].'/'.$data['id'].".zip"."',is_down=1 WHERE id=".$data['id'];
+           $result=mysql_query($query);//执行查询
+       }
+        mysql_close($con);
+    }
         }
         }
 	}
