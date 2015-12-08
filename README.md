@@ -6,6 +6,7 @@ adding redis operations and weixin sharing, will then join weixin pay
 加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 已支持swoole_http_server，swoole_websocket_server
 添加了全局变量适用于高并发抢购、秒杀，数组算法处理等
+###
 需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
 首先安装php扩展zqf.so
 phpize来安装
