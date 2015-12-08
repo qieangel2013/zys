@@ -5,8 +5,8 @@ adding redis operations and weixin sharing, will then join weixin pay
 集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
 加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 已支持swoole_http_server，swoole_websocket_server,高并发抢购、秒杀，数组算法处理等
-###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等
-需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+	需要安装php扩展zqf
 	首先安装php扩展zqf.so
 	phpize来安装
 	然后在php文件调用
