@@ -6,7 +6,7 @@
 	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 	已支持swoole_http_server，swoole_websocket_server
 	添加了全局变量适用于高并发抢购、秒杀，数组算法处理等
-	需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+	需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
        	首先安装php扩展zqf.so
         phpize来安装
         然后在php文件调用
@@ -42,19 +42,20 @@
 	$task->connect(json_encode($data));
 	}
         添加了验证码类
-          $config =    array(
+        $config =    array(
             'fontSize'    =>    30,    // 验证码字体大小
             'length'      =>    4,     // 验证码位数
             'useNoise'    =>    true, // 关闭验证码杂点
         );
-         $Verify = new Verify($config);
-         $Verify->entry();
-         添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+        $Verify = new Verify($config);
+        $Verify->entry();
+        添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
        	$obj=new zqf();
         $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
         生成透明二维码：
         $obj=new zqf();
         $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
+[https://github.com/qieangel2013/php_ext_zqf]: (https://github.com/qieangel2013/php_ext_zqf)
 ===================================
 ###自定义自动加载配置如下：
 	;可以任意加载多个目录类和目录函数用,隔开
