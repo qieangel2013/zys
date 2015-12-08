@@ -1,25 +1,25 @@
 ###yaf项目快速开发：
-	yaf project rapid development, integration of the db action class support chain operation,
-	support separate read and write, pdo, mysqli, mongo, upload operation,
-	adding redis operations and weixin sharing, will then join weixin pay
-	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
-	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
-	已支持swoole_http_server，swoole_websocket_server
-	添加了全局变量适用于高并发抢购、秒杀，数组算法处理等
+yaf project rapid development, integration of the db action class support chain operation,
+support separate read and write, pdo, mysqli, mongo, upload operation,
+adding redis operations and weixin sharing, will then join weixin pay
+集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
+加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
+已支持swoole_http_server，swoole_websocket_server
+添加了全局变量适用于高并发抢购、秒杀，数组算法处理等
 需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
 [https://github.com/qieangel2013/php_ext_zqf]: https://github.com/qieangel2013/php_ext_zqf
-       	首先安装php扩展zqf.so
-        phpize来安装
-        然后在php文件调用
-        dl('zqf.so');或者phpini里加载
+首先安装php扩展zqf.so
+phpize来安装
+然后在php文件调用
+dl('zqf.so');或者phpini里加载
         $obj=new zqf();
         $counter= $obj->autoadd(0,1,0);（声明只针对多线程）
         echo $counter;
-	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
-	添加了分页类
+支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
+添加了分页类
 	$Page = new Page($count,$pageoffset);
 	$show = $Page->show();
-	添加了swoole的task服务器，并实现拆包处理任务算法
+添加了swoole的task服务器，并实现拆包处理任务算法
 	$task=new swoole_taskclient();
 	//拆分数据算法
 	$count_num_pre=$data['prenum'];
@@ -42,7 +42,7 @@
 	}}else{
 	$task->connect(json_encode($data));
 	}
-        添加了验证码类
+添加了验证码类
         $config =    array(
             'fontSize'    =>    30,    // 验证码字体大小
             'length'      =>    4,     // 验证码位数
@@ -50,11 +50,11 @@
         );
         $Verify = new Verify($config);
         $Verify->entry();
-        添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
+添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
 [https://github.com/qieangel2013/php_ext_zqf]: https://github.com/qieangel2013/php_ext_zqf
        	$obj=new zqf();
         $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
-        生成透明二维码：
+生成透明二维码：
         $obj=new zqf();
         $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ===================================
