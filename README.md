@@ -5,6 +5,14 @@
 	集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
 	加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 	已支持swoole_http_server，swoole_websocket_server
+	添加了全局变量适用于高并发抢购、秒杀，数组算法处理等（需要安装php扩展zqf，详情见：https://github.com/qieangel2013/php_ext_zqf）
+       	首先安装php扩展zqf.so
+        phpize来安装
+        然后在php文件调用
+        dl('zqf.so');或者phpini里加载
+        $obj=new zqf();
+        $counter= $obj->autoadd(0,1,0);（声明只针对多线程）
+        echo $counter;
 	支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 	添加了分页类
 	$Page = new Page($count,$pageoffset);
