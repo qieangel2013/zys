@@ -12,9 +12,9 @@ adding redis operations and weixin sharing, will then join weixin pay
 phpize来安装
 然后在php文件调用
 dl('zqf.so');或者phpini里加载
-        $obj=new zqf();
-        $counter= $obj->autoadd(0,1,0);（声明只针对多线程）
-        echo $counter;
+	$obj=new zqf();
+	$counter= $obj->autoadd(0,1,0);（声明只针对多线程）
+	echo $counter;
 支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 添加了分页类
 	$Page = new Page($count,$pageoffset);
@@ -26,15 +26,15 @@ dl('zqf.so');或者phpini里加载
 	$count_num=$data['appendnum'];
 	$count_size=10000;//拆分数据算法
 	if($count_num>$count_size){
-	$z_str=floor($count_num/$count_size);
-	$y_str=fmod($count_num,$count_size);
-	$data['explodenum']=$y_str==0?$z_str:$z_str+1;
-	for ($i=1; $i <$z_str+1 ; $i++) { 
-	$data['appendnum']=$count_size;
-	$data['explodecount']=$i;
-	$task->connect(json_encode($data));
-	$data['prenum'] +=$count_size;
-	}
+		$z_str=floor($count_num/$count_size);
+		$y_str=fmod($count_num,$count_size);
+		$data['explodenum']=$y_str==0?$z_str:$z_str+1;
+		for ($i=1; $i <$z_str+1 ; $i++) { 
+			$data['appendnum']=$count_size;
+			$data['explodecount']=$i;
+			$task->connect(json_encode($data));
+			$data['prenum'] +=$count_size;
+		}
 	if($y_str){
 	$data['appendnum']=$y_str;
 	$data['explodecount']=$z_str+1;
@@ -43,20 +43,20 @@ dl('zqf.so');或者phpini里加载
 	$task->connect(json_encode($data));
 	}
 添加了验证码类
-        $config =    array(
-            'fontSize'    =>    30,    // 验证码字体大小
-            'length'      =>    4,     // 验证码位数
-            'useNoise'    =>    true, // 关闭验证码杂点
-        );
-        $Verify = new Verify($config);
-        $Verify->entry();
+	$config =    array(
+	'fontSize'    =>    30,    // 验证码字体大小
+	'length'      =>    4,     // 验证码位数
+	'useNoise'    =>    true, // 关闭验证码杂点
+	);
+	$Verify = new Verify($config);
+	$Verify->entry();
 添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf]
 [https://github.com/qieangel2013/php_ext_zqf]: https://github.com/qieangel2013/php_ext_zqf
-       	$obj=new zqf();
-        $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
+	$obj=new zqf();
+	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
 生成透明二维码：
-        $obj=new zqf();
-        $obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
+	$obj=new zqf();
+	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ===================================
 ###自定义自动加载配置如下：
 	;可以任意加载多个目录类和目录函数用,隔开
