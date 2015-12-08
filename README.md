@@ -19,7 +19,7 @@ dl('zqf.so');或者phpini里加载
 添加了分页类
 	$Page = new Page($count,$pageoffset);
 	$show = $Page->show();
-添加了swoole的task服务器，并实现拆包处理任务算法
+###添加了swoole的task服务器，并实现拆包处理任务算法
 	$task=new swoole_taskclient();
 	//拆分数据算法
 	$count_num_pre=$data['prenum'];
@@ -42,7 +42,7 @@ dl('zqf.so');或者phpini里加载
 	}}else{
 	$task->connect(json_encode($data));
 	}
-添加了验证码类
+###添加了验证码类
 	$config =    array(
 	'fontSize'    =>    30,    // 验证码字体大小
 	'length'      =>    4,     // 验证码位数
@@ -50,10 +50,10 @@ dl('zqf.so');或者phpini里加载
 	);
 	$Verify = new Verify($config);
 	$Verify->entry();
-添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###添加了生成二维码功能需要安装php扩展zqf，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
 	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
-生成透明二维码：
+###生成透明二维码：
 	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ===================================
