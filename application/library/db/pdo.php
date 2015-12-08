@@ -416,7 +416,7 @@ class db_pdo extends db_Db{
         if('' != $this->queryStr){
             $this->error .= "\n [ SQL语句 ] : ".$this->queryStr;
         }
-        trace($this->error,'','ERR');
+        throw new Exception($this->error());
         return $this->error;
     }
 
