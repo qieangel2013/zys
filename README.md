@@ -211,4 +211,3 @@ adding redis operations and weixin sharing, will then join weixin pay
 
 ###如果你对我的辛勤劳动给予肯定，请给我捐赠，你的捐赠是我最大的动力
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/ali.png)
-有什么问题可以及时联系我 qieangel@hotmail.com
