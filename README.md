@@ -1,4 +1,4 @@
-###yaf项目快速开发：
+###yaf项目快速开发（兼容php7）：
 yaf project rapid development, integration of the db action class support chain operation,
 support separate read and write, pdo, mysqli, mongo, upload operation,
 adding redis operations and weixin sharing, will then join weixin pay
@@ -209,4 +209,6 @@ adding redis operations and weixin sharing, will then join weixin pay
 	</body>
 	</html>
 
-### 以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
+###如果你对我的辛勤劳动给予肯定，请给我捐赠，你的捐赠是我最大的动力
+	![](/public/images/ali.png)
+	以上具体的使用方法，控制器里都有，随后会加入更多功能，有什么问题可以及时联系我 qieangel@hotmail.com
