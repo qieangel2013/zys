@@ -10,9 +10,9 @@ adding redis operations and weixin sharing, will then join weixin pay
 	$obj=new zqf();
 	第一个参数是红包总额，第二个人参数红包数量，第三个参数默认代表拼手气红包，设置为1的话为普通红包
 	拼手气红包
-	$hongb= $obj->hongbao(10,8);或者$hongb= $obj->hongbao(10,8,0);
+	$hongb= $obj->hongbao(10,8);或者$hongb= $obj->hongbao(10,8,0);返回数组为Array ( [0] => 1.33 [1] => 1.02 [2] => 1.28 [3] => 0.44 [4] => 1.37 [5] => 0.81 [6] => 1.81 [7] => 1.94 )
 	普通红包，每个人数额一样设置第三个参数
-	$hongb= $obj->hongbao(10,8,1);
+	$hongb= $obj->hongbao(10,8,1);返回数组为Array ( [0] => 1.25 [1] => 1.25 [2] => 1.25 [3] => 1.25 [4] => 1.25 [5] => 1.25 [6] => 1.25 [7] => 1.25 )
 	var_dump($hongb);
 ###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
 	需要安装php扩展zqf
