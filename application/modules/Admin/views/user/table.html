@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+      <html>
+      <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>后台系统功能页</title>
+      <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-store, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT"> 
+<META HTTP-EQUIV="expires" CONTENT="0"> 
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+      <link rel="stylesheet" type="text/css" href="/public/css/bsgrid.all.min.css">
+      <link rel="stylesheet" type="text/css" href="/public/css/grid_bootstrap.min.css">
+      </head>
+      <body>
+          <h3>广告设置</h3>
+          <div class="g_biaoBtom">
+            <div class="g_xunName">
+              <span>菜单名称</span>
+              <form method="post" id="myform">
+                <input type="text" value="" class="g_caiMiang" />
+                <input type="button" value="查询" class="g_chaXun"  onclick="doSearch()"/>
+                <input type="button" value="删除" class="g_addZeng" onclick="getCheckedIds();"/>
+              </form>
+            </div>
+            <table id="g_tabYeh">
+              <tr> 
+                <th w_check="true" w_index="id" id="qx"></th>
+                    <th w_index="username" >用户名</th> 
+                    <th w_index="truename" >真实姓名</th> 
+                    <th w_index="birthday" >生日</th> 
+                    <th w_render="sex_operate" >性别</th> 
+                    <th w_index="mobile" >手机号</th> 
+                    <th w_index="address" >地址</th> 
+                    <th w_index="qq" >qq</th> 
+                    <th w_render="operate" >操作</th> 
+                </tr> 
+            </table>
+          </div>
+          <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/public/js/grid.zh-CN.min.js"></script>
+        <script type="text/javascript" src="/public/js/bsgrid.all.min.js"></script>
+          <script type="text/javascript">
+          $.bsgrid.forcePushPropertyInObject($.fn.bsgrid.defaults.extend.renderPerRowMethods, 'extend_render_per_row', function(record, rowIndex, trObj, options){
+                if(record!=undefined && record!=''){
+                    trObj.attr('id',record.id);
+                }
+            });
+            var gridObj;
+            var dict={};//字典定义
+            //数据表格函数
+            function getData(data){
+              dict.retCode='0000';
+                  dict.retMsg='操作成功';
+                  dict.data={
+                    0:'女',
+                    1:'男'
+                  };
+                gridObj = $.fn.bsgrid.init('g_tabYeh', {
+                        dataType: 'json',
+                        ajaxType: 'post',
+                        url: '/user/getuserlist',
+                        autoLoad: true,
+                        pageSizeSelect: true,
+                        stripeRows: true,
+                        pageSize: 2,
+                        displayBlankRows: false,
+                        isProcessLockScreen:true,
+                        rowSelectedColor:false
+                });
+                
+                 $('#qx').append('<span style="padding-left:5px;">全选</span>');
+            }
+            $(function () {
+                   $.ajax({
+                        type: "GET",
+                        url: "/admin/user/getuserlist",
+                        data: {type:2},
+                        dataType: "json",
+                        success:getData
+                  });
+                  
+             
+            });
+            function operate(record, rowIndex, colIndex, options) {
+                return '<a href="javascript:EditUser(' + gridObj.getRecordIndexValue(record, 'id') + ');">编辑</a><a href="javascript:DelUser(' + gridObj.getRecordIndexValue(record, 'id') + ');">删除</a>';
+            }
+            function sex_operate(record, rowIndex, colIndex, options) {
+                for (var key in dict.data) 
+                  {
+                      if(key==gridObj.getRecordIndexValue(record, 'sex')){
+                          return dict.data[key];
+                      }
+                  }
+            }
+            //获取checkbox选中
+          function getCheckedIds() {
+                // values are array
+                alert(gridObj.getCheckedValues('id'));
+          }
+          //数据表格参数查询
+          function doSearch() {
+                searchParames = $('#myform').serialize();
+                if($('#username').val()==''){
+                    gridObj.search('');
+                }else{
+                    gridObj.search(searchParames);
+                }
+                console.log(searchParames);
+            }
+             // alert(tl_config.his_url);
+          </script>
+          </body>
+        </html>

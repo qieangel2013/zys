@@ -1,0 +1,206 @@
+/* 岗位管理-添加岗位 */
+.g_rightMidden{float: left;width: 960px;padding: 20px 20px 0px 20px;}
+.g_rightMidden .z_title{font-size: 12px;color: #666;padding:18px 0 12px;border-bottom: 1px solid #f5f5f5;}
+.z_tissue{padding-top: 40px;}
+.z_tissue li{margin-top: 20px;position: relative;}
+.z_tissue li span,.z_tissue li p,.z_tissue li select,.z_tissue li input{float: left;font-size: 12px;color: #222;}
+.z_tissue li span{width:168px;padding-right: 20px;text-align: right;line-height: 30px;}
+.z_tissue li p{line-height: 30px;}
+.z_tissue li select{float: left;font-size: 12px;color: #222;width:110px;height:28px;border:1px solid #ededed;padding-left: 8px;line-height: 28px;margin-right: 20px;}
+.z_tissue li input{border:1px solid #ededed;width:290px;height:28px;line-height: 28px;padding-left: 8px;}
+.z_tissue li textarea{width:523px;height:62px;border:1px solid #ededed;resize:none;padding-left: 5px;padding-top: 8px;font-size: 12px;color: #ccc;}
+.z_tissue li em{font-style: normal;color: #ff5a00;margin:5px 0 0 10px;float: left;}
+.z_sure,.z_goback,.l_return{display: inline-block;*display: inline;zoom:1;width:88px;height:30px;line-height: 30px;font-size: 12px;color: #fff;text-align: center;background-color: #ff5a00;margin-left: 380px;margin-top: 30px;}
+.z_goback{background-color: #ccc;margin-left: 20px;}
+.l_return{width:100px;background-color: #ccc;margin-left: 20px;}
+/* 岗位管理 */
+.z_manamged{padding-left: 10px;}
+.z_post ul{padding:20px 0;}
+.z_post ul li p{float: left;line-height: 30px;font-size: 12px;color: #333;padding-right: 15px;}
+.z_post ul li input[type="text"]{width:198px;height:28px;border:1px solid #ededed;line-height: 28px;}
+.z_post ul li .z_query{width:88px;height:30px;background-color: #ff5a00;line-height: 30px;text-align: center;font-size: 12px;color: #fff;margin-left: 10px;cursor: pointer;}
+.z_addpost,.z_delpost,.l_guideinto{height: 28px;border:1px solid #ededed;text-align: center;line-height: 28px;display: inline-block;*display: inline;zoom:1;font-size: 12px;color: #1777d8;margin-right: 8px;padding:0 22px;}
+.z_gangwei{margin-top: 10px;}
+.z_gangwei table{width:948px;border:1px solid #ededed;}
+.z_gangwei table th{height:45px;background-color: #f5f5f5;font-size: 12px;color: #666;vertical-align: middle;}
+.z_gangwei table tr{border:1px solid #ededed;}
+.z_gangwei table td{padding:12px 5px;text-align: center;vertical-align: middle;font-size: 12px;color: #333;}
+.z_gangwei table td a{color: #1777d8;margin:0 5px;}
+.z_gangwei .z_qxuan{display: inline-block;*display: inline;zoom:1;}
+.z_gangwei .z_qxuan input{float: left;margin:2px 5px 0 0;*margin:-2px 5px 0 0;}
+.z_gangwei .z_qxuan span{float: left;}
+.g_maina{margin-top: 30px;}
+.g_xiangMIa{float: left;line-height: 30px;font-size: 12px;color: #333;padding-right: 15px;}
+.g_naeVTa{width:188px;height:28px;border:1px solid #ededed;line-height: 28px;font-size: 12px;color: #666;padding: 0px 5px;}
+.z_query{width:88px;height:30px;background-color: #ff5a00;line-height: 30px;text-align: center;font-size: 12px;color: #fff;margin-left: 10px;cursor: pointer;}
+.g_addsome,.g_delanNIy{float:right;height: 28px;border:1px solid #ededed;text-align: center;
+	line-height: 28px;display: inline-block;*display: inline;zoom:1;font-size: 12px;color: #1777d8;
+	margin-right: 8px;padding:0 22px;}
+.g_delanNIy{margin-right: 0px;}
+
+/*项目管理-人员管理*/
+.l_name{float: left;}
+.l_jobname{float: left;margin-left: 40px;}
+.z_post ul li .l_name p{text-align:right;float: left;line-height: 30px;font-size: 12px;color: #333;width: 48px;margin-right: 14px;}
+.z_post ul li .l_jobname p{text-align:right;float: left;line-height: 30px;font-size: 12px;color: #333;width: 78px;margin-right: 14px;}
+.g_aiqnau{float: left;margin-left: 20px;}
+.z_post ul li .g_aiqnau p{width:auto;text-align:right;float: left;line-height: 30px;font-size: 12px;color: #333;
+	margin-right: 10px;padding-right: 0px;}
+.z_post ul li .g_aiqnau input{width: 88px;height: 28px;border: 1px solid #ededed;line-height: 28px;font-size: 12px;color: #666;padding: 0px 5px;}
+.z_post ul li .g_aiqnau .z_query{width: 88px;height: 30px;background-color: #ff5a00;line-height: 30px;
+    text-align: center;font-size: 12px;color: #fff;margin-left: 10px;cursor: pointer;}
+
+/*项目管理-无记录*/
+.l_nolists{margin-top: 40px;font-size: 24px;color: #666666;line-height: 24px;text-align: center;}
+/*.l_nlspage{position: relative;top: 439px;}*/
+/*岗位管理-查看权限*/
+.l_ckqx_btn ul{padding:20px 0 0 0;}
+.z_post ul li .l_query,.z_post ul li .l_charge{float:left;width: 88px;height: 30px;line-height: 30px;text-align: center;font-size: 12px;color: #fff;cursor: pointer;}
+.z_post ul li .l_query{background-color: #ff5a00;}
+.z_post ul li .l_charge{background-color: #EEEEEE;color: #666666;}
+.l_sure{margin-left: 431px;}
+/*岗位管理-分配菜单*/
+.l_gw_fpcd{width: 920px;height: 527px;margin-left: 10px;overflow-x:hidden;overflow-y: scroll;border: 1px solid #ededed;}
+.l_gw_fpcd ul{width: 100%;}
+.l_gw_fpcd ul li>div{cursor:pointer;height:45px;border-bottom: 1px solid #ededed;}
+.l_gw_fpcd ul li .l_level{padding-left:21px;background-color: #f5f5f5;font-weight: bold;font-size: 12px;color: #222;line-height: 16px;}
+.l_gw_fpcd ul li .l_level2{padding-left:41px;font-size: 12px;color: #222;line-height: 16px;}
+.l_gw_fpcd ul li .l_level3{padding-left:61px;font-size: 12px;color: #222;line-height: 16px;}
+.l_gw_fpcd ul li .l_chkfpcd{display: inline-block;margin:14px 15px 14px auto;}
+.l_gw_fpcd ul li .l_chkfpcd span{float: left;}
+.l_gw_fpcd ul li .l_chkfpcd input{float: left;margin: 2px 5px 0 0;}
+.l_bcgonext{display: inline-block;*display: inline;zoom:1;width:88px;height:30px;line-height: 30px;font-size: 12px;color: #fff;text-align: center;background-color: #ff5a00;margin-left: 358px;margin-top: 30px;}
+.l_bcgonext{width: 136px;background-color: #FF5A00;}
+/*岗位管理-分配菜单-分配操作*/
+.l_margint20{margin-top: 20px;}
+.l_checkdiv{display: inline-block;margin-right: 15px;}
+.l_checkdiv span{float: left;color: #1777d8;}
+.l_checkdiv input{float: left;margin: 2px 5px 0 0;}
+/* 员工管理- 操作日志 */
+.z_post li span{padding:0 10px;font-size: 12px;color: #222;line-height: 30px;display: inline-block;*display: inline;zoom:1;}
+.z_wujidong .g_ThanThree em{background: url("../images/g_tanJiabd.png") 0px center no-repeat;}
+.z_wujidong .z_eyabNub3 em{top:5px;}
+.z_wujidong .z_eyabNub4 em{margin-left: 110px;top:7px;}
+.z_wujidong .z_eyabNub5 em{margin-left: 120px;background: none;}
+/* 员工管理-添加员工-分配岗位 */
+.l_margint30{margin-top: 30px;}
+.l_yg_fpgw{width: 950px;height: 467px;overflow-x:hidden;overflow-y: scroll;border: 1px solid #ededed;}
+.l_yg_fpgw table{width:950px;}
+.l_yg_fpgw table th{height:44px;background-color: #f5f5f5;font-size: 12px;color: #666;vertical-align: middle;}
+.l_yg_fpgw table tr{border-bottom:1px solid #ededed;}
+.l_yg_fpgw table td{padding:12px 5px;text-align: center;vertical-align: middle;font-size: 12px;color: #333;}
+.l_yg_fpgw table td.l_tdleft{padding:12px 0 12px 40px;text-align: left;vertical-align: middle;font-size: 12px;color: #333;}
+.l_yg_fpgw table td a{color: #1777d8;margin:0 5px;}
+/*员工管理-添加员工*/
+.l_required{width: 100%;height: 12px;line-height: 12px;text-align: left;}
+.l_required em{font-style: normal;color: #ff5a00;margin: 3px 0 0 0;line-height: 12px;float: left;}
+.l_required span{text-align: left;line-height: 12px;margin-left: 5px;font-size: 12px;color: #999999;float: left;}
+.l_addstaff ul{width:473px;border-top: 1px solid #E9E9E9;border-left: 1px solid #E9E9E9;border-right: 1px solid #E9E9E9;float: left;display:table;}
+.l_addstaff li{float:left;border-bottom: 1px solid #E9E9E9;height:50px;}
+.l_addstaff li.l_left{float:left;width: 98px;line-height:30px;background-color: #F5F5F5;overflow: hidden;}
+.l_addstaff li.l_right{float:left;width: 372px;background-color: #FFFFFF;border-left: 1px solid #E9E9E9;}
+.l_addstaff li span{display:block;zoom:1;height:30px;line-height: 30px;margin: 10px;text-align: right;font-size: 12px;color: #666;}
+.l_addstaff li .l_txstaff{height: 30px;margin: 10px 10px;*padding-left: 11px;float:left;}     
+.l_addstaff li .l_txstaff p{height: 30px;line-height: 30px;font-size: 12px;color: #222222;padding-left: 10px;}     
+.l_addstaff li input[type="text"]{float:left;width: 198px;height: 28px;font-size: 12px;color: #222;border: 1px solid #ededed;line-height: 28px;}
+.l_addstaff li em{float:left;font-style: normal;color: #ff5a00;margin: 5px 0 0 10px;line-height: 25px;}
+.l_addstaff li input.l_inputsm{width: 340px;color: #cccccc;font-size: 12px;}
+.l_addstaff li select.l_zhwzt{margin-left:0;float:left;font-size: 12px;color: #222; width: 200px;height: 30px;border: 1px solid #ededed;padding-left: 8px;line-height: 30px; margin-right: 0px;}
+.l_addstaff li select.l_szqy{margin-right:10px;float:left;font-size: 12px;color: #222; width: 100px;height: 30px;border: 1px solid #ededed;padding-left: 8px;line-height: 30px;}
+.l_addstaff li input.l_date{padding-left: 36px;background: url(../images/l_calendar.png) 10px center no-repeat;background-size: 16px 15px;}
+.l_addstaff li a.l_clickdate{width: 36px;height: 30px;display: block;margin:0;position: absolute;z-index: 2;}
+/*员工管理-员工详情*/
+.l_gwxxtit{margin-top: 33px;height: 33px;line-height: 33px;font-size: 16px;color: #666666;text-align: left;}
+.l_gwxx table{width:950px;border: 1px solid #E9E9E9;}
+.l_gwxx table th{height:44px;background-color: #f5f5f5;font-size: 12px;color: #666;vertical-align: middle;}
+.l_gwxx table tr{border-bottom:1px solid #ededed;}
+.l_gwxx table td{padding:12px 5px;text-align: center;vertical-align: middle;font-size: 12px;color: #333;}
+
+/* 行政区域管理 */
+.z_myjob .z_addpost,.z_myjob .z_delpost{margin: 20px 0;}
+.z_zone{margin-left: 80px;}
+.z_country{width:20px;border-left:1px dotted #aaa;border-top:1px dotted #aaa;position: relative;min-height: 22px;height:auto;}
+.z_country ul{position: absolute;left:-7px;top:-7px;width:100px;}
+.z_country ul li{height:22px;}
+.z_country ul li span{float: left;width:13px;height:13px;background:  url("../images/z_jiahao.png")  no-repeat;cursor: pointer;}
+.z_country ul li .z_minus{background:  url("../images/z_jianhao.png")  no-repeat;}
+.z_country ul li input{float: left;margin:0 5px 0 14px;}
+.z_country ul li p{float: left;font-size: 12px;color: #222;margin-top: -2px;}
+.z_provice{margin-left: 27px;}
+.z_address3{margin:20px 0 0 27px;}
+.z_address3 .z_country{padding-bottom: 2px;}
+.z_address4{margin:6px 0 23px 26px;}
+.z_address4 .z_country{border-bottom:1px dotted #aaa;border-top: none;min-height: 20px;}
+.z_address4 .z_country ul {top: 16px;left: 7px;}
+.z_address4 .z_country ul li input{}
+.z_gone{display: none;}
+.z_address1 span{top:1px;}
+.z_address2 span{top:3px;}
+.z_address3 span{top:5px;}
+
+/*项目管理- 进度管理1*/
+.g_nwiarihr{float: right;margin-top: 30px;}
+.g_nwiarihr .z_addpost{margin-right: 0px;}
+.g_tabName{width: 950px;margin-left: 10px;margin-top: 10px;float: left;border: 1px solid #ededed;}
+.g_tabName th{height: 45px;line-height: 45px;font-size: 14px;text-align: center;color: #666;
+	background-color: #f5f5f5;border-bottom: 1px solid #ededed;border-right: 1px solid #ededed;}
+.g_tabName td{border-bottom: 1px solid #ededed;border-right: 1px solid #ededed;height: 70px;
+	vertical-align: middle;text-align: center;}
+.g_tabName td input{width: 198px;height: 28px;line-height: 28px;padding: 0px 5px;font-size: 13px;
+	color: #666;border: 1px solid #ededed;}
+.g_tabName .g_chuanJus{text-align: left;padding-left: 20px;}
+.g_tabName .g_chuanJus input{width: 248px;margin-right: 10px;}
+.g_chuanJus a{font-size: 13px;color: #1777d8;margin-right: 10px;}
+.g_mauwYq{float: left;}
+
+/*项目管理-人员管理-编辑人员1*/
+.g_xiangBiay{margin-left: 10px;overflow: hidden;margin-top: 30px;}
+.g_nsian{overflow: hidden;}
+.g_nsian em{font-style: normal;font-size: 13px;color: #ff5a00;float: left;margin-top: 4px;}
+.g_nsian span{font-size: 12px;color: #999;height: 18px;line-height: 18px;float: left;margin-left: 4px;}
+.g_mszlaiGYw{float: left;width: 473px;border: 1px solid #ededed;margin-top: 10px;border-bottom:none;}
+.g_mszlaiGYw li{overflow: hidden;border-bottom: 1px solid #ededed;}
+.g_mszlaiGYw li span{float: left;width: 85px;padding-right: 15px;border-right: 1px solid #ededed;
+	height: 48px;line-height: 48px;font-size: 12px;color: #737373;text-align: right;background-color: #f5f5f5;}
+.g_xiangXLuru{float: left;width: 360px;height: 48px;padding-left: 11px;line-height: 48px;}
+.g_xiangXLuru input{width: 188px;height: 28px;line-height: 28px;padding: 0px 5px;font-size: 12px;
+	color: #666;border: 1px solid #ededed;float: left;margin-top: 9px;}
+.g_nauwbsK{font-style: normal;font-size: 13px;color: #ff5a00;margin-top: 2px;float: left;margin-left: 10px;}
+.g_leuanBUs{border-left: none;}
+.g_xiangXLuru select{width: 200px;height: 30px;line-height: 30px;font-size: 12px;background-color: #fff;
+	color: #666;border: 1px solid #ededed;float: left;margin-top: 9px;}
+
+/*项目管理-人员管理-人员详情内部*/
+.g_xiangXLuru p{font-size: 12px;color: #222;height: 48px;line-height: 48px;overflow: hidden;width: 350px;margin-left: 10px;}
+.g_xiangXLuru var{font-style: normal;font-size: 13px;color: #222;float: left;height: 48px;line-height: 48px;margin-left: 10px;}
+.g_xiangXLuru a{font-size: 13px;float: left;margin-left: 30px;color: #1777d8;height: 20px;line-height: 20px;margin-top: 14px;}
+
+
+/*项目管理-添加项目1-1*/
+.g_tanJiawn{margin-left: 10px;overflow: hidden;margin-top: 30px;}
+.g_bianMiahq{width: 600px;margin-left: 150px;}
+.g_numbOne{overflow: hidden;margin-bottom: 14px;}
+.g_numbOne span{float: left;font-size: 12px;color: #666;width: 68px;text-align: left;height: 30px;line-height: 30px;}
+.g_numbOne p{float: left;font-size: 12px;color: #222;height: 30px;line-height: 30px;}
+.g_numbOne input{float: left;width: 288px;border: 1px solid #ededed;padding: 0px 5px;font-size: 12px;color: #222;height: 28px;line-height: 28px;}
+.g_numbOne em{font-style: normal;font-size: 13px;color: #ff5a00;float: left;margin-left: 10px;
+	height: 30px;line-height: 30px;}
+.g_numbOne textarea{float: left;width: 514px;height: 58px;resize: none;border: 1px solid #ededed;color: #222;font-size: 12px;padding: 5px;}
+.g_nuyeZren{overflow: hidden;margin-top: 30px;}
+.g_nuyeZren span{float: left;font-size: 16px;color: #666;height: 30px;line-height: 30px;}
+.g_nuyeZren a{float: right;}
+.g_xianFtaw{width: 950px;border: 1px solid #ededed;margin-top: 14px;}
+.g_xianFtaw th{height: 43px;line-height: 43px;background-color: #f5f5f5;color: #666;font-size: 14px;
+	text-align: center;border-right: 1px solid #ededed;border-bottom: 1px solid #ededed;}
+.g_xianFtaw td{height: 70px;line-height: 70px;color: #666;font-size: 13px;text-align: center;
+	border-right: 1px solid #ededed;border-bottom: 1px solid #ededed;vertical-align: middle;}
+.g_juaZHi{padding-left: 10px;}
+.g_juaZHi input{float: left;width: 388px;height: 28px;line-height: 28px;padding: 0px 5px;border: 1px solid #ededed;color: #666;}
+.g_juaZHi em{font-style: normal;font-size: 13px;color: #ff5a00;float: left;margin-left: 10px;
+	height: 30px;line-height: 30px;}
+.g_addSiaen input{color: #666;width: 188px;height: 28px;line-height: 28px;padding: 0px 5px;border: 1px solid #ededed;}
+.g_juaZHi a{float: left;font-size: 12px;color: #ff5a00;height: 20px;line-height: 20px;margin-top: 4px;margin-left: 10px;}
+
+
+
+

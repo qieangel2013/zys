@@ -1,0 +1,12 @@
+@charset "UTF-8";
+.g_leftAll{width: 200px;float: left;background-color: #eee;height: 780px;}
+.g_indent{width: 200px;cursor: pointer;}
+.g_indent p{width: 172px;padding-left: 28px;font-size: 14px;color: #222;height: 50px;line-height: 50px;
+	cursor: pointer;}
+.g_dowmXia{width: 200px;border-top: 1px solid #e9e9e9;border-bottom: 1px solid #e9e9e9;display: none;}
+.g_dowmXia li{height: 50px;line-height: 50px;padding-left: 48px;}
+.g_dowmXia li a{color: #666;font-size: 14px;}
+.g_below{background: url("../images/g_addJia.png") 160px center no-repeat;}
+.g_leftUp{background: url("../images/g_remoJian.png") 160px center no-repeat;}
+.g_dowmXia .g_qianYemian{background-color: #fff;}
+

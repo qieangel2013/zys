@@ -1,0 +1,11 @@
+/* 添加菜单页 */
+.z_addmemu table td{border:1px solid #ddd;padding:8px 0;text-align: left;vertical-align: middle;font-size: 14px;font-weight: bold;width:730px;padding-left: 30px;}
+.z_addmemu table td select,.z_addmemu table td input,.z_addmemu table td textarea{width:200px;height:26px;line-height: 26px;border:1px solid #ddd;font-size: 14px;color: #000;font-weight: normal;float: left;padding-left: 2px;}
+.z_addmemu table  .z_shuxing{width:200px;text-align: center;padding-left: 0;}
+.z_addmemu table td input{width:196px;}
+.z_addmemu table td textarea{width:300px;height:50px;resize:none;}
+.z_addmemu table td span{float: left;color: #fd6002;margin:6px 0 0 5px;}
+.z_addmemu table .z_mumenre input{width:76px;height:26px;text-align: center;line-height: 24px;border:1px solid #ddd;background-color: #fff;float: none;font-weight: bold;color: #333;cursor: pointer;}
+.z_addmemu table .z_mumenre td{padding:32px 0 32px 0;text-align: center;}
+.z_rightMidden{float: left;width: 960px;padding-left: 20px;}
+.z_rightMidden .g_topluJIng{border:1px solid #ddd;border-bottom: none;}

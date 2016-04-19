@@ -1,0 +1,72 @@
+﻿@charset "utf-8";
+/*CSS reset*/
+html, body,
+div, span, p, a, img, strong, em, small,
+h1, h2, h3, h4,
+dl, dt, dd,
+ol, ul, li,
+table, caption, tbody, tfoot, thead, tr, th, td,
+form, label, input, button, textarea{
+	margin : 0;
+	padding: 0;
+	border : 0;
+	outline: 0;
+	font-size: 100%;
+	font: inherit;
+	font-family: "Microsoft YaHei", \5b8b\4f53, tahoma, arial;
+	vertical-align: baseline;
+}
+body { background-color: #fff; }
+ol, ul { list-style:none; }
+img    { border: 0 none; }
+table  {	border-collapse: collapse; border-spacing: 0; }
+a      {text-decoration:none; }
+/* clear float */
+.clearfix { _zoom: 1; }
+.clearfix:after {
+	content: ' ';
+	clear: both;
+	display: block;
+}
+/* no-select */
+.noselect {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none; (IE10)
+}
+/* hidden text */
+.hiddentext, .hiddentext li {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.g_none{display: none;}
+.bbb{display:block;}
+/* 比价页上下分页 */
+.z_pages{display: inline-block;height:50px;*margin-top: 20px;}
+.z_pages span{cursor: pointer;font-size: 12px;margin:0 5px;line-height: 50px;}
+.z_pages .z_present{color: #ff5a00;}
+
+/* 买卖家左侧上部分和右侧共用 */
+.z_center{width:1200px;margin:0 auto;}
+.z_center .z_caption{font-size: 12px;line-height: 50px;}
+.z_center .z_caption em{font-style: normal;color: #ff5a00;line-height: 50px;}
+.z_content .z_right{float: right;width:1000px;display: inline-block;*display: inline;zoom: 1;margin-right: 20px;position:relative;}
+.z_right h3{border-bottom: 3px solid #c9c9c9;font-size: 14px;line-height: 28px;font-weight:bold;color:#000;}
+
+/* 上下页翻页  */
+.z_paging{margin-top:20px;}
+.z_showamout p{float: left;font-size: 12px;color: #666;line-height: 24px;}
+.z_showamout span{float: left;width:24px;height:24px;text-align: center;line-height: 24px;background-color: #f0f0f0;font-size: 12px;color: #222;margin:0 5px;cursor: pointer;}
+.z_findpage{float: right;}
+.z_findpage p{float: left;font-size: 12px;color: #666;line-height: 24px;}
+.z_findpage input{float: left;height:24px;background-color: #f0f0f0;font-size: 12px;color: #222;margin:0 5px;text-align: left;}
+.z_findpage .z_one,.z_findpage .z_two{padding:0 6px 0 16px;cursor: pointer;}
+.z_findpage .z_three,.z_findpage .z_four{padding:0 17px 0 5px;cursor: pointer;}
+.z_findpage .z_one{background: url(../images/z_shouye.png) no-repeat 5px center #f0f0f0;}
+.z_findpage .z_two{background: url(../images/z_upage.png) no-repeat 5px center #f0f0f0;}
+.z_findpage .z_three{background: url(../images/z_nextpage.png) no-repeat 33px center #f0f0f0;}
+.z_findpage .z_four{background: url(../images/z_lastpage.png) no-repeat 33px center #f0f0f0;}
+.z_findpage .z_number{width:42px;height:22px;border:1px solid #ededed;background-color: #fff;line-height: 22px;text-align: center;}
+.z_findpage .z_advance{width:30px;height:24px;background-color: #ff5a00;text-align: center;line-height: 24px;margin-right:0;color: #fff;cursor: pointer;}

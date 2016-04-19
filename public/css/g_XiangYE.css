@@ -1,0 +1,84 @@
+@charset "UTF-8";
+.g_midCon{width: 1200px;overflow: hidden;}
+.g_rightMidden{float: left;width: 960px;padding: 20px 20px 0px 20px;}
+.g_rightMidden h3{font-size: 16px;color: #666;border-bottom: 1px solid #f0f0f0;height: 36px;
+	line-height: 36px;font-weight: normal;}
+.g_biaoBtom{margin-top: 30px;}
+.g_xunName{overflow: hidden;}
+.g_xunName span{float: left;font-size: 14px;color: #333;height: 28px;line-height: 28px;margin-right:10px;}
+.g_caiMiang{float: left;width: 188px;height: 28px;border: 1px solid #ddd;padding: 0px 5px;
+	font-size: 14px;color: #333;}
+.g_chaXun{float: left;width: 90px;height: 30px;background-color: #1777d8;font-size: 14px;color: #fff;
+	line-height: 30px;color: #fff;cursor: pointer;margin-left: 15px;}
+.g_addZeng{float: left;width: 90px;height: 30px;background-color: #fff;font-size: 14px;color: #fff;
+	line-height: 30px;color: #666;cursor: pointer;margin-left: 15px;border: 1px solid #ddd;}
+#g_tabYeh{width: 960px;border: 1px solid #ddd;margin-top: 20px;}
+#g_tabYeh th{border-right: 1px solid #ddd;font-size: 14px;color: #666;
+	background-color: #f5f5f5;border-bottom: 1px solid #ddd;}
+#g_tabYeh td{border-right: 1px solid #ddd;font-size: 12px;color: #666;
+	border-bottom: 1px solid #ddd;text-align: center;}
+#g_tabYeh td a{color: #1777d8;margin: 0px 12px;}
+/*表格页*/
+.g_biaoCai{float: left;width: 980px;padding-left: 20px;}
+.g_comSmake{border: 1px solid #cdcdcd;border-bottom: none;}
+.g_topluJIng{height: 36px;line-height: 36px;background: url("../images/g_geYbg.png") 0 0 repeat-x;
+	padding-left: 14px;}
+.g_topluJIng span{float: left;font-size: 14px;color: #323232;font-weight: bold;}
+.g_topluJIng em{float: left;font-size: 14px;color: #323232;font-style: normal;font-weight: bold;
+	margin: 0px 4px;}
+.g_caiMinge{padding-bottom: 10px;}
+.g_inpur{overflow: hidden;padding: 24px 0px 0px 30px;}
+.g_inpur span{float: left;font-size: 13px;color: #323232;height: 24px;line-height: 24px;}
+.g_biaoMane{float: left;width: 190px;height: 22px;line-height: 22px;border: 1px solid #a1a1a1;
+	margin-left: 6px;padding: 0px 4px;font-size: 13px;color: #323232;margin-right: 70px;}
+.g_inpur select{float: left;width: 200px;height: 26px;line-height: 26px;border: 1px solid #a1a1a1;
+	margin-left: 6px;font-size: 13px;color: #323232;background-color: #fff;}
+.g_clickGua{float: left;width: 80px;height: 24px;line-height: 24px;font-size: 13px;color: #323232;
+	background-color: #fff;margin-left: 100px;border: 1px solid #a1a1a1;cursor: pointer;}
+.g_twoBuea{overflow: hidden;margin-top: 26px;padding-left: 8px;}
+.g_twoBuea input{float: left;width: 78px;height: 24px;line-height: 24px;font-size: 13px;
+	color: #323232;background-color: #fff;border: 1px solid #a1a1a1;cursor: pointer;margin-right: 24px;}
+.g_lieBaito{margin-top: 10px;}
+.g_topNewja{overflow: hidden;border: 1px solid #cdcdcd;border-left: none;border-right: none;
+	background-color: #f1f1f1;}
+.g_topNewja span{float: left;text-align: center;font-size: 14px;color: #323232;height: 32px;
+	line-height: 32px;font-weight: bold;}
+.g_topNewja em{font-style: normal;}
+.g_kongJua,.g_niaLia{width: 74px;}
+.g_nullSia,.g_nubTwo,.g_xiGuaerji,.g_ThanThree{width: 242px;}
+.g_xitongT,.g_zhuaJIa{width: 300px;}
+.g_paiXunb,.g_nuebaoan{width: 172px;}
+.g_youJued,.g_nsuJua{width: 174px;}
+.g_trTdcon,.g_eiYeNub2,.g_eyabNub3{overflow: hidden;border-bottom: 1px solid #cdcdcd;}
+.g_trTdcon span,.g_eiYeNub2 span,.g_eyabNub3 span{float: left;text-align: center;font-size: 13px;
+	color: #323232;height: 32px;line-height: 32px;}
+.g_trTdcon a,.g_eiYeNub2 a,.g_eyabNub3 a{color: #323232;font-size: 13px;}
+.g_trTdcon .g_nubTwo,.g_eiYeNub2 .g_xiGuaerji,.g_eyabNub3 .g_ThanThree{text-align: left;}
+.g_nubTwo em{background: url("../images/g_tanJiabd.png") 0px center no-repeat;cursor: pointer;
+	padding-left: 22px;font-style: normal;margin-left: 80px;}
+.g_xiGuaerji em{background: url("../images/g_tanJiabd.png") 0px center no-repeat;cursor: pointer;
+	padding-left: 22px;font-style: normal;margin-left: 90px;}
+.g_ThanThree em{cursor: pointer;padding-left: 22px;font-style: normal;margin-left: 100px;}
+.g_cianGya{margin-left: 10px;}
+.g_nubTwo em{top:1px;}
+.g_xiGuaerji em{top:3px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

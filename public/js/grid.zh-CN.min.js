@@ -1,0 +1,6 @@
+/**
+* jQuery.bsgrid v1.37 by @Baishui2004
+* Copyright 2014 Apache v2 License
+* https://github.com/baishui2004/jquery.bsgrid
+*/
+(function(a){a.bsgridLanguage={isFirstPage:"已经是第一页！",isLastPage:"已经是最后一页！",needInteger:"请输入数字！",needRange:function(c,b){return"请输入一个在"+c+"到"+b+"之间的数字！"},errorForRequestData:"请求数据失败！",errorForSendOrRequestData:"发送或请求数据失败！",noPagingation:function(b){return'共:&nbsp;<span id="'+b+'"></span>'},pagingToolbar:{pageSizeDisplay:function(d,c){var b="";if(!c){b+="每页显示:"}return b+'&nbsp;<select id="'+d+'"></select>'},currentDisplayRows:function(c,b,e){var d="";if(!e){d+="当前显示:"}return d+'&nbsp;<span id="'+c+'"></span>&nbsp;-&nbsp;<span id="'+b+'"></span>'},totalRows:function(b){return'共:&nbsp;<span id="'+b+'"></span>'},currentDisplayPageAndTotalPages:function(b,c){return'<div><span id="'+b+'"></span>&nbsp;/&nbsp;<span id="'+c+'"></span></div>'},firstPage:"首&nbsp;页",prevPage:"上一页",nextPage:"下一页",lastPage:"末&nbsp;页",gotoPage:"跳&nbsp;转",refreshPage:"刷&nbsp;新"},loadingDataMessage:"正在加载数据，请稍候......",noDataToDisplay:"没有数据可以用于显示。"}})(jQuery);

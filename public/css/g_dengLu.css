@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.g_dengAlii{width: 100%;min-width: 1200px;height: 736px;padding-top: 160px;
+	background: url("../images/g_dengBg.png") center center no-repeat;}
+.g_yongName{width: 400px;margin: 0 auto;overflow: hidden;position: relative;}
+.g_yongName h3{font-size: 24px;color: #fff;text-align: center;margin-bottom: 70px;}
+.g_yongName input{margin-bottom: 20px;float: left;height: 48px;line-height: 48px;font-size: 14px;}
+.g_nameHu{background: url("../images/g_name.png") 10px center no-repeat;width: 352px;
+	background-color: #fff;padding-left: 48px;border-radius: 5px;}
+.g_Mima{background: url("../images/g_poresd.png") 11px center no-repeat;width: 352px;
+	background-color: #fff;padding-left: 48px;border-radius: 5px;}
+.g_yanMaz{width: 268px;background-color: #fff;padding-left: 12px;border-radius: 5px 0px 0px 5px;}
+.g_yongName span{float: left;width: 119px;border-left: 1px solid #ccc;background-color: #ddd;
+	height: 48px;line-height: 48px;font-size: 14px;color: #333;text-align: center;
+	border-radius: 0px 5px 5px 0px;}
+.g_yongName em{position: absolute;left: 0px;top: 294px;color: #ff5a00;font-size: 12px;font-style: normal;
+	z-index: 2;}
+.g_yongName .g_addIn{font-size: 16px;background-color: #1677d8;border-radius: 5px;width: 400px;
+	text-align: center;color: #fff;margin-top: 20px;cursor: pointer;}
+
+
+
+
+
+

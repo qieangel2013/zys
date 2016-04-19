@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>后台系统表格页</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="/public/css/z_PostManage.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="/public/css/bsgrid.all.min.css">
+<link rel="stylesheet" type="text/css" href="/public/css/grid_bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/public/css/easydialog.css">
+</head>
+<body>
+       <!-- 右 -->
+		    <div class="g_biaoCai z_rightMidden">
+		    		<div class="z_title">首页>组织管理</div>
+		    	<div class="z_manamged">
+			    	<div class="z_post">
+			    		<ul>
+			    			<li class="clearfix">
+			    				<p>组织名称</p>
+			    				<input type="text"/>
+			    				<input type="button" value="查询" class="z_query" onclick="doSearch()"/>
+			    			</li>
+			    		</ul>
+			    	</div>
+			    	<a href="###" class="z_addpost">添加</a>
+			    	<a href="###" class="z_delpost" onclick="getCheckedIds();">删除</a>
+		    		</div>
+		    		<table id="g_tabYeh">
+		    			<tr> 
+		    				    <th w_check="true" w_index="id" id="qx"></th>
+            				<th w_index="username">用户名</th> 
+                    <th w_index="truename" >真实姓名</th>
+            				<th w_render="operate" >操作</th> 
+        				</tr> 
+		    		</table>
+				<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+				<script type="text/javascript" src="/public/js/grid.zh-CN.min.js"></script>
+				<script type="text/javascript" src="/public/js/bsgrid.all.min.js"></script>
+		    	<script type="text/javascript">
+          var zxcvb='';
+          //展示收缩
+          function itemwind(id,style){
+             $("tr[parent_id='"+id+"']").each(function(i,v){
+                if(style=='none'){
+                  if($(v).attr('node')!='' && $(v).attr('node')!=undefined){
+                      $(v).find("td").eq(1).find('img').attr('src','/public/images/g_addJia.png');
+                  }
+                }
+                $(v).css('display',style);
+                var ids=$(this).attr('id');
+                itemwind(ids,style);
+            });
+          }
+					$.bsgrid.forcePushPropertyInObject($.fn.bsgrid.defaults.extend.renderPerRowMethods, 'extend_render_per_row', function(record, rowIndex, trObj, options){
+    						if(record!=undefined && record!=''){
+      							trObj.attr('id',record.id);
+    						}
+                //trObj.find("td").first().css('text-align','left');
+    						if(record.node!=undefined){
+                    switch(record.node){
+                      case 0:
+                        trObj.attr('class','parent0');
+                        trObj.attr('node',0);
+                        break;
+                    case 1:
+                        trObj.attr('class','parent1');
+                        trObj.attr('node',1);
+                        break;
+                  case 2:
+                        trObj.attr('class','parent2');
+                        trObj.attr('node',2);
+                        break;
+                  case 3:
+                        trObj.attr('class','parent3');
+                        trObj.attr('node',3);
+                        break;
+                    case 4:
+                        trObj.attr('class','parent4');
+                        trObj.attr('node',4);
+                        break;
+                    }
+      						
+    				}else{
+               trObj.attr('class','parent_left');
+            }
+        
+    			if(record!=undefined && record!='' && record.parent_id!='' && record.parent_id!=undefined){
+      				trObj.attr('parent_id',record.parent_id);
+              //trObj.attr('class','parent_class');
+    				}
+  					});
+            var sdfs=[];
+            function getItemData(data,parent_id,level){
+                    if(typeof(data) == "object") {
+                            $.each(data, function(i, n) {
+                              if(parent_id!=0){
+                                n.parent_id=parent_id;
+                              }                                
+                              if(n.child!=undefined && n.child!="" && typeof(n.child)=='object'){
+                                //console.log(n.child);
+                                n.node=level;
+                                sdfs.push(n);
+                                getItemData(n.child,n.id,level+1);
+                              }else{
+                                sdfs.push(n);
+                              }
+                            })
+            }
+          }
+  					$(function () {
+       					 gridObj = $.fn.bsgrid.init('g_tabYeh', {
+          						 	/*dataType: 'json',
+            						ajaxType: 'post',
+            						url: '/user/getuserlist1',*/
+            						autoLoad: true,
+            						pageSizeSelect: false,
+            						stripeRows: true,
+            						pageSize: 999999,
+            						displayBlankRows: false,
+            						isProcessLockScreen:true,
+            						rowSelectedColor:false,
+                        showPageToolbar:true
+        				});
+                 
+       					 $.ajax({
+        					 type:"POST",
+       						 url:"/admin/user/getuserlist1",
+        					 data: {rows:10, pages:1},
+        					 dataType: "json",
+        					success:function (userdata){  
+        						var userdatas=[];
+          						userdatas.success=true;
+          						userdatas.curPage=1;
+          						var sdf=[];
+
+         			 userdatas.data=sdfs;
+               getItemData(userdata.data.rows,0,0);
+               userdatas.totalRows=sdfs.length;
+               //console.log(sdfs);
+          		 gridObj.loadGridData('json',userdatas);
+               console.log(gridObj.getPagingObj());
+         			 $('.parent0').each(function(){
+                  var html_text=$(this).find("td").eq(1).html();
+                  html_text ='<div style="text-align:left;"><img src="/public/images/g_remoJian.png" style="padding-left:8px;"/><span style="padding-left:10px;">'+html_text+'</span></div>';
+             			$(this).find("td").eq(1).html(html_text);
+                  var id=$(this).attr('id');
+                  $("tr[parent_id='"+id+"']").each(function(i,v){
+                          if($(v).attr('node')=='' || $(v).attr('node')==undefined){
+                               var html_text=$(v).find("td").eq(1).html();
+                                html_text ='<div style="text-align:left;"><span style="padding-left:40px;">'+html_text+'</span></div>';
+                                $(this).find("td").eq(1).html(html_text);
+                            }
+                          $(v).find("td").eq(1).css('padding-left','30px');
+                      
+                     });
+          				});
+               $('.parent1').each(function(){
+                var html_text=$(this).find("td").eq(1).html();
+                   html_text ='<div style="text-align:left;"><img src="/public/images/g_remoJian.png" style="padding-left:10px;"/><span style="padding-left:12px;">'+html_text+'</span></div>';
+                  $(this).find("td").eq(1).html(html_text);
+                  var id=$(this).attr('id');
+                  $("tr[parent_id='"+id+"']").each(function(i,v){
+                          if($(v).attr('node')=='' || $(v).attr('node')==undefined){
+                               var html_text=$(v).find("td").eq(1).html();
+                                html_text ='<div style="text-align:left;"><span style="padding-left:43px;">'+html_text+'</span></div>';
+                                $(this).find("td").eq(1).html(html_text);
+                            }
+                          $(v).find("td").eq(1).css('padding-left','60px');
+                      
+                     });
+                  });
+               $('.parent2').each(function(){
+                var html_text=$(this).find("td").eq(1).html();
+                   html_text ='<div style="text-align:left;"><img src="/public/images/g_remoJian.png" style="padding-left:12px;"/><span style="padding-left:14px;">'+html_text+'</span></div>';
+                  $(this).find("td").eq(1).html(html_text);
+                  var id=$(this).attr('id');
+                  $("tr[parent_id='"+id+"']").each(function(i,v){
+                          if($(v).attr('node')=='' || $(v).attr('node')==undefined){
+                               var html_text=$(v).find("td").eq(1).html();
+                                html_text ='<div style="text-align:left;"><span style="padding-left:46px;">'+html_text+'</span></div>';
+                                $(this).find("td").eq(1).html(html_text);
+                            }
+                          $(v).find("td").eq(1).css('padding-left','90px');
+                      
+                     });
+                  });
+               $('.parent3').each(function(){
+                var html_text=$(this).find("td").eq(1).html();
+                   html_text ='<div style="text-align:left;"><img src="/public/images/g_remoJian.png" style="padding-left:14px;"/><span style="padding-left:16px;">'+html_text+'</span></div>';
+                  $(this).find("td").eq(1).html(html_text);
+                  var id=$(this).attr('id');
+                  $("tr[parent_id='"+id+"']").each(function(i,v){
+                          if($(v).attr('node')=='' || $(v).attr('node')==undefined){
+                               var html_text=$(v).find("td").eq(1).html();
+                                html_text ='<div style="text-align:left;"><span style="padding-left:49px;">'+html_text+'</span></div>';
+                                $(this).find("td").eq(1).html(html_text);
+                            }
+                          $(v).find("td").eq(1).css('padding-left','120px');
+                      
+                     });
+                  });
+               $('.parent4').each(function(){
+                var html_text=$(this).find("td").eq(1).html();
+                   html_text ='<div style="text-align:left;"><img src="/public/images/g_remoJian.png" style="padding-left:16px;"/><span style="padding-left:18px;">'+html_text+'</span></div>';
+                  $(this).find("td").eq(1).html(html_text);
+                  var id=$(this).attr('id');
+                  $("tr[parent_id='"+id+"']").each(function(i,v){
+                          if($(v).attr('node')=='' || $(v).attr('node')==undefined){
+                               var html_text=$(v).find("td").eq(1).html();
+                                html_text ='<div style="text-align:left;"><span style="padding-left:52px;">'+html_text+'</span></div>';
+                                $(this).find("td").eq(1).html(html_text);
+                            }
+                          $(v).find("td").eq(1).css('padding-left','150px');
+                   
+                     });
+                  });
+       					 
+      for (var i = 0; i <5; i++) {
+        $("tr[class='parent"+i+"']").each(function(p,k){
+            $(k).find('td').eq(1).bind('click',function(){
+                  var id=$(this).parent().attr('id');
+                        if($(this).find('img').attr('src')=='/public/images/g_remoJian.png'){
+                           itemwind(id,'none');
+                          $(this).find('img').attr('src','/public/images/g_addJia.png');
+                      }else{
+                         $("tr[parent_id='"+id+"']").each(function(i,v){
+                            $(v).css('display','');
+                          });
+                        $(this).find('img').attr('src','/public/images/g_remoJian.png');
+                      }
+            })
+
+        });
+      }
+
+              $("tr[class='parent_left']").each(function(pp,kk){
+                  if($(kk).attr('parent_id')==undefined || $(kk).attr('parent_id')==''){
+                      var html_text=$(kk).find("td").eq(1).html();
+                   html_text ='<div style="text-align:left;"><span style="padding-left:25px;width:25px;height:17px;"></span><!--<img src="/public/images/g_remoJian.png" style="padding-left:8px;"/>--><span style="padding-left:10px;">'+html_text+'</span></div>';
+                    $(kk).find("td").eq(1).html(html_text);
+                  }
+              });
+
+    				}
+});
+$('#qx').append('<span style="padding-left:5px;">全选</span>');
+
+      
+});
+    				function operate(record, rowIndex, colIndex, options) {
+        				return '<a href="javascript:EditUser(' + gridObj.getRecordIndexValue(record, 'id') + ');">编辑</a><a href="javascript:DelUser(' + gridObj.getRecordIndexValue(record, 'id') + ');">删除</a>';
+    				}
+    				function sex_operate(record, rowIndex, colIndex, options) {
+        				if(1==gridObj.getRecordIndexValue(record, 'sex')){
+           					 return "男";
+        				}else{
+            				return "女";
+       					 }
+    				}
+    				//获取checkbox选中
+					function getCheckedIds() {
+        				// values are array
+        				alert(gridObj.getCheckedValues('id'));
+					}
+					//数据表格参数查询
+					function doSearch() {
+        				searchParames = $('#myform').serialize();
+        				if($('#username').val()==''){
+          					gridObj.search('');
+        				}else{
+          					gridObj.search(searchParames);
+        				}
+        				//console.log(searchParames);
+    				}
+           // alert(tl_config.his_url);
+        //tl_config.goto('www.baidu.com');
+      
+		    	</script>
+		   
+    </div>
+</body>
+</html>

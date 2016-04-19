@@ -1,0 +1,48 @@
+@charset "UTF-8";
+.g_none{display: none;}
+.g_topAll{width: 100%;min-width: 1200px;background-color: #1777d8;height: 72px;}
+.g_topCome{height: 72px;min-width: 1200px;}
+.g_houLeft{width: 180px;float: left;height: 72px;padding-left: 20px;cursor: pointer;position: relative;}
+.g_houLeft span{line-height: 24px;color: #fff;font-size: 18px;padding-right: 18px;width: 160px;
+	display: block;background: url("../images/g_upDown.png") 154px 11px no-repeat;margin-top: 26px;
+	border-right: 1px solid #4592e0;}
+.g_niazhanK{position: absolute;left: -1px;top: 70px;width: 198px;border: 1px solid #ddd;z-index: 3;
+	background-color: #fff;}
+.g_niazhanK li{height: 54px;line-height: 54px;font-size: 15px;overflow: hidden;}
+.g_niazhanK li a{color: #222;height: 54px;line-height: 54px;padding-left: 48px;float: left;width: 150px;}
+.g_niazhanK li a:hover{background-color: #1677d8;color: #fff;}
+.g_huMing{float: left;padding-left: 24px;height: 72px;position: relative;cursor: pointer;}
+.g_huMing span{line-height: 24px;color: #fff;font-size: 14px;display: block;margin-top: 26px;
+	background: url("../images/g_upDown.png") 50px 11px no-repeat;padding-right: 32px;}
+.g_yuiChu{position: absolute;left: 0px;top: 70px;width: 99%;height: 70px;border: 1px solid #ddd;
+	background-color: #fff;}
+.g_yuiChu a{float: left;text-align: center;width: 100%;line-height: 70px;color: #666;font-size: 14px;}
+.g_daoNav{float: right;height: 72px;}
+.g_bifUlbao{height: 72px;}
+.g_bifUlbao li{float: left;padding: 0px 15px;color: #fff;font-size: 14px;line-height: 72px;}
+.g_bifUlbao li a{color: #fff;}
+.g_bifUlbao li span{background: url("../images/g_Sheiji.png") 0 2px no-repeat;padding-left: 26px;
+	cursor: pointer;}
+.g_bifUlbao .g_qianBlue{background-color: #4c90d7;}
+.g_bifUlbao .g_baiSd{background-color: #fff;}
+.g_bifUlbao .g_baiSd a{color: #333;}
+.g_nCaidan{position: relative;}
+.g_biaoGecon{width: 790px;background: #fff;border: 1px solid #ddd;position: absolute;right: 0px;top:72px;
+	padding-left: 18px;}
+.g_biaoGecon{overflow: hidden;}
+.g_smallUlbao li{float: left;padding: 0px 28px; color: #222;line-height: 90px;}
+.g_smallUlbao li a{color: #222;}
+.g_smallUlbao li .g_Ahover{color: #4c90d6;}
+.g_smallUlbao li .g_danQia{color: #1777d8;}
+
+
+
+
+
+
+
+
+
+
+
+

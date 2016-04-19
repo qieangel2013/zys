@@ -1,4 +1,16 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 文件名称：全局公共函数
+| 功能 :功能函数
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/2/24 10:42 星期四
+|---------------------------------------------------------------
+*/
 /**
  * 一天中12小时时间数组
  */
@@ -621,3 +633,41 @@ function addtask($data){
                 $task->connect(json_encode($data));
                 }
 }
+/**
+     * 名称:  请求接口获取数据
+     * 参数:  string $key     接口地址
+     * 返回值: array   数据;
+     */
+     function GetData($url)
+    {
+        $ch = curl_init($url);  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1) ;
+        curl_setopt ( $ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ;  
+        $output = curl_exec($ch);  
+        curl_close($ch);  
+        if (empty($output)) { return ;}  
+        $result = json_decode($output,true);  
+        return $result;
+    }
+    /**
+     * 名称:  请求接口提交数据
+     * 参数:  string $key     接口地址
+     * 参数:  array $data     提交数据
+     * 返回值: array   数据;
+     */
+     function PostData($url,$data)
+    {
+        $ch = curl_init($url);  
+        curl_setopt($ch, CURLOPT_URL,$url) ;  
+        curl_setopt($ch, CURLOPT_POST,1) ; 
+        curl_setopt ( $ch, CURLOPT_HEADER, 0);
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));  
+        $output=curl_exec($ch);  
+        if(curl_errno($ch))print_r(curl_error($ch));
+        curl_close($ch) ; 
+        if (empty($output)) { return ;}  
+        $result = json_decode($output,true);  
+        return $result;
+    }
