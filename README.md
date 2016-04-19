@@ -6,6 +6,7 @@ adding redis operations and weixin sharing, will then join weixin pay
 加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 已支持swoole_http_server，swoole_websocket_server，高并发抢购、秒杀，数组算法处理等，添加了后台admin模块，集成表格树！
 支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
+后台访问：http://localhost/admin/user/index
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/admin.png)
 ###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
 	需要安装php扩展zqf
