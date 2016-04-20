@@ -15,10 +15,10 @@ adding redis operations and weixin sharing, will then join weixin pay
 		首先要执行php的cli模式执行DbServer.php数据库连接池服务文件
 		前台调用：
 		$dbclient=new mysql_dbclient;
-        	$data=$dbclient->query('select * from pro_account');
-        	$dbclient->close();
-        	print_r($data);;
-        	exit;
+		$data=$dbclient->query('select * from pro_account');
+		$dbclient->close();
+		print_r($data);
+		exit;
 ###后台访问：http://localhost/admin/user/index
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/admin.png)
 ###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
