@@ -671,3 +671,11 @@ function addtask($data){
         $result = json_decode($output,true);  
         return $result;
     }
+    //微信表情处理
+    function uicode_z($str,$method='en') {
+    	if($method=='en'){
+        	return preg_replace_callback('/[\xf0-\xf7].{3}/',function($r){return '@E'.base64_encode($r[0]);},$str);
+	 }else{
+        	return preg_replace_callback('/@E(.{6}==)/', function($r){return base64_decode($r[1]);},$str);
+    }
+}
