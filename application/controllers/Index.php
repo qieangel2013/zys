@@ -19,7 +19,14 @@ class IndexController extends Yaf_Controller_Abstract {
 		alert("3");
 		exit;
 	}
-
+    public function dbtestAction() {
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $dbclient=new mysql_dbclient;
+        $data=$dbclient->query('select * from pro_account');
+        $dbclient->close();
+        print_r($data);;
+        exit;
+    }
 	public function testAction() {
 		$where=array('id' =>353);
    		$user=new HbModel('hb_goods');
