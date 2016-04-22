@@ -1,4 +1,16 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 文件名称：数据库连接池类
+| 功能 :用户信息操作
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/3/25
+|---------------------------------------------------------------
+*/
 class DbServer
 {
     public static $instance;
@@ -6,7 +18,7 @@ class DbServer
     private $application;
     private $config;
     private $Serconfig;
-    protected $pool_size = 20;
+    protected $pool_size = 10;
     protected $idle_pool = array(); 
     protected $busy_pool = array(); 
     protected $wait_queue = array(); 
@@ -18,26 +30,19 @@ class DbServer
         $config_obj=Yaf_Registry::get("config");
         $this->config=$config_obj->database->config->toArray();
         $this->Serconfig=$config_obj->DbServer->toArray();
-        $http = new swoole_server("0.0.0.0", $this->Serconfig['port']);
-        $http->set(
+        $this->http = new swoole_server("0.0.0.0", $this->Serconfig['port']);
+        $this->http->set(
             array(
-            'worker_num' => 1,
+            'worker_num' => 3,
+            'task_worker_num' => 5,
             'max_request' => 0,
             'daemonize' => true,
             'dispatch_mode' => 1,
             'log_file' => $this->Serconfig['logfile']
             )
         );
-        $http->on('WorkerStart',array($this , 'onStart'));
-        $http->on('Receive',array($this , 'onReceive'));
-        $http->start();
-    }
-
-   public function onStart($serv)
-    {
-        $this->http = $serv;
-
-        for ($i = 0; $i < $this->pool_size; $i++) {
+         //$this->process = new swoole_process(function($process) use($http) {
+            /*for ($i = 0; $i < $this->pool_size; $i++) {
             $db = new mysqli;
             $db->connect($this->config['host'],$this->config['user'],$this->config['pwd'],$this->config['name']);
             //设置数据库编码
@@ -49,22 +54,67 @@ class DbServer
                 'db_sock' => $db_sock,
                 'fd' => 0,
             );
+        }*/
+           // print_r($this->idle_pool);
+            //print_r($this->taskid);
+           //$http->sendMessage('zqf \n',0);
+       //});
+         //$this->process->start();
+        //$http->addProcess($this->process);
+        $this->http->on('WorkerStart',array(&$this , 'onStart'));
+        $this->http->on('Receive',array(&$this , 'onReceive'));
+        //$http->on('pipeMessage',array($this , 'onpipeMessage'));
+        $this->http->on('Task',array(&$this , 'onTask'));
+        $this->http->on('Finish',array(&$this , 'onFinish'));
+        $this->http->start();
+    }
+     public function onStart($serv)
+    {
+       
+        if($serv->worker_id==0){
+            for ($i = 0; $i < $this->pool_size; $i++) {
+            $db = new mysqli;
+            $db->connect($this->config['host'],$this->config['user'],$this->config['pwd'],$this->config['name']);
+            //设置数据库编码
+            $db->query("SET NAMES '".$this->config['charset']."'");
+            $db_sock = swoole_get_mysqli_sock($db);
+            swoole_event_add($db_sock, array(&$this, 'onSQLReady'));
+            $this->idle_pool[] = array(
+                'mysqli' => $db,
+                'db_sock' => $db_sock,
+                'fd' => 0,
+            );
         }
+        }
+        
+
+    }
+     public function onpipeMessage($serv, $src_worker_id, $data)
+    {
+       //echo "#{$serv->worker_id} message from #$src_worker_id: $data\n";
+       
+        //$this->idle_pool=json_decode($data,true);
+
     }
     public function onSQLReady($db_sock)
     {
         $db_res = $this->busy_pool[$db_sock];
         $mysqli = $db_res['mysqli'];
         $fd = $db_res['fd'];
+        $data_select=array('status1' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
         if ($result = $mysqli->reap_async_query()) {
             //$ret = var_export($result->fetch_all(MYSQLI_ASSOC), true);
-            $ret = json_encode($result->fetch_all(MYSQLI_ASSOC));
-            $this->http->send($fd, $ret);
+            $data_select['data']=$result->fetch_all(MYSQLI_ASSOC);
+            $this->http->send($fd,json_encode($data_select));
             if (is_object($result)){
                 mysqli_free_result($result);
             }
         } else {
-            $this->http->send($fd, sprintf("MySQLi Error: %s\n", mysqli_error($mysqli)));
+            $data_select['error']=1;
+            $data_select['status1']='error';
+            $data_select['errormsg']=sprintf("MySQLi Error: %s\n", mysqli_error($mysqli));
+            $data_select['result']=array();
+            $this->http->send($fd,json_encode($data_select));
         }
         //release mysqli object
         $this->idle_pool[] = $db_res;
@@ -81,24 +131,90 @@ class DbServer
 
     public function onReceive($serv, $fd, $from_id, $data)
     {
-    //echo "Received: $data\n";
         //没有空闲的数据库连接
-        
-    if (count($this->idle_pool) == 0) {
+        $data_rec=json_decode($data,true);
+        if($data_rec['type']==1){
+                $data_rec['data']['sql']=$data_rec['sql'];
+                $data_rec['data']['fd']=$fd;
+                $result = $serv->taskwait(json_encode($data_rec['data']));
+                $data_arr=array('status2' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
+                    if ($result !== false) {
+                        //if($result=='00000000001'){
+                            list($status, $db_res) = explode(':', $result, 2);
+                            if ($status == 'OK') {
+                            //数据库操作成功了，执行业务逻辑代码，这里就自动释放掉MySQL连接的占用
+                                $data_arr['data']=unserialize($db_res);
+                                $serv->send($fd,json_encode($data_arr));
+                            } else {
+                                    $data_arr['error']=1;
+                                    $data_arr['status2']='error';
+                                    $data_arr['errormsg']='';
+                                    $data_arr['result']=array();
+                                    $serv->send($fd,json_encode($data_arr));
+                            }
+                       // }
+                        
+                     } else {
+                            $serv->send($fd, "Error. Task timeout\n");
+                    }
+        }else{
+             if (count($this->idle_pool) == 0) {
             //等待队列未满
             if (count($this->wait_queue) < $this->wait_queue_max) {
                 $this->wait_queue[] = array(
                     'fd' => $fd,
-                    'sql' => $data,
+                    'sql' => $data_rec['sql'],
                 );
+                } else {
+                    $this->http->send($fd, "request too many, Please try again later.");
+                }
             } else {
-                $this->http->send($fd, "request too many, Please try again later.");
+
+                $this->doQuery($fd, $data_rec['sql']);
             }
-        } else {
-            $this->doQuery($fd, $data);
         }
+   
     }
     
+    public function onTask($serv, $task_id, $from_id, $sql)
+    {
+            $sqls=json_decode($sql,true);
+            static $link = null;
+            $data_task=array('status3' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
+            if ($link == null) {
+                $link = mysqli_connect($this->config['host'],$this->config['user'],$this->config['pwd'],$this->config['name']);
+                if (!$link) {
+                    $link = null;
+                    $data_task['error']=1;
+                    $data_task['status3']='error';
+                    $data_task['errormsg']="ER:" . mysqli_error($link);
+                    $data_task['result']=array();
+                    $serv->send($sqls['fd'],json_encode($data_task));
+                    $serv->finish("ER:" . mysqli_error($link));
+                }
+            }
+         //设置编码
+            $link->query("SET NAMES '".$this->config['charset']."'");
+            $result = $link->query($sqls['sql']);
+            if (!$result) {
+                $data_task['error']=1;
+                $data_task['status3']='error';
+                $data_task['errormsg']="ER:" . mysqli_error($link);
+                $data_task['result']=array();
+                $serv->send($sqls['fd'],json_encode($data_task));
+                $serv->finish("ER:" . mysqli_error($link));
+            }else{
+                $data_task['error']=0;
+                $data_task['status3']='ok';
+                $data_task['errormsg']="";
+                $data_task['result']=1;
+                $serv->send($sqls['fd'],json_encode($data_task));
+                $serv->finish("OK:" . serialize($data_task));
+            }
+       
+        
+    }
+
     public function doQuery($fd, $sql)
     {
         //从空闲池中移除
@@ -124,7 +240,10 @@ class DbServer
         //加入工作池中
         $this->busy_pool[$db['db_sock']] = $db;
     }
-
+     public function onFinish($serv, $data)
+    {
+        //print_r($data);
+    }
     public static function getInstance() {
         if (!self::$instance) {
             self::$instance = new DbServer;

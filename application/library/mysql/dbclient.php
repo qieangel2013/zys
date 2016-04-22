@@ -14,12 +14,22 @@ class mysql_dbclient
     }
  
     public function query($sql) {
-        $this->client->send($sql);
+        if($this->parseSql($sql)){
+            $sqls['sql']=$sql;
+            $sqls['type']=2;
+        }else{
+            $sqls['sql']=$sql;
+            $sqls['type']=1;
+        }
+        $this->client->send(json_encode($sqls));
         {
             $dbclient_data=json_decode($this->client->recv(),true);
         }
         return $dbclient_data;
 
+    }
+    private function parseSql($sql){
+        return preg_match("/^(\s*)select/i",$sql);
     }
     public function close() {
         $this->client->close();

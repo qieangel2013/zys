@@ -22,9 +22,14 @@ class IndexController extends Yaf_Controller_Abstract {
     public function dbtestAction() {
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $dbclient=new mysql_dbclient;
-        $data=$dbclient->query('select * from pro_account');
+        
+        for ($i=0; $i <5 ; $i++) { 
+            $dbclient->query("INSERT INTO user(name) VALUES('$i')");
+            //echo "INSERT INTO user(name) VALUES('$i')";
+        }
+        $data=$dbclient->query("select * from user");
         $dbclient->close();
-        print_r($data);;
+        print_r($data);
         exit;
     }
 	public function testAction() {
