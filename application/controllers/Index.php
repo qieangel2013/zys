@@ -20,15 +20,20 @@ class IndexController extends Yaf_Controller_Abstract {
 		exit;
 	}
     public function dbtestAction() {
+        ini_set("display_errors", "On");
+        error_reporting(E_ALL | E_STRICT);
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $dbclient=new mysql_dbclient;
-        $data=$dbclient->query("select * from user");
-        print_r($data);
-        for ($i=0; $i <5 ; $i++) { 
+        
+        //print_r($data);
+        for ($i=0; $i <100 ; $i++) { 
             $dbclient->query("INSERT INTO user(name) VALUES('$i')");
             //echo "INSERT INTO user(name) VALUES('$i')";
         }
+
+        $data=$dbclient->query("select * from user");
         $dbclient->close();
+        print_r($data);
         exit;
     }
 	public function testAction() {

@@ -4,21 +4,8 @@ support separate read and write, pdo, mysqli, mongo, upload operation,
 adding redis operations and weixin sharing, will then join weixin pay
 集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
 加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
-已支持swoole_http_server，swoole_websocket_server，高并发抢购、秒杀，数组算法处理等，添加了后台admin模块，集成表格树！添加基于swoole的数据库连接池，支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
-###数据库连接池使用方法
-		配置文件添加：
-		;数据库连接池配置
-		DbServer.port=9501
-		DbServer.logfile="/server/log/DbServer.log"
-		DbServer.localip="192.168.1.56"
-		调用方法：
-		首先要执行php的cli模式执行DbServer.php数据库连接池服务文件
-		前台调用：
-		$dbclient=new mysql_dbclient;
-		$data=$dbclient->query('select * from pro_account');
-		$dbclient->close();
-		print_r($data);
-		exit;
+已支持swoole_http_server，swoole_websocket_server，高并发抢购、秒杀，数组算法处理等，添加了后台admin模块，集成表格树！
+支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 ###后台访问：http://localhost/admin/user/index
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/admin.png)
 ###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
