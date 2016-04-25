@@ -41,7 +41,7 @@ class DbServer
             'worker_num' => 1,
             //'task_worker_num' => 10,
             'max_request' => 0,
-            'daemonize' => false,
+            'daemonize' => true,
             'dispatch_mode' => 1,
             'log_file' => $this->Serconfig['logfile']
             )
@@ -50,9 +50,9 @@ class DbServer
             $this->http->set(
             array(
             'worker_num' => 10,
-            'task_worker_num' => 10,
+            'task_worker_num' => $this->pool_size,
             'max_request' => 0,
-            'daemonize' => false,
+            'daemonize' => true,
             'dispatch_mode' => 1,
             'log_file' => $this->Serconfig['logfile']
             )
@@ -185,7 +185,7 @@ class DbServer
     
     public function onTask($serv, $task_id, $from_id, $sql)
     {
-        $sql=json_decode($sql,true);
+        $sqls=json_decode($sql,true);
         $data_task=array('status' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
          if (!self::$link) {
             self::$link = new mysqli;
@@ -193,15 +193,15 @@ class DbServer
             //设置数据库编码
             self::$link->query("SET NAMES '".$this->config['charset']."'");
         }
-        $result = self::$link->query($sql['sql']);
+        $result = self::$link->query($sqls['sql']);
         if (!$result)
         {
             return "query error";
         }
-        if($sql['type']==1){
+        if($sqls['type']==1){
             $data=1;
         }else{
-            $data = $result->fetchAll(MYSQLI_ASSOC);
+            $data = $result->fetch_all(MYSQLI_ASSOC);
         }
         
         return $data;
