@@ -27,7 +27,7 @@ adding redis operations and weixin sharing, will then join weixin pay
         print_r($data);
         exit;
 ###后台访问：http://localhost/admin/user/index
-![](https://github.com/qieangel2013/yaf/blob/master/public/images/admin.png)
+	   
 ###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
 	需要安装php扩展zqf
 	$obj=new zqf();
