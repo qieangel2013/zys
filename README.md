@@ -10,6 +10,8 @@ adding redis operations and weixin sharing, will then join weixin pay
 	简单地封装文件在/application/library/mysql/dbclient.php
 	配置在conf/application.ini中
 	;数据库连接池配置
+	DbServer.async=true   //配置是同步执行还是异步执行
+	DbServer.pool_num=20  //配置连接池mysql的数量
 	DbServer.port=9501
 	DbServer.logfile="/server/log/DbServer.log"
 	DbServer.localip="192.168.2.13"
