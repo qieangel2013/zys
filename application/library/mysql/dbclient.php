@@ -14,14 +14,7 @@ class mysql_dbclient
     }
  
     public function query($sql) {
-        if($this->parseSql($sql)){
-            $sqls['sql']=$sql;
-            $sqls['type']=2;
-        }else{
-            $sqls['sql']=$sql;
-            $sqls['type']=1;
-        }
-        $this->client->send(json_encode($sqls));
+        $this->client->send($sql);
         {
             $dbclient_data=json_decode($this->client->recv(),true);
         }
