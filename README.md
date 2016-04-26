@@ -27,6 +27,8 @@ adding redis operations and weixin sharing, will then join weixin pay
         $dbclient->close();
         print_r($data);
         exit;
+###数据库连接池多进程执行如下：
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/multiprocess.png)
 ###后台访问：http://localhost/admin/user/index
 	   
 ###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
