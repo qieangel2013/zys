@@ -20,6 +20,7 @@ class DbServer
     private $config;
     private $Serconfig;
     private $isasync;
+    private $multiprocess;
     protected $pool_size = 20;
     protected $idle_pool = array(); 
     protected $busy_pool = array(); 
@@ -34,6 +35,7 @@ class DbServer
         $this->Serconfig=$config_obj->DbServer->toArray();
         $this->pool_size=isset($this->Serconfig['pool_num'])?$this->Serconfig['pool_num']:20;
         $this->isasync=isset($this->Serconfig['async'])?$this->Serconfig['async']:true;
+        $this->multiprocess=isset($this->Serconfig['multiprocess'])?$this->Serconfig['multiprocess']:false;
         $this->http = new swoole_server("0.0.0.0", $this->Serconfig['port']);
         if($this->isasync){
             $this->http->set(
@@ -168,7 +170,11 @@ class DbServer
                     $this->doQuery($fd, $data);
             }
         }else{
-            $result = $this->http->taskwait($data);
+            if($this->multiprocess){
+                $result = $this->http->task($data);
+            }else{
+                 $result = $this->http->taskwait($data);
+            }
             $data_resp=array('status' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
             if ($result !== false)
             {
