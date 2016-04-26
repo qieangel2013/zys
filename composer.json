@@ -1,0 +1,17 @@
+{
+    "name": "yaffastdemo/yaf",
+    "description": "the yaf Framework",
+    "type": "framework",
+    "keywords": ["framework","yaf","ORM"],
+    "license": "Apache2",
+    "authors": [
+        {
+            "name": "qieangel2013",
+            "email": "904208360@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "minimum-stability": "dev"
+}
