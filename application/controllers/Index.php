@@ -26,7 +26,7 @@ class IndexController extends Yaf_Controller_Abstract {
         $dbclient=new mysql_dbclient;
         
         //print_r($data);
-        for ($i=0; $i <10000 ; $i++) { 
+        for ($i=0; $i <100000 ; $i++) { 
             $dbclient->query("INSERT INTO user(name) VALUES('$i')");
             //echo "INSERT INTO user(name) VALUES('$i')";
         }
