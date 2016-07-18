@@ -10,6 +10,23 @@ class IndexController extends Yaf_Controller_Abstract {
         ini_set("display_errors", "On");
         error_reporting(E_ALL | E_STRICT);
 	}
+	public function getpzAction() {
+        //注意：需要安装yaconf扩展，并且yaconf.directory=/tmp/yaconf 必须在php.ini里设置，不能动态加载
+        echo Yaconf::get("conf.zqf");
+        exit;
+    }
+    public function autoAction() {
+        //注意：需要安装yac扩展，用于存储共享变量，下面的实例作为高并发计数器
+        $yac = new Yac();
+        $count=$yac->get('zqf');
+        if(!$count){
+            $yac->set('zqf', 1);
+        }else{
+            $yac->set('zqf', $count+0.5);
+        }
+        echo $count;
+        exit;
+    }
 	public function indexAction() {
     	$where=array('id' =>37936);
    		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
