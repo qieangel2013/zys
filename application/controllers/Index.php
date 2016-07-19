@@ -253,4 +253,13 @@ class IndexController extends Yaf_Controller_Abstract {
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolesocket.html");
     }
+    public function swoolelivecameraAction(){
+    	//直播视频录入
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $this->getView()->display("index/swoolelivecamera.html");
+    }
+    public function swooleliveAction(){
+    	//直播视频接受
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $this->getView()->display("index/swoolelive.html");
 }
