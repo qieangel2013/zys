@@ -9,11 +9,13 @@
 </head>
 <body>
     <img id="receiver" style="width:320px;height:240px"/>
-
+    <audio id="audio" src="" controls="controls">
+    </audio>
     <script type="text/javascript" charset="utf-8">
         var zqfdata;
         var receiver_socket = new WebSocket("ws://192.168.102.163:9503");
         var image = document.getElementById('receiver');
+        var audio = document.querySelector('audio');
         receiver_socket.onmessage = function(data)
         {
             zqfdata= jQuery.parseJSON(data.data);
@@ -21,16 +23,38 @@
                 image.src=zqfdata.data;
             }else if(zqfdata.type=='mess'){
                 $('#chatLog').append('<br/>'+zqfdata.data);
-            }
-            
-            
+            }else if(zqfdata.type=='mic'){
+               // var blob=dataURLtoBlob(zqfdata.data);
+                //console.log(zqfdata.data);
+                //console.log(window.URL.createObjectURL(blob));
+                //$('#audio').attr('src',zqfdata.data);
+                
+                audio.src =zqfdata.data;
+                if(audio.paused){ 
+                    audio.play(); 
+                } 
+                /*g_audio.elems["id"] = '';
+                g_audio.push({
+                song_id: '',
+                song_fileUrl: window.URL.createObjectURL(zqfdata.data)
+                //audio.src = window.URL.createObjectURL(zqfdata.data);
+            });  */
         }
+    }
   receiver_socket.onopen = function (event) {
     receiver_socket.send(JSON.stringify({data:"亲！我连上啦！",type:"mess"})); 
   };
    receiver_socket.onclose = function(event) { 
     console.log('Client notified socket has closed',event); 
   }; 
+function dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
     </script>
     <div id="chatLog" ></div>
 <input  type="text" id="content">
