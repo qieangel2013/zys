@@ -8,8 +8,8 @@ adding redis operations and weixin sharing, will then join weixin pay
 在/application/controllers/Index.php里添加了yac、yaconf的使用，通过yac实现高并发计数器，加入swoole实现简单的视频直播
 ###swoole实现简单的视频直播
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
-	录制视频页面 http://localhost/index/swoolelivecamera
-	接受视频页面 http://localhost/index/swoolelive
+	录制视频页面 http://localhost/index/swoolelivecamera（按键盘a字母录音，按键弹起停止录音）
+	接受视频页面 http://localhost/index/swoolelive（自动接收录入页面的录音并播放）
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ###composer 安装
 {
