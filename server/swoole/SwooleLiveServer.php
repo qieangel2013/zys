@@ -51,7 +51,10 @@ class SwooleLiveServer
 		    		$server->push($fd,json_encode($data_mes,true));
 		    	}elseif($framedata['type']=='video'){
 		    		$server->push($fd,$frame->data);
-		    	}
+		    	}elseif($framedata['type']=='mic'){
+                                $server->push($fd,$frame->data);
+                        }
+
         		
     	    }
     	}
