@@ -10,6 +10,7 @@ adding redis operations and weixin sharing, will then join weixin pay
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
 	录制视频页面 http://localhost/index/swoolelivecamera
 	接受视频页面 http://localhost/index/swoolelive
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ###composer 安装
 {
     "require": {
