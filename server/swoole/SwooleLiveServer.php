@@ -39,12 +39,20 @@ class SwooleLiveServer
 		/*for($i=1 ; $i<= $result ; $i++) {
         	$server->push($i,'游客'.$frame->data);
     	}*/
-    	if('smes_closed'==$frame->data){
+    	$framedata=json_decode($frame->data,true);
+    	if('smes_closed'==$framedata['data']){
     		$server->Close($frame->fd);
     	}else{
 			$result_fd=json_decode($result,true);
 		    foreach($result_fd as $id=>$fd){
-        		$server->push($fd,$frame->data);
+		    	if($framedata['type']=='mess'){
+		    		$data_mes['data']='游客'.$frame->fd.'说：' .$framedata['data'];
+		    		$data_mes['type']=$framedata['type'];
+		    		$server->push($fd,json_encode($data_mes,true));
+		    	}elseif($framedata['type']=='video'){
+		    		$server->push($fd,$frame->data);
+		    	}
+        		
     	    }
     	}
 	}
