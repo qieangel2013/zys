@@ -11,7 +11,7 @@
     <canvas id="output" style="display:none"></canvas>
 
     <script type="text/javascript" charset="utf-8">
-
+    	var data;
         var socket = new WebSocket("ws://192.168.102.163:9503");
         var back = document.getElementById('output');
         var backcontext = back.getContext('2d');
@@ -36,7 +36,8 @@
                 }
             }
             if(video.src){
-                socket.send(back.toDataURL("image/jpeg", 0.5));
+            	data={data:back.toDataURL("image/jpeg", 0.5),type:'video'}
+                socket.send(JSON.stringify(data));
             }
             setTimeout(draw, 100);
         }
