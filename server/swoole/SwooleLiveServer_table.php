@@ -10,10 +10,10 @@ class SwooleLiveServer
 		$this->table->create();
 
 
-		$server = new swoole_websocket_server("0.0.0.0",8888);
+		$server = new swoole_websocket_server("0.0.0.0",9503);
 		$server->set(
 			array(
-				'daemonize' => false
+				'daemonize' => true
 			)
 		);
 		$server->on('Open',array($this , 'onOpen'));
@@ -22,7 +22,6 @@ class SwooleLiveServer
 		$server->start();
 	}
 	public function onOpen($server, $req) {
-		echo $req->fd;
 		$this->table->set($req->fd, array('id'=>$req->fd));
 
 	}
