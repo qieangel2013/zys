@@ -6,10 +6,10 @@ adding redis operations and weixin sharing, will then join weixin pay
 加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
 已支持swoole_http_server，swoole_websocket_server，高并发抢购、秒杀，数组算法处理等，添加了后台admin模块，集成表格树！添加基于swoole的数据库连接池，支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
 在/application/controllers/Index.php里添加了yac、yaconf的使用，通过yac实现高并发计数器，加入swoole实现简单的视频直播，加入了网页控制台的实现例如：http://localhost/console/console.php
-###swoole实现简单的视频直播
+###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
-	录制视频页面 http://localhost/index/swoolelivecamera（按键盘a字母录音，按键弹起停止录音）
-	接受视频页面 http://localhost/index/swoolelive（自动接收录入页面的录音并播放）
+	录制视频页面 http://localhost/index/swoolelivecamera
+	接受视频页面 http://localhost/index/swoolelive
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ###composer 安装
 {
