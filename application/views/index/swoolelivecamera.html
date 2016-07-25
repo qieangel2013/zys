@@ -158,6 +158,7 @@
 
         socket.onopen = function(){
             draw();
+            ly_start();
         }
 
         var draw = function(){
@@ -186,7 +187,58 @@
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia || navigator.msGetUserMedia;
         navigator.getUserMedia({video:true,audio:true}, success, console.log);
- 
+ 	
+ 	var ly_start= function(){
+            try{
+            	//gRecorder.start();
+            	//door = true;
+            if(gRecorder!=null){
+            if(!door) {
+            	
+            		gRecorder.start();
+                	door = true;
+            	
+            }
+        }
+            }catch(e){
+                if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                    return setTimeout(ly_end, 100);
+                } else {
+                    throw e;
+                }
+            }
+            
+            setTimeout(ly_end, 100);
+        }
+        var ly_end= function(){
+            try{
+            	//gRecorder.start();
+            	//door = true;
+           if(gRecorder!=null){
+            if(door) {
+            	var sd_gRecorder=gRecorder.getBlob();
+            	blobToDataURL(sd_gRecorder, function (dataurl){
+        		data={data:dataurl,type:'mic'};
+                socket.send(JSON.stringify(data));
+                //console.log(JSON.stringify(gRecorder.getBlob()));
+                //audio.src = window.URL.createObjectURL(gRecorder.getBlob());
+                gRecorder.clear();
+                gRecorder.stop();
+                door = false;
+    			});
+            	
+            }
+        }
+            }catch(e){
+                if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                    return setTimeout(ly_start, 100);
+                } else {
+                    throw e;
+                }
+            }
+            
+            setTimeout(ly_start, 100);
+        }
     document.onkeydown = function(e) {
         if(e.keyCode === 65) {
             if(!door) {
