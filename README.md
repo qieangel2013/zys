@@ -15,7 +15,7 @@ adding redis operations and weixin sharing, will then join weixin pay
 	需要php以cli模式运行/server/swoole/VmStatServer.php
 	本地访问http://localhost/vmstat/
 	执行如下：
-![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstat.png)
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstats.png)
 ###composer 安装
 {
     "require": {
