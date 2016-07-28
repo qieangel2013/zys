@@ -263,3 +263,4 @@ class IndexController extends Yaf_Controller_Abstract {
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolelive.html");
 }
+}
