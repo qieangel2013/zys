@@ -15,7 +15,8 @@ class VmStatServer
 
 		$server->set(
 			array(
-				'daemonize' => true
+				'daemonize' => true,
+				'log_file' => '/server/log/vmstat.log'
 			)
 		);
 
@@ -43,7 +44,6 @@ class VmStatServer
 			$result = ob_get_contents();
 			ob_end_clean();
 			$result_fd=json_decode($result,true);
-			$server->push($fd,fread($this->vmstat_handle, 1024));
 			while(!feof($this->vmstat_handle)) 
     		{ 
 		    	foreach($result_fd as $id=>$fd){
