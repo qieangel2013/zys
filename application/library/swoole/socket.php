@@ -13,26 +13,26 @@ class swoole_socket extends Model {
 		$where=array('id' =>$userid);
 		$result =$this->user->where($where)->select();
 	}
-	public static function savefd($fd){
+	public static function savefd($fd,$kname='fd'){
 		//$where=array('id' =>37936);
 		$redis_con=new phpredis();
-	if($redis_con->listSize('fd')){
-		$redis_con->listPush('fd',$fd,0,1);
+	if($redis_con->listSize($kname)){
+		$redis_con->listPush($kname,$fd,0,1);
 	}else{
-		$redis_con->listPush('fd',$fd);
+		$redis_con->listPush($kname,$fd);
 	}
 		//file_put_contents( __DIR__ .'/log.txt' , $fd);
 	}
-	public static function getfd(){
+	public static function getfd($kname='fd'){
 		$redis_con=new phpredis();
-		$result=$redis_con->listGet('fd',0,-1);
+		$result=$redis_con->listGet($kname,0,-1);
 		 //$m = file_get_contents( __DIR__ .'/log.txt');
 		//echo $m;
 		echo json_encode($result);
 	}
-	public static function removefd($fd){
+	public static function removefd($fd,$kname='fd'){
 		$redis_con=new phpredis();
-		$redis_con->listRemove('fd',$fd);
+		$redis_con->listRemove($kname,$fd);
 	}
 
 
