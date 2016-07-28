@@ -31,7 +31,7 @@ class VmStatServer
 	}
 
 	public function onOpen($server, $req) {
-		$this->application->execute(array('swoole_socket','savefd'),$req->fd);
+		$this->application->execute(array('swoole_socket','savefd'),$req->fd,'vmstat');
 		$this->vmstat_handle=popen('vmstat 1', 'r');
 
 	}
@@ -41,7 +41,7 @@ class VmStatServer
     		$server->push($frame->fd,"procs -----------memory---------- ---swap-- -----io---- -system-- ----cpu----\n");
     		$server->push($frame->fd,"r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa\n");
 			ob_start();
-			$this->application->execute(array('swoole_socket','getfd'));
+			$this->application->execute(array('swoole_socket','getfd'),'vmstat');
 			$result = ob_get_contents();
 			ob_end_clean();
 			$result_fd=json_decode($result,true);
@@ -69,7 +69,7 @@ class VmStatServer
 	public function onClose($server, $fd) {
 		@shell_exec('killall vmstat');
     	@pclose($this->vmstat_handle);
-		$this->application->execute(array('swoole_socket','removefd'),$fd);
+		$this->application->execute(array('swoole_socket','removefd'),$fd,'vmstat');
 	}
 	public static function getInstance() {
 		if (!self::$instance) {
