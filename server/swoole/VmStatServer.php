@@ -15,6 +15,7 @@ class VmStatServer
 
 		$server->set(
 			array(
+				'worker_num' => 1,
 				'daemonize' => true,
 				'log_file' => '/server/log/vmstat.log'
 			)
