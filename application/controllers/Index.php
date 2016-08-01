@@ -263,4 +263,16 @@ class IndexController extends Yaf_Controller_Abstract {
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolelive.html");
 }
+public function rpcAction(){
+    	//rpc调用
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $sd=new RpcClient;
+		$datas=array('name' => 'userinfo','result'=>'{"id":3,"name"=>"zqf",email:"904208360@qq.comn"}');
+		$sd->send($datas);
+		$info=$sd->getresult();
+		print_r($info);
+		$sd->close();
+		exit;
+
+}
 }
