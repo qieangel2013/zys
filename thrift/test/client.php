@@ -1,14 +1,16 @@
 <?php
-require_once __DIR__ . "/Thrift/ClassLoader/ThriftClassLoader.php";
+define('APPLICATION_PATH_DIR', dirname(dirname(__DIR__)). "/application");
+define('THRIFT_DIR_PATH',dirname(APPLICATION_PATH_DIR)."/thrift");
+require_once THRIFT_DIR_PATH. "/Thrift/ClassLoader/ThriftClassLoader.php";
 $loader = new Thrift\ClassLoader\ThriftClassLoader();
-$loader->registerNamespace('Thrift', __DIR__);
-$loader->registerNamespace('swoole', __DIR__);
-$loader->registerNamespace('Bin', __DIR__);
-$loader->registerDefinition('Bin',  __DIR__);
+$loader->registerNamespace('Thrift', THRIFT_DIR_PATH);
+$loader->registerNamespace('swoole', THRIFT_DIR_PATH);
+$loader->registerNamespace('Bin', THRIFT_DIR_PATH);
+$loader->registerDefinition('Bin',  THRIFT_DIR_PATH);
 $loader->register();
 define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
-$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
-$this->application->bootstrap();
+$application = new Yaf_Application(dirname(APPLICATION_PATH_DIR). "/conf/application.ini");
+$application->bootstrap();
 $config_obj=Yaf_Registry::get("config");
 $rpc_config=$config_obj->rpc->toArray();
 $socket = new Thrift\Transport\TSocket($rpc_config['host'],$rpc_config['port']);
