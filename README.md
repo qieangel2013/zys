@@ -8,6 +8,7 @@
 	5.基于yac、yaconf提供共享数据、配置服务
 	6.基于php_ext_zqf提供高并发计数器、红包、二维码服务
 	7.很好的支持网页版console的shell服务
+	8.基于swoole提供分布式服务器通讯服务
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
 	录制视频页面 http://localhost/index/swoolelivecamera
