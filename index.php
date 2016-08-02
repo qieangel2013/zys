@@ -7,7 +7,7 @@ define ("MYPATH", dirname(__FILE__));
  * 另外在配置文件中, 可以替换PHP的常量, 比如此处的APPLICATION_PATH
  */
 $application = new Yaf_Application("conf/application.ini");
-
+ 
 /* 如果打开flushIstantly, 则视图渲染结果会直接发送给请求端
  * 而不会写入Response对象
  */
