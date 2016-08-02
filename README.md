@@ -1,11 +1,13 @@
-###yaf项目快速开发（兼容php7）：
-yaf project rapid development, integration of the db action class support chain operation,
-support separate read and write, pdo, mysqli, mongo, upload operation,
-adding redis operations and weixin sharing, will then join weixin pay
-集成了db操作类支持链式操作，支持读写分离，pdo，mysqli，mongo，upload操作，
-加入redis操作以及微信分享，加入微信支付，加入swoole的支持，
-已支持swoole_http_server，swoole_websocket_server，高并发抢购、秒杀，数组算法处理等，添加了后台admin模块，集成表格树！添加基于swoole的数据库连接池，支持自定义加载目录类文件和函数文件（通过插件的形式实现的）
-在/application/controllers/Index.php里添加了yac、yaconf的使用，通过yac实现高并发计数器，加入swoole实现简单的视频直播，加入了网页控制台的实现例如：http://localhost/console/console.php，加入swoole实现的vmstat服务器监控，加入thrift的rpc远程调用
+###zys高性能服务框架
+	基于yaf和swoole的高性能服务框架
+###核心特性
+	1.基于swoole提供同步异步数据库连接池服务
+	2.基于thrift提供rpc远程调用服务
+	3.基于HTML5提供在线网络直播平台服务
+	4.基于vmstat提供服务器硬件实时监控服务
+	5.基于yac、yaconf提供共享数据、配置服务
+	6.基于php_ext_zqf提供高并发计数器、红包、二维码服务
+	7.很好的支持网页版console的shell服务
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
 	录制视频页面 http://localhost/index/swoolelivecamera
