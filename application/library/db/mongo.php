@@ -153,7 +153,7 @@ class db_mongo extends db_Db{
      */
     public function error() {
         $this->error = $this->_mongo->lastError();
-        //trace($this->error,'','ERR');
+        trace($this->error,'','ERR');
         return $this->error;
     }
 

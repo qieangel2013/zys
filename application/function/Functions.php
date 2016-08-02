@@ -679,3 +679,29 @@ function addtask($data){
         	return preg_replace_callback('/@E(.{6}==)/', function($r){return base64_decode($r[1]);},$str);
     }
 }
+//trance
+function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
+    static $_trace =  array();
+    $config_obj=Yaf_Registry::get("config");
+    $log_config=$config_obj->log->toArray();
+    $record=$log_config['record'];
+
+    if('[yaf]' === $value){ // 获取trace信息
+        return $_trace;
+    }else{
+        $info   =   ($label?$label.':':'').print_r($value,true);
+        if($record) {
+            Log::record($info,$level,$record);
+            Log::write('123','err');
+        }
+        if('ERR' == $level) {// 抛出异常
+            throw new Exception($info);
+        }
+        $level  =   strtoupper($level);
+        if(!isset($_trace[$level])) {
+                $_trace[$level] =   array();
+            }
+        $_trace[$level][]   = $info;
+
+    }
+}

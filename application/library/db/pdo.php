@@ -407,6 +407,7 @@ class db_pdo extends db_Db{
      * @return string
      */
     public function error() {
+    	// /print_r($this->PDOStatement);
         if($this->PDOStatement) {
             $error = $this->PDOStatement->errorInfo();
             $this->error = $error[1].':'.$error[2];
@@ -416,7 +417,10 @@ class db_pdo extends db_Db{
         if('' != $this->queryStr){
             $this->error .= "\n [ SQL语句 ] : ".$this->queryStr;
         }
-        throw new Exception($this->error());
+        trace($this->error,'','ERR');
+        //print_r($this->error());
+        //echo "<br/>";
+        //throw new Exception($this->error());
         return $this->error;
     }
 

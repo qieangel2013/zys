@@ -299,7 +299,7 @@ class db_mysqli extends db_Db{
         if('' != $this->queryStr){
             $this->error .= "\n [ SQL语句 ] : ".$this->queryStr;
         }
-        //trace($this->error,'','ERR');
+        trace($this->error,'','ERR');
         return $this->error;
     }
 
