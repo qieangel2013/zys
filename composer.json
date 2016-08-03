@@ -1,6 +1,6 @@
 {
     "name": "qieangel2013/zys",
-    "description": "zyf php Framework",
+    "description": "zys php Framework",
     "type": "framework",
     "keywords": ["swoole","yaf","thrift"],
     "license": "Apache2",
