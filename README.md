@@ -1,5 +1,5 @@
 #zys高性能服务框架
-[![Build Status](https://img.shields.io/wercker/ci/wercker/docs.svg)](https://packagist.org/packages/qieangel2013/zyf)
+[![Build Status](https://img.shields.io/wercker/ci/wercker/docs.svg)](https://packagist.org/packages/qieangel2013/zys)
 ![Supported PHP versions: >=5.3](https://img.shields.io/badge/php-%3E%3D5.3-blue.svg)
 ![License](https://img.shields.io/hexpm/l/plug.svg)
 ###核心特性
