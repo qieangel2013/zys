@@ -27,7 +27,7 @@
 ###composer 安装
 {
     "require": {
-        "qieangel2013/zys": "dev-master"
+        "qieangel2013/zys": "0.1.0"
     }
 }
 ###数据库连接池使用方法
