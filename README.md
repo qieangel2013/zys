@@ -27,7 +27,7 @@
 ###composer 安装
 {
     "require": {
-        "yaffastdemo/yaf": "dev-master"
+        "qieangel2013/zys": "dev-master"
     }
 }
 ###数据库连接池使用方法
