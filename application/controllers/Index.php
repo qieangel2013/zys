@@ -29,6 +29,7 @@ class IndexController extends Yaf_Controller_Abstract {
     }
 	public function indexAction() {
     	$where=array('id' =>37936);
+        Log::trance('777799888');
    		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		//$result = $user->where($where)->select();
 		//echo $user->getlastsql();

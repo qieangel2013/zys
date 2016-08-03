@@ -65,22 +65,12 @@ class Log {
      * @param string $extra 额外参数
      * @return void
      */
-    static function save($type='3',$destination='',$extra='') {
+    static function trance($message,$level='err',$destination='',$type=3,$extra='') {
         $config_obj=Yaf_Registry::get("config");
-        $log_config=$config_obj->log->toArray();
-        if(empty(self::$log)) return ;
-        $type = $type?$type:'3';
+        $log_config=$config_obj->log->toArray();;
+        $type = $type?$type:3;
         if(self::FILE == $type) { // 文件方式记录日志信息
             if(empty($destination)){
-                if($log_config['record']){
-                    if(!is_dir($log_config['dir'])){
-                        mkdir($log_config['dir'],0777,true);
-                    }
-                    if(!is_dir($log_config['dir'].'/'.date('Ymd'))){
-                        mkdir($log_config['dir'].'/'.date('Ymd'),0777,true);
-                    }
-                     $destination = $log_config['dir'].'/'.date('Ymd').'/'.date('y_m_d').'.log';
-                }else{
                      if(!is_dir(MYPATH.'/logs/')){
                         mkdir(MYPATH.'/logs/',0777,true);
                     }
@@ -89,8 +79,6 @@ class Log {
                     }
                     $destination = MYPATH.'/logs/'.date('Ymd').'/'.date('y_m_d').'.log';
                 }
-                
-            }
             //检测日志文件大小，超过配置大小则备份日志文件重新生成
             if(is_file($destination) && floor('2097152') <= filesize($destination) )
                   rename($destination,dirname($destination).'/'.time().'-'.basename($destination));
@@ -99,10 +87,7 @@ class Log {
             $extra   =  $extra?$extra:'额外信息';
         }
         $now = date(self::$format);
-        error_log($now.' '.get_client_ip().' '.$_SERVER['REQUEST_URI']."\r\n".implode('',self::$log)."\r\n", $type,$destination ,$extra);
-         if($log_config['record']){
-            self::append($destination,$now.' '.get_client_ip().' '.$_SERVER['REQUEST_URI']."\r\n".implode('',self::$log)."\r\n",$type);
-         }
+        self::append($destination,"{$now} {$level}: {$message}\r\n",$type);
         // 保存后清空日志缓存
         self::$log = array();
         //clearstatcache();
@@ -119,7 +104,7 @@ class Log {
      * @param string $extra 额外参数
      * @return void
      */
-    static function write($message,$level=self::ERR,$type=3,$destination='',$extra='') {
+    static function write($message,$level=self::ERR,$destination='',$type=3,$extra='') {
         $config_obj=Yaf_Registry::get("config");
         $log_config=$config_obj->log->toArray();
         $now = date(self::$format);
@@ -151,7 +136,7 @@ class Log {
             $destination   =   $destination?$destination:'mubiao';
             $extra   =  $extra?$extra:'额外信息';
         }
-        error_log("{$now} {$level}: {$message}\r\n", $type,$destination,$extra );
+        error_log("{$now} {$level}: {$message}\r\n", $type,$destination,$extra);
         if($log_config['record']){
             self::append($destination,"{$now} {$level}: {$message}\r\n",$type);
          }
