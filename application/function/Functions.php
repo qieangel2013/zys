@@ -691,8 +691,7 @@ function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
     }else{
         $info   =   ($label?$label.':':'').print_r($value,true);
         if($record) {
-            Log::record($info,$level,$record);
-            Log::write('123','err');
+            Log::write($info,$level);
         }
         if('ERR' == $level) {// 抛出异常
             throw new Exception($info);
