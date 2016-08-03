@@ -1,8 +1,8 @@
 {
-    "name": "yaffastdemo/yaf",
-    "description": "the yaf Framework",
+    "name": "qieangel2013/zyf",
+    "description": "zyf php Framework",
     "type": "framework",
-    "keywords": ["framework","yaf","ORM"],
+    "keywords": ["swoole","yaf","thrift"],
     "license": "Apache2",
     "authors": [
         {
@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3"
     },
     "minimum-stability": "dev"
 }
