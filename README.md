@@ -13,6 +13,8 @@
 	8.基于swoole提供分布式服务器通讯服务
 ###服务启动
 	需要php以cli模式运行/server/server.php
+        php server.php start
+        php server.php stop
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
 	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
 	录制视频页面 http://localhost/index/swoolelivecamera
