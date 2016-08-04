@@ -29,7 +29,10 @@ class IndexController extends Yaf_Controller_Abstract {
     }
 	public function indexAction() {
     	$where=array('id' =>37936);
-        Log::trance('777799888');
+        //第一个参数是要打印的内容
+        //第二各参数是生成日志文件名
+        //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
+        logs('zas');
    		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		//$result = $user->where($where)->select();
 		//echo $user->getlastsql();

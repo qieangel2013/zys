@@ -684,8 +684,7 @@ function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
     static $_trace =  array();
     $config_obj=Yaf_Registry::get("config");
     $log_config=$config_obj->log->toArray();
-    $record=$log_config['record'];
-
+    $record=isset($log_config['record'])?$log_config['record']:FALSE;
     if('[yaf]' === $value){ // 获取trace信息
         return $_trace;
     }else{
@@ -703,4 +702,11 @@ function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
         $_trace[$level][]   = $info;
 
     }
+}
+//log
+//第一个参数是要打印的内容
+//第二各参数是生成日志文件名
+//第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
+function logs($message,$destination='',$level='DEBUG'){
+    Log::trance($message,$destination,$level);
 }

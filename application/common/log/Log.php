@@ -65,20 +65,23 @@ class Log {
      * @param string $extra 额外参数
      * @return void
      */
-    static function trance($message,$level='err',$destination='',$type=3,$extra='') {
+    static function trance($message,$destination='',$level='ERR',$type=3,$extra='') {
         $config_obj=Yaf_Registry::get("config");
         $log_config=$config_obj->log->toArray();;
         $type = $type?$type:3;
+        $log_config['record']=isset($log_config['record'])?$log_config['record']:false;
         if(self::FILE == $type) { // 文件方式记录日志信息
-            if(empty($destination)){
-                     if(!is_dir(MYPATH.'/logs/')){
+        	if(!is_dir(MYPATH.'/logs/')){
                         mkdir(MYPATH.'/logs/',0777,true);
-                    }
-                    if(!is_dir(MYPATH.'/logs'.'/'.date('Ymd'))){
+            }
+            if(!is_dir(MYPATH.'/logs'.'/'.date('Ymd'))){
                         mkdir(MYPATH.'/logs'.'/'.date('Ymd'),0777,true);
-                    }
+            }
+            if(empty($destination)){
                     $destination = MYPATH.'/logs/'.date('Ymd').'/'.date('y_m_d').'.log';
-                }
+            }else{
+            		$destination = MYPATH.'/logs/'.date('Ymd').'/'.$destination;
+            }
             //检测日志文件大小，超过配置大小则备份日志文件重新生成
             if(is_file($destination) && floor('2097152') <= filesize($destination) )
                   rename($destination,dirname($destination).'/'.time().'-'.basename($destination));
@@ -109,6 +112,7 @@ class Log {
         $log_config=$config_obj->log->toArray();
         $now = date(self::$format);
         $type = $type?$type:3;
+        $log_config['record']=isset($log_config['record'])?$log_config['record']:false;
         if(self::FILE == $type) { // 文件方式记录日志
             if(empty($destination)){
                 if($log_config['record']){
