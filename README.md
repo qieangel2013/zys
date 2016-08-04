@@ -112,11 +112,11 @@
 	);
 	$Verify = new Verify($config);
 	$Verify->entry();
-###添加了生成二维码功能，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###添加了生成二维码功能，详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
 	需要安装php扩展zqf
 	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
-###生成透明二维码，详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###生成透明二维码，详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
 	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ===================================
@@ -272,5 +272,6 @@
 	</body>
 	</html>
 
-###License
-	Apache License Version 2.0 see [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html)
+### License
+
+Apache License Version 2.0 see http://www.apache.org/licenses/LICENSE-2.0.html
