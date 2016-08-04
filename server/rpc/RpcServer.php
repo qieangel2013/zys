@@ -1,7 +1,7 @@
 <?php
-$process = new swoole_process('callback_function', true);
+$process = new swoole_process('rpcserver_call', true);
 $pid = $process->start();
-function callback_function(swoole_process $worker)
+function rpcserver_call(swoole_process $worker)
 {
 	define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
 	define('THRIFT_DIR_PATH',dirname(APPLICATION_PATH)."/thrift");
