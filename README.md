@@ -2,7 +2,7 @@
 [![Build Status](https://img.shields.io/wercker/ci/wercker/docs.svg)](https://packagist.org/packages/qieangel2013/zys)
 ![Supported PHP versions: >=5.5](https://img.shields.io/badge/php-%3E%3D5.5-blue.svg)
 ![Supported SWOOLE versions: >=1.8.0](https://img.shields.io/badge/swoole-%3E%3D1.8.0-orange.svg)
-![License](https://img.shields.io/hexpm/l/plug.svg)
+![License](https://img.shields.io/badge/license-Apache%202-yellow.svg)
 ###核心特性
 	1.基于swoole提供同步异步数据库连接池服务
 	2.基于thrift提供rpc远程调用服务
