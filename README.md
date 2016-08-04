@@ -10,21 +10,11 @@
 	5.基于yac、yaconf提供共享数据、配置服务
 	6.基于php_ext_zqf提供高并发计数器、红包、二维码服务
 	7.很好的支持网页版console的shell服务
-	8.基于swoole提供分布式服务器通讯服务
+	8.基于swoole提供分布式服务器通讯服务（开发中）
 ###服务启动
 	需要php以cli模式运行/server/server.php
         php server.php start
         php server.php stop
-###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
-	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
-	录制视频页面 http://localhost/index/swoolelivecamera
-	接受视频页面 http://localhost/index/swoolelive
-![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
-###vmstat服务器监控
-	需要php以cli模式运行/server/swoole/VmStatServer.php
-	本地访问http://localhost/vmstat/
-	执行如下：
-![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstats.png)
 ###thrift的rpc远程调用
 	需要php以cli模式运行/server/rpc/RpcServer.php（守护进程）
 	本地访问http://localhost/index/rpc （返回0表示成功）
@@ -58,9 +48,18 @@
         exit;
 ###数据库连接池多进程执行如下：
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/multiprocess.png)
+###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
+	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
+	录制视频页面 http://localhost/index/swoolelivecamera
+	接受视频页面 http://localhost/index/swoolelive
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
+###vmstat服务器监控
+	需要php以cli模式运行/server/swoole/VmStatServer.php
+	本地访问http://localhost/vmstat/
+	执行如下：
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstats.png)
 ###后台访问：http://localhost/admin/user/index
-	   
-###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
 	需要安装php扩展zqf
 	$obj=new zqf();
 	第一个参数是红包总额，第二个人参数红包数量，第三个参数默认代表拼手气红包，设置为1的话为普通红包
@@ -69,7 +68,7 @@
 	普通红包，每个人数额一样设置第三个参数
 	$hongb= $obj->hongbao(10,8,1);返回数组为Array ( [0] => 1.25 [1] => 1.25 [2] => 1.25 [3] => 1.25 [4] => 1.25 [5] => 1.25 [6] => 1.25 [7] => 1.25 )
 	var_dump($hongb);
-###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等详情见：[https://github.com/qieangel2013/php_ext_zqf](https://github.com/qieangel2013/php_ext_zqf)
+###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
 	需要安装php扩展zqf
 	首先安装php扩展zqf.so
 	phpize来安装
