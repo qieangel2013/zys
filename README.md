@@ -18,7 +18,6 @@
         php server.php stop
         php server.php restart
 ###thrift的rpc远程调用
-	需要php以cli模式运行/server/rpc/RpcServer.php（守护进程）
 	本地访问http://localhost/index/rpc （返回0表示成功）
 ###composer 安装
 {
