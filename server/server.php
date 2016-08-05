@@ -4,7 +4,7 @@
  * @author qieangel2013
  */
 ini_set("display_errors", "On");
-        error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT);
 // 检查扩展
 if(!extension_loaded('yaf'))
 {
@@ -85,10 +85,14 @@ switch ($ser_ser[1]) {
         asyncCaller(syncServer());
         break;
     case 'stop':
-        exec('killall php killall vmstat');
+        exec("ps -ef | grep ".$cmd." | awk '{print $2}'|xargs kill -9");
+        exec("ps -ef | grep vmstat | awk '{print $2}'|xargs kill -9");
+        echo "Kill all process success.\n"; 
         break;
      case 'restart':
-        exec('killall php killall vmstat');
+        exec("ps -ef | grep ".$cmd." | awk '{print $2}'|xargs kill -9");
+        exec("ps -ef | grep vmstat | awk '{print $2}'|xargs kill -9");
+        echo "Kill all process success.\n"; 
         asyncCaller(syncServer());
         break;
     default:
