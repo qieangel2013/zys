@@ -50,12 +50,10 @@
 ###数据库连接池多进程执行如下：
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/multiprocess.png)
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
-	需要php以cli模式运行/server/swoole/SwooleLiveServer.php
 	录制视频页面 http://localhost/index/swoolelivecamera
 	接受视频页面 http://localhost/index/swoolelive
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ###vmstat服务器监控
-	需要php以cli模式运行/server/swoole/VmStatServer.php
 	本地访问http://localhost/vmstat/
 	执行如下：
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstats.png)
