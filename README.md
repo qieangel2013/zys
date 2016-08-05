@@ -22,7 +22,7 @@
 ###composer 安装
 {
     "require": {
-        "qieangel2013/zys": "0.1.0"
+        "qieangel2013/zys": "0.1.1"
     }
 }
 ###数据库连接池使用方法
