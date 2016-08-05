@@ -9,7 +9,7 @@
 	3.基于HTML5提供在线网络直播平台服务
 	4.基于vmstat提供服务器硬件实时监控服务
 	5.基于yac、yaconf提供共享数据、配置服务
-	6.基于php_ext_zqf提供高并发计数器、红包、二维码服务
+	6.基于zqf提供高并发计数器、红包、二维码服务
 	7.很好的支持网页版console的shell服务
 	8.基于swoole提供分布式服务器通讯服务（开发中）
 ###服务启动
@@ -47,7 +47,7 @@
         $dbclient->close();
         print_r($data);
         exit;
-###数据库连接池多进程执行如下：
+###数据库连接池多进程执行如下
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/multiprocess.png)
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
 	录制视频页面 http://localhost/index/swoolelivecamera
@@ -57,44 +57,40 @@
 	本地访问http://localhost/vmstat/
 	执行如下：
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/vmstats.png)
-###后台访问：http://localhost/admin/user/index
-###添加了红包生成算法（拼手气红包和普通红包），详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
+###yac、yaconf提供共享数据、配置使用如下
+	需要安装php扩展yac、yaconf
+	//注意：需要安装yaconf扩展，并且yaconf.directory=/tmp/yaconf 必须在php.ini里设置，不能动态加载
+        echo Yaconf::get("conf.zqf");
+        //注意：需要安装yac扩展，用于存储共享变量，下面的实例作为高并发计数器
+        $yac = new Yac();
+        $count=$yac->get('zqf');
+        if(!$count){
+            $yac->set('zqf', 1);
+        }else{
+            $yac->set('zqf', $count+0.5);
+        }
+        echo $count;
+###高并发计数器、红包、二维码使用如下
 	需要安装php扩展zqf
+	首先安装php扩展zqf.so
+	phpize来安装
+	然后在php文件调用
+	dl('zqf.so');或者phpini里加载（[https://github.com/qieangel2013/zqf）
 	$obj=new zqf();
-	第一个参数是红包总额，第二个人参数红包数量，第三个参数默认代表拼手气红包，设置为1的话为普通红包
+	$counter= $obj->autoadd(0,1,0);（声明只针对多线程）
+	echo $counter;
+	红包第一个参数是红包总额，第二个人参数红包数量，第三个参数默认代表拼手气红包，设置为1的话为普通红包
 	拼手气红包
 	$hongb= $obj->hongbao(10,8);或者$hongb= $obj->hongbao(10,8,0);返回数组为Array ( [0] => 1.33 [1] => 1.02 [2] => 1.28 [3] => 0.44 [4] => 1.37 [5] => 0.81 [6] => 1.81 [7] => 1.94 )
 	普通红包，每个人数额一样设置第三个参数
 	$hongb= $obj->hongbao(10,8,1);返回数组为Array ( [0] => 1.25 [1] => 1.25 [2] => 1.25 [3] => 1.25 [4] => 1.25 [5] => 1.25 [6] => 1.25 [7] => 1.25 )
 	var_dump($hongb);
-###添加了全局变量适用于高并发抢购、秒杀，数组算法处理等详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
-	需要安装php扩展zqf
-	首先安装php扩展zqf.so
-	phpize来安装
-	然后在php文件调用
-	dl('zqf.so');或者phpini里加载
-	$obj=new zqf();
-	$counter= $obj->autoadd(0,1,0);（声明只针对多线程）
-	echo $counter;
-###添加了验证码类
-	$config =    array(
-	'fontSize'    =>    30,    // 验证码字体大小
-	'length'      =>    4,     // 验证码位数
-	'useNoise'    =>    true, // 关闭验证码杂点
-	);
-	$Verify = new Verify($config);
-	$Verify->entry();
-###添加了生成二维码功能，详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
-	需要安装php扩展zqf
-	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
-###生成透明二维码，详情见：[https://github.com/qieangel2013/zqf](https://github.com/qieangel2013/zqf)
-	$obj=new zqf();
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
-===================================
+###网页版console的shell使用如下
+	本地访问http://localhost/console
 ###交流使用
 	zys框架交流群：337937322
-
 ### License
 
 Apache License Version 2.0 see http://www.apache.org/licenses/LICENSE-2.0.html
