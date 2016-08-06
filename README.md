@@ -17,14 +17,14 @@
         php server.php start
         php server.php stop
         php server.php restart
-###thrift的rpc远程调用
-	本地访问http://localhost/index/rpc （返回0表示成功）
 ###composer 安装
 {
     "require": {
         "qieangel2013/zys": "0.1.1"
     }
 }
+###thrift的rpc远程调用
+	本地访问http://localhost/index/rpc （返回0表示成功）
 ###数据库连接池使用方法
 	服务文件在/server/mysql/DbServer.php
 	简单地封装文件在/application/library/mysql/dbclient.php
