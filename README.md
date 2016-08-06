@@ -18,11 +18,11 @@
         php server.php stop
         php server.php restart
 ###composer 安装
-{
-    "require": {
+	{
+    	"require": {
         "qieangel2013/zys": "0.1.1"
-    }
-}
+	 }
+	}
 ###thrift的rpc远程调用
 	本地访问http://localhost/index/rpc （返回0表示成功）
 ###数据库连接池使用方法
