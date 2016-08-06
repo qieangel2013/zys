@@ -19,9 +19,9 @@
         php server.php restart
 ###composer 安装
 	{
-    	"require": {
-        "qieangel2013/zys": "0.1.1"
-	 }
+    		"require": {
+        		"qieangel2013/zys": "0.1.1"
+		 }
 	}
 ###thrift的rpc远程调用
 	本地访问http://localhost/index/rpc （返回0表示成功）
