@@ -6,7 +6,7 @@ class SwooleLiveServer
 	public function __construct() {
 
 		$this->table = new swoole_table(1024);
-		$this->table->column('id', swoole_table::TYPE_INT, 4);       //1,2,4,8
+		$this->table->column('id', swoole_table::TYPE_INT, 8);       //1,2,4,8
 		$this->table->create();
 
 

@@ -26,19 +26,25 @@ class phpredis
     private $_TRANSCATION = null;  
   
     //初始化  
-    public function __construct()  
+    public function __construct($rconfig='')  
     {  
-        $this->_config = Yaf_Registry::get("config");
-        $config=$this->_config->redis->config->toArray();
-        $this->_HOST = $config['server'];  
-        $this->_PORT = $config['port'];  
+        if(empty($rconfig)){
+            $this->_config = Yaf_Registry::get("config");
+            $config=$this->_config->redis->config->toArray();
+            $this->_HOST = $config['server'];  
+            $this->_PORT = $config['port']; 
+        }else{
+            $this->_HOST = $rconfig['server'];  
+            $this->_PORT = $rconfig['port']; 
+        }
         $this->_TIMEOUT = 0;  
         $this->_DBNAME = null;  
         $this->_CTYPE = 1;  
   
         if (!isset($this->_REDIS)) {  
             $this->_REDIS = new Redis();  
-            $this->connect($this->_HOST, $this->_PORT, $this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE);  
+            $this->connect($this->_HOST, $this->_PORT, $this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
+            return $this->_REDIS; 
         }  
     }  
   
