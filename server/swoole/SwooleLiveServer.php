@@ -9,8 +9,9 @@ class SwooleLiveServer
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
 		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
-
-		$server = new swoole_websocket_server("0.0.0.0", 9503);
+		$config_obj=Yaf_Registry::get("config");
+		$live_config=$config_obj->live->toArray();
+		$server = new swoole_websocket_server($live_config['ServerIp'], $live_config['port']);
 
 		$server->set(
 			array(

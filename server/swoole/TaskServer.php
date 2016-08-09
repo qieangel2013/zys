@@ -7,8 +7,9 @@ class TaskServer
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
 		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
-
-		$server = new swoole_server("0.0.0.0", 9503);
+		$config_obj=Yaf_Registry::get("config");
+		$task_config=$config_obj->task->toArray();
+		$server = new swoole_server($task_config['ServerIp'], $task_config['port']);
 
 		$server->set(
 			array(

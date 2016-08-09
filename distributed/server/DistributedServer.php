@@ -14,7 +14,9 @@ class DistributedServer
 		$this->table = new swoole_table(1024);
 		$this->table->column('serverfd', swoole_table::TYPE_INT, 8); 
 		$this->table->create();
-		$server = new swoole_server("0.0.0.0", 9504,SWOOLE_PROCESS,SWOOLE_SOCK_TCP);
+		$config_obj=Yaf_Registry::get("config");
+		$distributed_config=$config_obj->distributed->toArray();
+		$server = new swoole_server($distributed_config['ServerIp'],$distributed_config['port'],SWOOLE_PROCESS,SWOOLE_SOCK_TCP);
 		$server->set(
 			array(
             'worker_num'            => 1,

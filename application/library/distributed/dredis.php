@@ -4,7 +4,7 @@ class distributed_dredis {
 	public static $redis_con;
 	public function __construct() {
 		$d_config=yaf_Registry::get("config");
-        $config=$d_config->distributed->toArray();
+        $config=$d_config->distributed->redis->toArray();
 		self::$redis_con=new phpredis($config);
 	}
 	public function getname($userid){

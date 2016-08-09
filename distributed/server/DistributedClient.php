@@ -23,7 +23,9 @@ class DistributedClient
         $client->on('Receive', array(&$this, 'onReceive'));
         $client->on('Close', array(&$this, 'onClose'));
         $client->on('Error', array(&$this, 'onError'));
-        $client->connect($address,9504);
+        $config_obj=Yaf_Registry::get("config");
+        $distributed_config=$config_obj->distributed->toArray();
+        $client->connect($address,$distributed_config['port']);
         $this->table->set(ip2long($address),array('clientfd'=>ip2long($address)));
         $this->b_client_pool[ip2long($address)] = $client;
     }
