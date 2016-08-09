@@ -1,16 +1,19 @@
 <?php
 //namespace server;
-//use Yaf;
 class DistributedClient
 {
 	public $application;
     public static $instance;
     public $c_client_pool=[];
     public $b_client_pool=[];
+    private $table;
 	public function __construct() {
 		define('APPLICATION_PATH', dirname(dirname(dirname(__DIR__))). "/application");
 		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
+        $this->table = new swoole_table(1024);
+        $this->table->column('clientfd', swoole_table::TYPE_INT, 8); 
+        $this->table->create();
 	}
 
 	 public function addServerClient($address)
@@ -21,18 +24,13 @@ class DistributedClient
         $client->on('Close', array(&$this, 'onClose'));
         $client->on('Error', array(&$this, 'onError'));
         $client->connect($address,9504);
-        $this->c_client_pool[ip2long($address)] = $client;
+        $this->table->set(ip2long($address),array('clientfd'=>ip2long($address)));
         $this->b_client_pool[ip2long($address)] = $client;
     }
 
     public function onConnect($serv) {
         $localinfo=swoole_get_local_ip();
-        foreach ($this->b_client_pool as $k => $v) {
-            $v->send(json_encode(array('code' =>10001,'status'=>1,'fd'=>$localinfo['eth0'])));
-            unset($this->b_client_pool[$k]);
-        }
-        //print_r($this->c_client_pool);
-        //$serv->send(json_encode(array('code' =>10001,'status'=>1,'fd'=>$localinfo['eth0'])));
+        $serv->send(json_encode(array('code' =>10001,'status'=>1,'fd'=>$localinfo['eth0'])));
     }
 
 	public function onReceive($serv, $fd, $from_id, $data) {
@@ -60,40 +58,37 @@ class DistributedClient
      * 服务器断开连接
      * @param $cli
      */
-    public function onClose($serv,$fd)
+    public function onClose($client)
     {
-        print_r("close\n");
-        $serv->close();
-        /*foreach ($this->c_client_pool as $k => $v) {
-            if($v['fd']==$fd){
-                unset($this->c_client_pool[$k]);
-            }
-        }*/
-        //unset($this->server_clients[ip2long($cli->address)]);
-        unset($serv);
+        //print_r("close\n");
+        unset($client);
     }
     /**
      * 服务器连接失败
      * @param $cli
      */
-    public function onError($cli)
+    public function onError($client)
     {
-        print_r("close\n");
-        $cli->close();
-        //unset($this->server_clients[$cli->address]);
-        unset($cli);
+        //print_r("error\n");
+        unset($client);
     }
+    //获取分布式服务器列表
     public function getserlist($keyname='Distributed'){
-                ob_start();
-                distributed_dredis::getInstance()->getfd($keyname);
-                $result = ob_get_contents();
-                ob_end_clean();
-                return $result;
+        ob_start();
+        distributed_dredis::getInstance()->getfd($keyname);
+        $result = ob_get_contents();
+        ob_end_clean();
+        return $result;
     }
-
+    //添加到分布式服务器列表
     public function appendserlist($data,$keyname='Distributed'){
         distributed_dredis::getInstance()->savefd($data,$keyname);
     }
+    //从分布式服务器列表删除
+    public function removeuser($data,$keyname='Distributed'){
+        distributed_dredis::getInstance()->removefd($data,$keyname);
+    }
+    //单例
     public static function getInstance() {
         if (!(self::$instance instanceof DistributedClient)) {
             self::$instance = new DistributedClient;

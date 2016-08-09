@@ -1,6 +1,6 @@
 <?php
 //namespace server;
-//use Yaf;
+//use DistributedClient;
 class DistributedServer
 {
 	public static $instance;
@@ -12,7 +12,7 @@ class DistributedServer
 	private $table;
 	public function __construct() {
 		$this->table = new swoole_table(1024);
-		$this->table->column('fd', swoole_table::TYPE_INT, 4); 
+		$this->table->column('serverfd', swoole_table::TYPE_INT, 8); 
 		$this->table->create();
 		$server = new swoole_server("0.0.0.0", 9504,SWOOLE_PROCESS,SWOOLE_SOCK_TCP);
 		$server->set(
@@ -24,17 +24,14 @@ class DistributedServer
             //'package_length_type'   => 'N', //长度的类型，参见PHP的pack函数
             //'package_length_offset' => 0,   //第N个字节是包长度的值
             //'package_body_offset'   => 0,   //从第几个字节计算长度
-             'daemonize' => true
+            'daemonize' => true
 			)
 		);
 		require_once __DIR__. "/DistributedClient.php";
-		//$this->client_ser=new DistributedClient();
 		$server->on('Start',array(&$this , 'onStart'));
 		$server->on('Connect',array(&$this , 'onConnect'));
 		$server->on('Receive',array(&$this , 'onReceive'));
-
 		$server->on('Task',array(&$this , 'onTask'));
-
 		$server->on('Finish',array(&$this , 'onFinish'));
 		$server->on('Close',array(&$this , 'onClose'));
 		$server->start();
@@ -47,7 +44,6 @@ class DistributedServer
 		if(!empty($result_fd)){
 			foreach($result_fd as $id=>$fd){
 				if($fd!=$localinfo['eth0']){
-					array_unshift($this->b_server_pool,ip2long($fd));
 					array_unshift($this->server_pool,ip2long($fd));
 					$this->table->set(ip2long($fd),array('fd'=>ip2long($fd)));
 					DistributedClient::getInstance()->addServerClient($fd);
@@ -67,34 +63,28 @@ class DistributedServer
 	}
 	public function onReceive($serv, $fd, $from_id, $data) {
 		$remote_info=json_decode($data, true);
-        //$remote_info=json_decode($data, true);
         if($remote_info['code']==10001){
          		if($this->client_a!=$remote_info['fd']){
          			if(!$this->table->get(ip2long($remote_info['fd']))){
          				$this->client_a=$remote_info['fd'];
          				DistributedClient::getInstance()->addServerClient($remote_info['fd']);
          			}
-        			
-        			//$localinfo=swoole_get_local_ip();
-        			//$serv->send(json_encode(array('code' =>10002,'status'=>1,'fd'=>$localinfo['eth0'])),$fd);
-        			
-        			
         		}
         }
-        
-        // start a task
-        //$serv->task(json_encode($param));
+        print_r($remote_info);
 	}
 	 /**
      * 服务器断开连接
      * @param $cli
      */
-    public function onClose($serv,$fd)
+    public function onClose($server,$fd,$from_id)
     {
-        print_r("close\n");
-        $serv->close();
-        //unset($this->client_pool[$fd]);
-        unset($serv);
+        foreach ($this->client_pool as $k => $v) {
+        	if($k==$fd){
+        		DistributedClient::getInstance()->removeuser($v['remote_ip'],'Distributed');
+        		print_r($v['remote_ip']." have closed\n");
+        	}
+        }
     }
 	public function onTask($serv, $task_id, $from_id, $data) {
         $fd = json_decode($data, true);
