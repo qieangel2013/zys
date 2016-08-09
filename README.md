@@ -11,7 +11,8 @@
 	5.基于yac、yaconf提供共享数据、配置服务
 	6.基于zqf提供高并发计数器、红包、二维码服务
 	7.很好的支持网页版console的shell服务
-	8.基于swoole提供分布式服务器通讯服务（开发中）
+	8.基于swoole提供异步任务服务器
+	9.基于swoole提供分布式服务器通讯服务（包括数据同步、文件同步）（测试中）
 ###服务启动
 	需要php以cli模式运行/server/server.php
         php server.php start
