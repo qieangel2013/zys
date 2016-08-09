@@ -10,6 +10,10 @@ if(!extension_loaded('yaf'))
 {
     exit("Please install yaf extension.\n");
 }
+if(!extension_loaded('redis'))
+{
+    exit("Please install redis extension.\n");
+}
 if(!extension_loaded('swoole'))
 {
     exit("Please install swoole extension.\n");
@@ -25,6 +29,7 @@ function syncServer()
     echo (yield ['mysqlpool']) ."\n";
     echo (yield ['vmstat']) ."\n";
     echo (yield ['swoolelive']) ."\n";
+    echo (yield ['task']) ."\n";
     echo (yield ['distributed']) ."\n";
 }
 //异步调用器
@@ -68,6 +73,15 @@ function asyncCaller(Generator $gen)
                 }
                 echo "swoolelive SERVEICE START ...\n";//网络直播服务
                 $gen->send('swoolelive SERVEICE SUCCESS!');
+                asyncCaller($gen);
+                break;
+             case 'task':
+                 foreach(glob(__DIR__.'/swoole/Task*.php') as $start_file)
+                {
+                    exec($cmd.' '.$start_file);
+                }
+                echo "task SERVEICE START ...\n";//网络直播服务
+                $gen->send('task SERVEICE SUCCESS!');
                 asyncCaller($gen);
                 break;
             case 'distributed':
