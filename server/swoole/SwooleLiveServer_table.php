@@ -11,11 +11,21 @@ class SwooleLiveServer
 		$config_obj=Yaf_Registry::get("config");
 		$live_config=$config_obj->live->toArray();
 		$server = new swoole_websocket_server($live_config['ServerIp'], $live_config['port']);
-		$server->set(
+		if(isset($live_config['logfile'])){
+			$server->set(
+			array(
+				'daemonize' => true,
+				'log_file' => $live_config['logfile']
+			)
+			);
+		}else{
+			$server->set(
 			array(
 				'daemonize' => true
 			)
-		);
+			);
+		}
+		
 		$server->on('Open',array($this , 'onOpen'));
 		$server->on('Message',array($this , 'onMessage'));
 		$server->on('Close',array($this , 'onClose'));

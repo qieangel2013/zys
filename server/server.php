@@ -109,13 +109,11 @@ switch ($ser_ser[1]) {
         asyncCaller(syncServer());
         break;
     case 'stop':
-        exec("ps -ef | grep ".$cmd." | awk '{print $2}'|xargs kill -9");
-        exec("ps -ef | grep vmstat | awk '{print $2}'|xargs kill -9");
+        exec("ps -ef | grep -E '".$cmd."|vmstat' |grep -v 'grep'| awk '{print $2}'|xargs kill -9 > /dev/null 2>&1 &");
         echo "Kill all process success.\n"; 
         break;
      case 'restart':
-        exec("ps -ef | grep ".$cmd." | awk '{print $2}'|xargs kill -9");
-        exec("ps -ef | grep vmstat | awk '{print $2}'|xargs kill -9");
+        exec("ps -ef | grep -E '".$cmd."|vmstat' |grep -v 'grep'| awk '{print $2}'|xargs kill -9 > /dev/null 2>&1 &");
         echo "Kill all process success.\n"; 
         asyncCaller(syncServer());
         break;

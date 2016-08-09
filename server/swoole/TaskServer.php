@@ -10,14 +10,25 @@ class TaskServer
 		$config_obj=Yaf_Registry::get("config");
 		$task_config=$config_obj->task->toArray();
 		$server = new swoole_server($task_config['ServerIp'], $task_config['port']);
-
-		$server->set(
+		if(isset($task_config['logfile'])){
+			$server->set(
+			array(
+				'worker_num'  => 8,
+				'daemonize' => true,
+				'task_worker_num' => 8,
+				'log_file' => $task_config['logfile']
+			)
+			);
+		}else{
+			$server->set(
 			array(
 				'worker_num'  => 8,
 				'daemonize' => true,
 				'task_worker_num' => 8
 			)
-		);
+			);
+		}
+		
 
 		$server->on('Receive',array($this , 'onReceive'));
 

@@ -20,7 +20,22 @@ class DistributedServer
 		$config_obj=Yaf_Registry::get("config");
 		$distributed_config=$config_obj->distributed->toArray();
 		$server = new swoole_server($distributed_config['ServerIp'],$distributed_config['port'],SWOOLE_PROCESS,SWOOLE_SOCK_TCP);
-		$server->set(
+		if(isset($distributed_config['logfile'])){
+			$server->set(
+			array(
+            'worker_num'            => 1,
+            'dispatch_mode'         => 4, //1: 轮循, 3: 争抢
+            //'open_length_check'     => true, //打开包长检测
+            //'package_max_length'    => 8192000, //最大的请求包长度,8M
+            //'package_length_type'   => 'N', //长度的类型，参见PHP的pack函数
+            //'package_length_offset' => 0,   //第N个字节是包长度的值
+            //'package_body_offset'   => 0,   //从第几个字节计算长度
+            'daemonize' => true,
+            'log_file' => $distributed_config['logfile']
+			)
+			);
+		}else{
+			$server->set(
 			array(
             'worker_num'            => 1,
             'dispatch_mode'         => 4, //1: 轮循, 3: 争抢
@@ -31,7 +46,9 @@ class DistributedServer
             //'package_body_offset'   => 0,   //从第几个字节计算长度
             'daemonize' => true
 			)
-		);
+			);
+		}
+		
 		require_once __DIR__. "/DistributedClient.php";
 		$server->on('Start',array(&$this , 'onStart'));
 		$server->on('Connect',array(&$this , 'onConnect'));

@@ -15,13 +15,23 @@ class VmStatServer
 		$config_obj=Yaf_Registry::get("config");
 		$vmstat_config=$config_obj->vmstat->toArray();
 		$this->server = new swoole_websocket_server($vmstat_config['ServerIp'], $vmstat_config['port']);
-		$this->server->set(
+		if(isset($vmstat_config['logfile'])){
+			$this->server->set(
 			array(
 				'worker_num' => 1,
 				'daemonize' => true,
-				'log_file' => '/server/log/vmstat.log'
+				'log_file' => $vmstat_config['logfile']
 			)
-		);
+			);
+		}else{
+			$this->server->set(
+			array(
+				'worker_num' => 1,
+				'daemonize' => true
+			)
+			);
+		}
+		
 		$this->process = new swoole_process(array(&$this,'vmstata_call'),true);
 		$this->process->name('vmstat监控服务器');
         $this->process->start();
