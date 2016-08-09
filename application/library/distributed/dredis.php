@@ -4,8 +4,10 @@ class distributed_dredis {
 	public static $redis_con;
 	public function __construct() {
 		$d_config=yaf_Registry::get("config");
-        $config=$d_config->distributed->redis->toArray();
-		self::$redis_con=new phpredis($config);
+        $config=$d_config->distributed->toArray();
+        $dredis_config['server']=$config['redisserver'];
+        $dredis_config['port']=$config['redisport'];
+		self::$redis_con=new phpredis($dredis_config);
 	}
 	public function getname($userid){
 		$where=array('id' =>$userid);

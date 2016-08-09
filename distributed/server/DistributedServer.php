@@ -14,6 +14,9 @@ class DistributedServer
 		$this->table = new swoole_table(1024);
 		$this->table->column('serverfd', swoole_table::TYPE_INT, 8); 
 		$this->table->create();
+		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
+		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+		$this->application->bootstrap();
 		$config_obj=Yaf_Registry::get("config");
 		$distributed_config=$config_obj->distributed->toArray();
 		$server = new swoole_server($distributed_config['ServerIp'],$distributed_config['port'],SWOOLE_PROCESS,SWOOLE_SOCK_TCP);

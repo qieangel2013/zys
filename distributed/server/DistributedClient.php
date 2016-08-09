@@ -8,9 +8,6 @@ class DistributedClient
     public $b_client_pool=[];
     private $table;
 	public function __construct() {
-		define('APPLICATION_PATH', dirname(dirname(dirname(__DIR__))). "/application");
-		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
-		$this->application->bootstrap();
         $this->table = new swoole_table(1024);
         $this->table->column('clientfd', swoole_table::TYPE_INT, 8); 
         $this->table->create();
