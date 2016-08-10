@@ -80,7 +80,7 @@ function asyncCaller(Generator $gen)
                 {
                     exec($cmd.' '.$start_file);
                 }
-                echo "task SERVEICE START ...\n";//网络直播服务
+                echo "task SERVEICE START ...\n";//任务服务器服务
                 $gen->send('task SERVEICE SUCCESS!');
                 asyncCaller($gen);
                 break;
@@ -89,7 +89,7 @@ function asyncCaller(Generator $gen)
                 {
                     exec($cmd.' '.$start_file);
                 }
-                echo "distributed SERVEICE START ...\n";//网络直播服务
+                echo "distributed SERVEICE START ...\n";//分布式服务器通讯服务
                 $gen->send('distributed SERVEICE SUCCESS!');
                 asyncCaller($gen);
                 break;
