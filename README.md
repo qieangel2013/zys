@@ -12,7 +12,7 @@
 	6.基于zqf提供高并发计数器、红包、二维码服务
 	7.很好的支持网页版console的shell服务
 	8.基于swoole提供异步任务服务器
-	9.基于swoole提供分布式服务器通讯服务（包括数据同步、文件同步）（测试中）
+	9.基于swoole提供分布式服务器通讯服务（包括数据同步、文件同步）
 ###服务启动
 	需要php以cli模式运行/server/server.php
         php server.php start
@@ -24,6 +24,18 @@
         		"qieangel2013/zys": "0.1.1"
 		 }
 	}
+###分布式服务器通讯服务
+	分布式服务器通讯服务是建立多个服务器之间进行数据通信服务，本服务已集成自动连接在线服务器，支持热拔，一旦有一台服务器挂了，其他服务器会自动移除该服务器连接通讯，一旦启动会自动连接上
+	注意事项：
+		需要在conf/application.conf里配置端口和监听、日志等
+		web端可以直接调用服务
+		使用如下
+		//注意：type为sql、file，要是需要别的功能，自己定义
+        	$sql = array('type'=>'sql','data'=>'show tables');
+       		var_dump(distributed::getInstance()->query($sql));
+       		本地访问：http:/localhost/index/distributed/
+       		执行结果如下
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/dis1.png)![](https://github.com/qieangel2013/yaf/blob/master/public/images/dis2.png)
 ###thrift的rpc远程调用
 	本地访问http://localhost/index/rpc （返回0表示成功）
 ###数据库连接池使用方法
