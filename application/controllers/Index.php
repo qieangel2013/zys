@@ -27,6 +27,14 @@ class IndexController extends Yaf_Controller_Abstract {
         echo $count;
         exit;
     }
+    public function distributedAction() {
+        //注意：type为sql、file，要是需要别的功能，自己定义
+        $sql = array('type'=>'sql','data'=>'show tables');
+        //swoole_taskclient::getInstance()->query($sql);
+       var_dump(distributed::getInstance()->query($sql));
+       exit;
+       //distributed::getInstance()->close();
+    }
 	public function indexAction() {
     	$where=array('id' =>37936);
         //第一个参数是要打印的内容

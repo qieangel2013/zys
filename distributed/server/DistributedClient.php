@@ -7,6 +7,8 @@ class DistributedClient
     public $c_client_pool=[];
     public $b_client_pool=[];
     private $table;
+    private $cur_address;
+    private $del_server=[];
 	public function __construct() {
         $this->table = new swoole_table(1024);
         $this->table->column('clientfd', swoole_table::TYPE_INT, 8); 
@@ -23,16 +25,18 @@ class DistributedClient
         $config_obj=Yaf_Registry::get("config");
         $distributed_config=$config_obj->distributed->toArray();
         $client->connect($address,$distributed_config['port']);
+        $this->cur_address=$address;
         $this->table->set(ip2long($address),array('clientfd'=>ip2long($address)));
         $this->b_client_pool[ip2long($address)] = $client;
+        return $client;
     }
 
     public function onConnect($serv) {
         $localinfo=swoole_get_local_ip();
-        $serv->send(json_encode(array('code' =>10001,'status'=>1,'fd'=>$localinfo['eth0'])));
+        $serv->send(json_encode(array('type'=>'system','data'=>array('code' =>10001,'status'=>1,'fd'=>$localinfo['eth0']))));
     }
 
-	public function onReceive($serv, $fd, $from_id, $data) {
+	public function onReceive($client,$data) {
 		/*$remote_info=json_decode($data, true);
         if($remote_info['code']==10002){
             $this->c_client_pool[ip2long($remote_info['fd'])]= array('fd' =>$fd,'client'=>$client);
@@ -68,7 +72,10 @@ class DistributedClient
      */
     public function onError($client)
     {
-        //print_r("error\n");
+        $this->removeuser($this->cur_address);
+        $this->del_server[ip2long($this->cur_address)]=$this->cur_address;
+        $this->table->del(ip2long($this->cur_address));
+        unset($this->b_client_pool[$this->cur_address]);
         unset($client);
     }
     //获取分布式服务器列表
@@ -80,12 +87,29 @@ class DistributedClient
         return $result;
     }
     //添加到分布式服务器列表
-    public function appendserlist($data,$keyname='Distributed'){
-        distributed_dredis::getInstance()->savefd($data,$keyname);
+    public function appendserlist($data,$score,$keyname='Distributed'){
+        distributed_dredis::getInstance()->savefd($data,$score,$keyname);
     }
     //从分布式服务器列表删除
     public function removeuser($data,$keyname='Distributed'){
         distributed_dredis::getInstance()->removefd($data,$keyname);
+    }
+    //定时获取移除的服务器
+    public function geterrlist($data){
+        if(!empty($data)){
+            $datas=json_decode($data,true);
+            if(empty($this->del_server)){
+                return false;
+            }else{
+                foreach ($datas as $k => $v) {
+                    if($this->del_server[$k]==$v){
+                        return $v;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
     }
     //单例
     public static function getInstance() {

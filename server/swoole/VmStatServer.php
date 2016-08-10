@@ -10,6 +10,7 @@ class VmStatServer
 	private $server;
 	public function __construct() {
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
+		define('MYPATH', dirname(APPLICATION_PATH));
 		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
 		$config_obj=Yaf_Registry::get("config");

@@ -13,22 +13,15 @@ class distributed_dredis {
 		$where=array('id' =>$userid);
 		$result =$this->user->where($where)->select();
 	}
-	public static function savefd($fd,$kname='fd'){
-	if(self::$redis_con->listSize($kname)){
-		self::$redis_con->listPush($kname,$fd,0,1);
-	}else{
-		self::$redis_con->listPush($kname,$fd);
-	}
-		//file_put_contents( __DIR__ .'/log.txt' , $fd);
+	public static function savefd($fd,$score,$kname='fd'){
+		self::$redis_con->setAdd($kname,$fd,1,$score);
 	}
 	public static function getfd($kname='fd'){
-		$result=self::$redis_con->listGet($kname,0,-1);
-		 //$m = file_get_contents( __DIR__ .'/log.txt');
-		//echo $m;
+		$result=self::$redis_con->setRange($kname,0,-1);
 		echo json_encode($result);
 	}
 	public static function removefd($fd,$kname='fd'){
-		self::$redis_con->listRemove($kname,$fd);
+		self::$redis_con->setMove($kname,$fd,1);
 	}
 
 	public static function getInstance() {
