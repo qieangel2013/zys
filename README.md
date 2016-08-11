@@ -35,6 +35,8 @@
         	$sql = array('type'=>'sql','data'=>'show tables');
        		var_dump(distributed::getInstance()->query($sql));
        		本地访问：http:/localhost/index/distributed/
+       		架构图
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/jg.png)
        		执行结果如下
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/dis1.png)![](https://github.com/qieangel2013/yaf/blob/master/public/images/dis2.png)
 ###thrift的rpc远程调用
