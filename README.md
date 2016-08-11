@@ -21,7 +21,7 @@
 ###composer 安装
 	{
     		"require": {
-        		"qieangel2013/zys": "0.1.2"
+        		"qieangel2013/zys": "0.1.3"
 		 }
 	}
 ###分布式服务器通讯服务
