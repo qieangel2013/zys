@@ -75,6 +75,7 @@ class DistributedClient
         $this->removeuser($this->cur_address);
         $this->del_server[ip2long($this->cur_address)]=$this->cur_address;
         $this->table->del(ip2long($this->cur_address));
+        $this->setkey($this->cur_address);
         unset($this->b_client_pool[$this->cur_address]);
         unset($client);
     }
@@ -93,6 +94,18 @@ class DistributedClient
     //从分布式服务器列表删除
     public function removeuser($data,$keyname='Distributed'){
         distributed_dredis::getInstance()->removefd($data,$keyname);
+    }
+    //设置错误服务器
+    public function setkey($data,$keyname='errser'){
+        return distributed_dredis::getInstance()->setkey($data,$keyname);
+    }
+    //获取错误服务器
+     public function getkey($keyname='errser'){
+        return distributed_dredis::getInstance()->getkey($keyname);
+    }
+    //删除错误服务器
+     public function delkey($keyname='errser'){
+        return distributed_dredis::getInstance()->delkey($keyname);
     }
     //定时获取移除的服务器
     public function geterrlist($data){

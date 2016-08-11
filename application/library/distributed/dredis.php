@@ -23,7 +23,15 @@ class distributed_dredis {
 	public static function removefd($fd,$kname='fd'){
 		self::$redis_con->setMove($kname,$fd,1);
 	}
-
+	public static function setkey($data,$kname='fd'){
+		self::$redis_con->set($kname,$data);
+	}
+	public static function getkey($kname='fd'){
+		return self::$redis_con->get($kname);
+	}
+	public static function delkey($kname='fd'){
+		return self::$redis_con->delete($kname);
+	}
 	public static function getInstance() {
         if (!(self::$instance instanceof distributed_dredis)) {
             self::$instance = new distributed_dredis;

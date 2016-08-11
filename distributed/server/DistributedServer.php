@@ -75,9 +75,8 @@ class DistributedServer
 			foreach($result_fd as $id=>$fd){
 				if($fd!=$localinfo['eth0']){
 					$client=DistributedClient::getInstance()->addServerClient($fd);
-					$this->table->set(ip2long($fd),array('fd'=>ip2long($fd)));
+					$this->table->set(ip2long($fd),array('serverfd'=>ip2long($fd)));
 					$this->b_server_pool[ip2long($fd)]=array('fd' =>$fd,'client'=>$client);
-					
 				}
     		}
 		}
@@ -85,7 +84,7 @@ class DistributedServer
 	}
 
 	public function onWorkerStart($serv,$worker_id){
-		swoole_timer_tick(1000,array(&$this , 'onTimer'));
+		//swoole_timer_tick(1000,array(&$this , 'onTimer'));
 	}
 
 	public function onConnect($serv,$fd){
@@ -108,7 +107,15 @@ class DistributedServer
          				$client=DistributedClient::getInstance()->addServerClient($remote_info['data']['fd']);
          				$this->b_server_pool[ip2long($remote_info['data']['fd'])]=array('fd' =>$remote_info['data']['fd'],'client'=>$client);
          				$this->client_a=$remote_info['data']['fd'];
+         			}else{
+         				if(DistributedClient::getInstance()->getkey()){
+         					$client=DistributedClient::getInstance()->addServerClient($remote_info['data']['fd']);
+         					$this->b_server_pool[ip2long($remote_info['data']['fd'])]=array('fd' =>$remote_info['data']['fd'],'client'=>$client);
+         					$this->client_a=$remote_info['data']['fd'];
+         					DistributedClient::getInstance()->delkey();
+         				}
          			}
+         			
         		}
         }else{
         	switch ($remote_info['type']) {
@@ -139,7 +146,7 @@ class DistributedServer
     {
     	if(!empty($this->client_pool)){
     		foreach ($this->client_pool as $k => $v) {
-        		if($k==$fd){
+        		if($v['fd']==$fd){
         			DistributedClient::getInstance()->removeuser($v['remote_ip'],'Distributed');
         			print_r($v['remote_ip']." have closed\n");
         			unset($this->client_pool[$k]);
