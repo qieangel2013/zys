@@ -4,15 +4,15 @@
 ![Supported SWOOLE versions: >=1.8.0](https://img.shields.io/badge/swoole-%3E%3D1.8.0-orange.svg)
 ![License](https://img.shields.io/badge/license-Apache%202-yellow.svg)
 ###核心特性
-	1.基于swoole提供同步异步数据库连接池服务
+	1.基于swoole提供分布式服务器通讯服务
 	2.基于thrift提供rpc远程调用服务
 	3.基于HTML5提供在线网络直播平台服务
-	4.基于vmstat提供服务器硬件实时监控服务
-	5.基于yac、yaconf提供共享数据、配置服务
-	6.基于zqf提供高并发计数器、红包、二维码服务
-	7.很好的支持网页版console的shell服务
-	8.基于swoole提供异步任务服务器
-	9.基于swoole提供分布式服务器通讯服务（包括数据同步、文件同步）
+	4.基于swoole提供同步异步数据库连接池服务
+	5.基于swoole提供异步任务服务器
+	6.基于vmstat提供服务器硬件实时监控服务
+	7.基于yac、yaconf提供共享数据、配置服务
+	8.基于zqf提供高并发计数器、红包、二维码服务
+	9.很好的支持网页版console的shell服务
 ###服务启动
 	需要php以cli模式运行/server/server.php
         php server.php start
