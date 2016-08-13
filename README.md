@@ -63,6 +63,7 @@
         $dbclient->close();
         print_r($data);
         exit;
+        本地访问：http:/localhost/index/dbtest/
 ###数据库连接池多进程执行如下
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/multiprocess.png)
 ###swoole实现简单的视频直播（可以实时传音频、视频、聊天）
