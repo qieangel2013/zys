@@ -1,4 +1,14 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/6/25
+|---------------------------------------------------------------
+*/
 //namespace server;
 class DistributedClient
 {
@@ -18,6 +28,11 @@ class DistributedClient
 	 public function addServerClient($address)
     {
        	$client = new swoole_client(SWOOLE_TCP, SWOOLE_SOCK_ASYNC);
+        $client->set(array(
+            'socket_buffer_size' => 1024 * 1024 * 2,
+            'open_eof_check' => true,
+            'package_eof' => "\r\n\r\n",
+        ));
         $client->on('Connect', array(&$this, 'onConnect'));
         $client->on('Receive', array(&$this, 'onReceive'));
         $client->on('Close', array(&$this, 'onClose'));
@@ -76,6 +91,7 @@ class DistributedClient
         $this->del_server[ip2long($this->cur_address)]=$this->cur_address;
         $this->table->del(ip2long($this->cur_address));
         $this->setkey($this->cur_address);
+        echo $client->errCode;
         unset($this->b_client_pool[$this->cur_address]);
         unset($client);
     }

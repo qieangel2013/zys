@@ -1,4 +1,14 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/5/25
+|---------------------------------------------------------------
+*/
 $process = new swoole_process('rpcserver_call', true);
 $pid = $process->start();
 function rpcserver_call(swoole_process $worker)

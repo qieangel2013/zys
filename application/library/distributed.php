@@ -13,7 +13,7 @@ class distributed
             exit("connect failed. Error: {$client->errCode}\n");
         }
     }
- 
+    //sql执行
     public function query($sql) {
         $this->client->send(json_encode($sql));
         {
@@ -22,6 +22,16 @@ class distributed
         return $dbclient_data;
 
     }
+    //文件执行
+    public function queryfile($data) {
+        $this->client->send(json_encode($data));
+        {
+            $dbclient_data=json_decode($this->client->recv(),true);
+        }
+        return $dbclient_data;
+
+    }
+
     public function close() {
         $this->client->close();
     }

@@ -1,4 +1,14 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/6/25
+|---------------------------------------------------------------
+*/
 //namespace server;
 //use DistributedClient;
 class DistributedServer
@@ -11,6 +21,7 @@ class DistributedServer
 	private $table;
 	private $localip;
 	private $connectioninfo;
+    private $curpath;
 	public function __construct() {
 		$this->table = new swoole_table(1024);
 		$this->table->column('serverfd', swoole_table::TYPE_INT, 8); 
@@ -46,7 +57,7 @@ class DistributedServer
             //'open_length_check'     => true, //打开包长检测
             //'package_max_length'    => 8192000, //最大的请求包长度,8M
             //'package_length_type'   => 'N', //长度的类型，参见PHP的pack函数
-            //'package_length_offset' => 0,   //第N个字节是包长度的值
+           // 'package_length_offset' => 0,   //第N个字节是包长度的值
             //'package_body_offset'   => 0,   //从第几个字节计算长度
             'daemonize' => true
 			)
@@ -100,8 +111,15 @@ class DistributedServer
             
 	}
 	public function onReceive($serv, $fd, $from_id, $data) {
-		$remote_info=json_decode($data, true);
-        if($remote_info['type']=='system' && $remote_info['data']['code']==10001){
+        $remote_info=json_decode($data, true);
+        //判断是否为二进制图片流
+        if(!is_array($remote_info)){
+            if(!is_dir(MYPATH.dirname($this->curpath['path']))){
+                mkdir(MYPATH.dirname($this->curpath['path']),0777,true);
+            }
+            file_put_contents(MYPATH.$this->curpath['path'],$data);//写入图片流
+        }else{
+            if($remote_info['type']=='system' && $remote_info['data']['code']==10001){
          		if($this->client_a!=$remote_info['data']['fd']){
          			if(!$this->table->get(ip2long($remote_info['data']['fd']))){
          				$client=DistributedClient::getInstance()->addServerClient($remote_info['data']['fd']);
@@ -118,23 +136,37 @@ class DistributedServer
          			
         		}
         }else{
-        	switch ($remote_info['type']) {
+        	   switch ($remote_info['type']) {
         		case 'sql':
         			if($this->localip==$this->connectioninfo['remote_ip']){
-        				foreach ($this->b_server_pool as $k => $v) {
-        					$v['client']->send($data);
-        				}
+                        foreach ($this->b_server_pool as $k => $v) {
+                            $v['client']->send($data);
+                        }
         				$serv->send($fd,$serv->taskwait($remote_info['data']));
         			}else{
         				print_r($remote_info);
+                        $serv->task($remote_info['data']);
         			}
         			break;
         		case 'file':
-        			
+        			if($this->localip==$this->connectioninfo['remote_ip']){
+                        foreach ($this->b_server_pool as $k => $v) {
+                           $v['client']->send($data);
+                           $v['client']->sendfile(MYPATH.$remote_info['data']['path']);
+                        }
+                        $serv->send($fd,$serv->taskwait($remote_info['data']));
+                    }else{
+                        if(isset($remote_info['data']['path'])){
+                            $this->curpath=$remote_info['data'];
+                        }
+                        $serv->task($remote_info['data']);
+                    }
         			break;
         		default:
         			break;
-        	}
+        	   }
+            }
+        
         }
         print_r($remote_info);
 	}
