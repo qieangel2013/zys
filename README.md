@@ -32,8 +32,28 @@
 		web端可以直接调用服务
 		使用如下
 		//注意：type为sql、file，要是需要别的功能，自己定义
+        	if($_FILES){
         	$sql = array('type'=>'sql','data'=>'show tables');
-       		var_dump(distributed::getInstance()->query($sql));
+        	var_dump(distributed::getInstance()->query($sql));
+        	//文件同步
+            	$dir_pre=MYPATH.'/public/uploads/';
+            	if(!is_dir($dir_pre.date('Ymd'))){
+                	mkdir($dir_pre.date('Ymd'),0777,true);
+        	 }
+            	if(is_uploaded_file($_FILES['file']['tmp_name'])){ 
+                $upname=explode('.',$_FILES['file']['name']);
+                $filename=uniqid().substr(time(),-4).'.'.$upname[1];
+                if(move_uploaded_file($_FILES['file']['tmp_name'],$dir_pre.date('Ymd').'/'.$filename)){  
+                    echo "Stored in: " . $dir_pre.date('Ymd').'/'.$filename; 
+                    $fileinfo = array('type'=>'file','data'=>array('path' =>'/public/uploads/'.date('Ymd').'/'.$filename,'size'=>$_FILES['file']['size'],'ext'=>$upname[1]));
+                    var_dump(distributed::getInstance()->queryfile($fileinfo));
+                	}else{  
+                    	echo 'Stored failed:file save error';  
+                	}  
+            	}else{
+                echo 'Stored failed:no post ';  
+            }
+       	}
        		本地访问：http:/localhost/index/distributed/
        		架构图
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jg.png)
