@@ -22,6 +22,7 @@ function rpcserver_call(swoole_process $worker)
 	$loader->registerNamespace('Bin', THRIFT_DIR_PATH);
 	$loader->registerDefinition('Bin',  THRIFT_DIR_PATH);
 	$loader->register();
+	define('MYPATH', dirname(APPLICATION_PATH));
 	$application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 	$application->bootstrap();
 	$config_obj=Yaf_Registry::get("config");
@@ -34,7 +35,7 @@ function rpcserver_call(swoole_process $worker)
 	$socket_tranport = new Thrift\Server\TServerSocket(SERVERIP,SERVERPORT);
 	$out_factory = $in_factory = new Thrift\Factory\TFramedTransportFactory();
 	$out_protocol = $in_protocol = new Thrift\Factory\TBinaryProtocolFactory();
-	$server = new swoole\Server($processor, $socket_tranport, $in_factory, $out_factory, $in_protocol, $out_protocol);
+	$server = new swoole\RpcServer($processor, $socket_tranport, $in_factory, $out_factory, $in_protocol, $out_protocol);
 	$server->serve();
 }
 swoole_process::daemon(true);

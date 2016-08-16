@@ -3,7 +3,7 @@ namespace swoole;
 use Thrift;
 use Thrift\Server\TNonblockingServer;
 
-class Server extends TNonblockingServer
+class RpcServer extends TNonblockingServer
 {
     protected $processor = null;
     protected $serviceName = 'rpc';
