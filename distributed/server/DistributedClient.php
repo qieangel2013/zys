@@ -91,7 +91,6 @@ class DistributedClient
         $this->del_server[ip2long($this->cur_address)]=$this->cur_address;
         $this->table->del(ip2long($this->cur_address));
         $this->setkey($this->cur_address);
-        echo $client->errCode;
         unset($this->b_client_pool[$this->cur_address]);
         unset($client);
     }

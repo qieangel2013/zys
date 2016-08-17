@@ -130,7 +130,9 @@ class DistributedServer
          					$client=DistributedClient::getInstance()->addServerClient($remote_info['data']['fd']);
          					$this->b_server_pool[ip2long($remote_info['data']['fd'])]=array('fd' =>$remote_info['data']['fd'],'client'=>$client);
          					$this->client_a=$remote_info['data']['fd'];
-         					DistributedClient::getInstance()->delkey();
+        					if($this->localip==DistributedClient::getInstance()->getkey()){
+        						DistributedClient::getInstance()->delkey();
+        					}
          				}
          			}
          			
@@ -230,5 +232,3 @@ class DistributedServer
         return self::$instance;
 	}
 }
-
-//DistributedServer::getInstance();
