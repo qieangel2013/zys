@@ -114,7 +114,8 @@ class DistributedServer
         $remote_info=json_decode($data, true);
         //判断是否为二进制图片流
         if(!is_array($remote_info)){
-            if(!is_dir(MYPATH.dirname($this->curpath['path']))){
+            if(is_dir(MYPATH.dirname($this->curpath['path'])) && is_readable(MYPATH.dirname($this->curpath['path']))){
+            }else{
                 mkdir(MYPATH.dirname($this->curpath['path']),0777,true);
             }
             file_put_contents(MYPATH.$this->curpath['path'],$data);//写入图片流
