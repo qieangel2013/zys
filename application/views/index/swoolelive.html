@@ -13,7 +13,7 @@
     </audio>
     <script type="text/javascript" charset="utf-8">
         var zqfdata;
-        var receiver_socket = new WebSocket("ws://192.168.102.163:9503");
+        var receiver_socket = new WebSocket("ws://"+document.domain+":9503");
         var image = document.getElementById('receiver');
         var audio = document.querySelector('audio');
         receiver_socket.onmessage = function(data)

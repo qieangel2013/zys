@@ -12,7 +12,7 @@
 
     <script type="text/javascript" charset="utf-8">
     	var data;
-        var socket = new WebSocket("ws://192.168.102.163:9503");
+        var socket = new WebSocket("ws://"+document.domain+":9503");
         var back = document.getElementById('output');
         var backcontext = back.getContext('2d');
         var video = document.getElementsByTagName('video')[0];
