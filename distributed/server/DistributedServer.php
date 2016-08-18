@@ -118,7 +118,7 @@ class DistributedServer
             }else{
                 mkdir(MYPATH.dirname($this->curpath['path']),0777,true);
             }
-            file_put_contents(MYPATH.$this->curpath['path'],$data);//写入图片流
+            file_put_contents(MYPATH.$this->curpath['path'],$data,FILE_APPEND);//写入图片流
         }else{
             if($remote_info['type']=='system' && $remote_info['data']['code']==10001){
          		if($this->client_a!=$remote_info['data']['fd']){
