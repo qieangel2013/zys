@@ -36,7 +36,7 @@
         	//数据同步
         	$sql = array('type'=>'sql','data'=>'show tables');
         	var_dump(distributed::getInstance()->query($sql));
-        	//文件同步（不用安装rsync+notify就可以实现文件同步，并且是触发式的占用很小的资源，调用sendfile零复制）
+        	//文件同步（不用安装rsync+inotify就可以实现文件同步，并且是触发式的占用很小的资源，调用sendfile零复制）
             	$dir_pre=MYPATH.'/public/uploads/';
             	if(!is_dir($dir_pre.date('Ymd'))){
                 	mkdir($dir_pre.date('Ymd'),0777,true);
