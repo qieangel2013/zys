@@ -1,5 +1,6 @@
 #zys高性能服务框架
-[![Build Status](https://img.shields.io/wercker/ci/wercker/docs.svg)](https://packagist.org/packages/qieangel2013/zys)
+[![Build Status](https://api.travis-ci.org/qieangel2013/zys.svg)](https://travis-ci.org/qieangel2013/zys)
+[![Packagist](https://img.shields.io/badge/packagist-passing-ff69b4.svg)](https://packagist.org/packages/qieangel2013/zys)
 ![Supported PHP versions: >=5.5](https://img.shields.io/badge/php-%3E%3D5.5-blue.svg)
 ![Supported SWOOLE versions: >=1.8.0](https://img.shields.io/badge/swoole-%3E%3D1.8.0-orange.svg)
 ![License](https://img.shields.io/badge/license-Apache%202-yellow.svg)
