@@ -22,6 +22,9 @@ class DistributedServer
     private $localip;
     private $connectioninfo;
     private $curpath;
+    private $filesizes;
+    private $tmpdata;
+    private $oldpath;
     public function __construct()
     {
         $this->table = new swoole_table(1024);
@@ -38,12 +41,7 @@ class DistributedServer
             $server->set(array(
                 'worker_num' => 4,
                 'task_worker_num' => 4,
-                'dispatch_mode' => 4, //1: 轮循, 3: 争抢
-                //'open_length_check'     => true, //打开包长检测
-                //'package_max_length'    => 8192000, //最大的请求包长度,8M
-                //'package_length_type'   => 'N', //长度的类型，参见PHP的pack函数
-                //'package_length_offset' => 0,   //第N个字节是包长度的值
-                //'package_body_offset'   => 0,   //从第几个字节计算长度
+                'dispatch_mode' => 4,
                 'daemonize' => true,
                 'log_file' => $distributed_config['logfile']
             ));
@@ -51,12 +49,7 @@ class DistributedServer
             $server->set(array(
                 'worker_num' => 4,
                 'task_worker_num' => 4,
-                'dispatch_mode' => 4, //1: 轮循, 3: 争抢
-                //'open_length_check'     => true, //打开包长检测
-                //'package_max_length'    => 8192000, //最大的请求包长度,8M
-                //'package_length_type'   => 'N', //长度的类型，参见PHP的pack函数
-                // 'package_length_offset' => 0,   //第N个字节是包长度的值
-                //'package_body_offset'   => 0,   //从第几个字节计算长度
+                'dispatch_mode' => 4,
                 'daemonize' => true
             ));
         }
@@ -147,11 +140,42 @@ class DistributedServer
         $remote_info = json_decode($data, true);
         //判断是否为二进制图片流
         if (!is_array($remote_info)) {
-            if (is_dir(MYPATH . dirname($this->curpath['path'])) && is_readable(MYPATH . dirname($this->curpath['path']))) {
-            } else {
-                mkdir(MYPATH . dirname($this->curpath['path']), 0777, true);
+            if (isset($this->curpath['path'])) {
+                if (is_dir(dirname(MYPATH . $this->curpath['path'])) && is_readable(dirname(MYPATH . $this->curpath['path']))) {
+                } else {
+                    mkdir(dirname(MYPATH . $this->curpath['path']), 0777, true);
+                }
+                if ($this->oldpath != $this->curpath['path']) {
+                    $this->tmpdata .= $data;
+                }
+                if (strlen($this->tmpdata) == $this->filesizes) {
+                    $infofile = pathinfo(MYPATH . $this->curpath['path']);
+                    if (in_array($infofile['extension'], array(
+                        'txt',
+                        'log'
+                    ))) {
+                        if (file_put_contents(MYPATH . $this->curpath['path'], $this->tmpdata)) {
+                            $this->tmpdata = '';
+                            $this->oldpath = $this->curpath['path'];
+                        }
+                    } else {
+                        if (in_array($infofile['extension'], array(
+                            'jpg',
+                            'png',
+                            'jpeg',
+                            'JPG',
+                            'JPEG',
+                            'PNG',
+                            'bmp'
+                        ))) {
+                            if (file_put_contents(MYPATH . $this->curpath['path'], $this->tmpdata)) {
+                                $this->tmpdata = '';
+                                $this->oldpath = $this->curpath['path'];
+                            } //写入图片流
+                        }
+                    }
+                }
             }
-            file_put_contents(MYPATH . $this->curpath['path'], $data, FILE_APPEND); //写入图片流
         } else {
             if ($remote_info['type'] == 'system' && $remote_info['data']['code'] == 10001) {
                 if ($this->client_a != $remote_info['data']['fd']) {
@@ -186,7 +210,6 @@ class DistributedServer
                             }
                             $serv->send($fd, $serv->taskwait($remote_info['data']));
                         } else {
-                            print_r($remote_info);
                             $serv->task($remote_info['data']);
                         }
                         break;
@@ -194,13 +217,21 @@ class DistributedServer
                         if ($this->localip == $this->connectioninfo['remote_ip']) {
                             foreach ($this->b_server_pool as $k => $v) {
                                 $v['client']->send($data);
-                                $v['client']->sendfile(MYPATH . $remote_info['data']['path']);
                             }
                             $serv->send($fd, $serv->taskwait($remote_info['data']));
                         } else {
                             if (isset($remote_info['data']['path'])) {
-                                $this->curpath = $remote_info['data'];
+                                $this->curpath   = $remote_info['data'];
+                                $this->filesizes = $remote_info['data']['size'];
+                                $data_s          = array(
+                                    'type' => 'filesizemes',
+                                    'data' => array(
+                                        'path' => $remote_info['data']['path']
+                                    )
+                                );
+                                $serv->send($fd, json_encode($data_s, true));
                             }
+                            
                             $serv->task($remote_info['data']);
                         }
                         break;

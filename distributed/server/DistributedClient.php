@@ -29,11 +29,6 @@ class DistributedClient
     public function addServerClient($address)
     {
         $client = new swoole_client(SWOOLE_TCP, SWOOLE_SOCK_ASYNC);
-        $client->set(array(
-            'socket_buffer_size' => 1024 * 1024 * 2,
-            'open_eof_check' => true,
-            'package_eof' => "\r\n\r\n"
-        ));
         $client->on('Connect', array(
             &$this,
             'onConnect'
@@ -76,14 +71,11 @@ class DistributedClient
     
     public function onReceive($client, $data)
     {
-        /*$remote_info=json_decode($data, true);
-        if($remote_info['code']==10002){
-        $this->c_client_pool[ip2long($remote_info['fd'])]= array('fd' =>$fd,'client'=>$client);
-        
-        }*/
-        //$remote_info=json_decode($data, true)
-        // start a task
-        //$serv->task(json_encode($param));
+        $remote_info = json_decode($data, true);
+        if ($remote_info['type'] == 'filesizemes') {
+            if ($client->sendfile(MYPATH . $remote_info['data']['path'])) {
+            }
+        }
     }
     public function onTask($serv, $task_id, $from_id, $data)
     {
