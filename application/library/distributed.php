@@ -8,7 +8,7 @@ class distributed
         $config_obj=Yaf_Registry::get("config");
         $distributed_config=$config_obj->distributed->toArray();
         $localinfo=swoole_get_local_ip();
-          if (!$this->client->connect($localinfo['eth0'],$distributed_config['port'], -1))
+          if (!$this->client->connect(current($localinfo),$distributed_config['port'], -1))
         {
             exit("connect failed. Error: {$client->errCode}\n");
         }

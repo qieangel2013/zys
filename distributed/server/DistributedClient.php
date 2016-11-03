@@ -64,7 +64,7 @@ class DistributedClient
             'data' => array(
                 'code' => 10001,
                 'status' => 1,
-                'fd' => $localinfo['eth0']
+                'fd' => current($localinfo)
             )
         )));
     }

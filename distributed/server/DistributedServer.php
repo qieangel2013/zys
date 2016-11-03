@@ -97,12 +97,12 @@ class DistributedServer
     public function onStart($serv)
     {
         $localinfo     = swoole_get_local_ip();
-        $this->localip = $localinfo['eth0'];
+        $this->localip = current($localinfo);
         $serverlist    = DistributedClient::getInstance()->getserlist();
         $result_fd     = json_decode($serverlist, true);
         if (!empty($result_fd)) {
             foreach ($result_fd as $id => $fd) {
-                if ($fd != $localinfo['eth0']) {
+                if ($fd != $this->localip) {
                     $client = DistributedClient::getInstance()->addServerClient($fd);
                     $this->table->set(ip2long($fd), array(
                         'serverfd' => ip2long($fd)
@@ -126,7 +126,7 @@ class DistributedServer
     {
         $this->connectioninfo = $serv->connection_info($fd);
         $localinfo            = swoole_get_local_ip();
-        $this->localip        = $localinfo['eth0'];
+        $this->localip        = current($localinfo);
         if ($this->localip != $this->connectioninfo['remote_ip']) {
             $this->client_pool[ip2long($this->connectioninfo['remote_ip'])] = array(
                 'fd' => $fd,
