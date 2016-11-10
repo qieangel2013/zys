@@ -13,6 +13,12 @@
 	7.基于yac、yaconf提供共享数据、配置服务
 	8.基于zqf提供高并发计数器、红包、二维码服务
 	9.很好的支持网页版console的shell服务
+###Nginx 下配置文件示例
+	location / {
+        if (!-e $request_filename) {
+           rewrite ^/(.*)$ /index.php?$1 last;
+        }
+    }
 ###服务启动
 	需要php以cli模式运行/server/server.php
         php server.php start
