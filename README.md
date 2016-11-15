@@ -13,7 +13,8 @@
 	7.基于yac、yaconf提供共享数据、配置服务
 	8.基于zqf提供高并发计数器、红包、二维码服务
 	9.很好的支持网页版console的shell服务
-###Nginx 下配置文件示例
+	10.基于hprose提供rpc远程调用、推送等服务
+###Nginx 下配置
 	location / {
         if (!-e $request_filename) {
            rewrite ^/(.*)$ /index.php?$1 last;
@@ -27,7 +28,7 @@
 ###composer 安装
 	{
     		"require": {
-        		"qieangel2013/zys": "0.1.7"
+        		"qieangel2013/zys": "0.1.8"
 		 }
 	}
 ###分布式服务器通讯服务
@@ -133,6 +134,9 @@
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ###网页版console的shell使用如下
 	本地访问http://localhost/console
+###hprose的使用如下
+	echo hprose::getInstance()->getdata();
+	本地访问：http://localhost/index/hprose
 ###交流使用
 	zys框架交流群：337937322
 ### License
