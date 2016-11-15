@@ -60,7 +60,7 @@ class IndexController extends Yaf_Controller_Abstract {
         //第二各参数是生成日志文件名
         //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
         logs('zas');
-   		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
+   		//$user=new ZysModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		//$result = $user->where($where)->select();
 		//echo $user->getlastsql();
 		//print_r($result);
@@ -86,7 +86,7 @@ class IndexController extends Yaf_Controller_Abstract {
     }
 	public function testAction() {
 		$where=array('id' =>353);
-   		$user=new HbModel('hb_goods');
+   		$user=new ZysModel('hb_goods');
 		$result = $user->where($where)->select();
 		print_r($result);
 		exit;
@@ -274,7 +274,7 @@ class IndexController extends Yaf_Controller_Abstract {
     public function swoolehttpAction(){
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $where=array('id' =>37936);
-        $user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
+        $user=new ZysModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
         $result = $user->where($where)->select();
         //echo $user->getlastsql();
         // echo json_encode( $result);
@@ -304,6 +304,13 @@ public function rpcAction(){
 		print_r($info);
 		$sd->close();
 		exit;
+
+}
+public function hproseAction(){
+        //hprose调用
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        echo hprose::getInstance()->getdata();
+        exit;
 
 }
 }

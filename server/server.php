@@ -31,6 +31,7 @@ function syncServer()
     echo (yield ['swoolelive']) ."\n";
     echo (yield ['task']) ."\n";
     echo (yield ['distributed']) ."\n";
+    echo (yield ['hprose']) ."\n";
 }
 //异步调用器
 function asyncCaller(Generator $gen)
@@ -91,6 +92,15 @@ function asyncCaller(Generator $gen)
                 }
                 echo "distributed SERVEICE START ...\n";//分布式服务器通讯服务
                 $gen->send('distributed SERVEICE SUCCESS!');
+                asyncCaller($gen);
+                break;
+             case 'hprose':
+                 foreach(glob(__DIR__.'/hprose/*.php') as $start_file)
+                {
+                    exec($cmd.' '.$start_file);
+                }
+                echo "hprose SERVEICE START ...\n";//hprose提供rpc服务
+                $gen->send('hprose SERVEICE SUCCESS!');
                 asyncCaller($gen);
                 break;
             default:

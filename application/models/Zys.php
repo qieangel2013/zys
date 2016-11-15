@@ -1,6 +1,6 @@
 <?php
 
-class HbModel extends Model {
+class ZysModel extends Model {
 	public function __construct($str='') {
 		parent::__construct($str);
 	}
