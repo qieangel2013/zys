@@ -13,6 +13,8 @@
     <script type="text/javascript" charset="utf-8">
     	var data;
         var socket = new WebSocket("ws://"+document.domain+":9503");
+        //ssl配置
+        //var socket = new WebSocket("wss://"+document.domain+":9503");
         var back = document.getElementById('output');
         var backcontext = back.getContext('2d');
         var video = document.getElementsByTagName('video')[0];

@@ -14,6 +14,8 @@
     <script type="text/javascript" charset="utf-8">
         var zqfdata;
         var receiver_socket = new WebSocket("ws://"+document.domain+":9503");
+        //ssl配置
+        //var receiver_socket = new WebSocket("wss://"+document.domain+":9503");
         var image = document.getElementById('receiver');
         var audio = document.querySelector('audio');
         receiver_socket.onmessage = function(data)

@@ -14,7 +14,7 @@
  *                                                        *
  * hprose swoole socket server library for php 5.3+       *
  *                                                        *
- * LastModified: Jul 29, 2016                             *
+ * LastModified: Nov 16, 2016                             *
  * Author: Ma Bingyao <andot@hprose.com>                  *
  *                                                        *
 \**********************************************************/
@@ -31,16 +31,20 @@ class Server extends Service {
             switch (strtolower($p['scheme'])) {
                 case 'tcp':
                 case 'tcp4':
-                case 'ssl':
-                case 'sslv2':
-                case 'sslv3':
-                case 'tls':
                     $result->type = SWOOLE_SOCK_TCP;
                     $result->host = $p['host'];
                     $result->port = $p['port'];
                     break;
                 case 'tcp6':
                     $result->type = SWOOLE_SOCK_TCP6;
+                    $result->host = $p['host'];
+                    $result->port = $p['port'];
+                    break;
+                case 'ssl':
+                case 'sslv2':
+                case 'sslv3':
+                case 'tls':
+                    $result->type = SWOOLE_SOCK_TCP | SWOOLE_SSL;
                     $result->host = $p['host'];
                     $result->port = $p['port'];
                     break;

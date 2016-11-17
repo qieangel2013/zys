@@ -23,10 +23,14 @@ class SwooleLiveServer
 		$config_obj=Yaf_Registry::get("config");
 		$live_config=$config_obj->live->toArray();
 		$server = new swoole_websocket_server($live_config['ServerIp'], $live_config['port']);
+		//ssl配置，注意编译swoole的时候需要加上--enable-openssl选项
+		//$server = new swoole_websocket_server($live_config['ServerIp'], $live_config['port'], SWOOLE_BASE, SWOOLE_SOCK_TCP | SWOOLE_SSL);
 		if(isset($live_config['logfile'])){
 			$server->set(
 			array(
 				'daemonize' => true,
+				//'ssl_cert_file' => '/usr/local/nginx/ssl/xcx.tianlian.cn.crt', ssl证书
+                //'ssl_key_file' => '/usr/local/nginx/ssl/xcx.tianlian.cn.key',	 ssl的key
 				'log_file' => $live_config['logfile']
 			)
 			);
@@ -34,6 +38,8 @@ class SwooleLiveServer
 			$server->set(
 			array(
 				'daemonize' => true
+				//'ssl_cert_file' => '/usr/local/nginx/ssl/xcx.tianlian.cn.crt',
+                //'ssl_key_file' => '/usr/local/nginx/ssl/xcx.tianlian.cn.key'
 			)
 			);
 		}
