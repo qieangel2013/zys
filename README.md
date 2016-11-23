@@ -133,7 +133,7 @@
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
 ###网页版console的shell使用如下
-	本地访问http://localhost/console
+	本地访问http://localhost/console/console.php
 ###hprose的使用如下
 	echo hprose::getInstance()->getdata();
 	本地访问：http://localhost/index/hprose
