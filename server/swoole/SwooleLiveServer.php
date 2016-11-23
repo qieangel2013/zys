@@ -72,6 +72,9 @@ class SwooleLiveServer
     	}else{
 			$result_fd=json_decode($result,true);
 		    foreach($result_fd as $id=>$fd){
+		    	if($fd==$frame->fd){
+		    		continue;
+		    	}
 		    	if($framedata['type']=='mess'){
 		    		$data_mes['data']='游客'.$frame->fd.'说：' .$framedata['data'];
 		    		$data_mes['type']=$framedata['type'];
