@@ -66,8 +66,13 @@ class IndexController extends Yaf_Controller_Abstract {
 		//echo $user->getlastsql();
 		//print_r($result);
         ////第二种方法
-        //$report=Z()->query('select * from zt_report');
-        //print_r($report);
+        //$user=Z()->query('select * from hb_users');
+        //print_r($user);
+         //第三种方法
+   		//$user= Z('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
+		//$result = $user->where($where)->select();
+		//echo $user->getlastsql();
+		//print_r($result);
 		alert("3");
 		exit;
 	}
