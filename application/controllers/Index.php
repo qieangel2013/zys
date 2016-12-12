@@ -60,10 +60,14 @@ class IndexController extends Yaf_Controller_Abstract {
         //第二各参数是生成日志文件名
         //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
         logs('zas');
+        //第一种方法
    		//$user=new ZysModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		//$result = $user->where($where)->select();
 		//echo $user->getlastsql();
 		//print_r($result);
+        ////第二种方法
+        //$report=Z()->query('select * from zt_report');
+        //print_r($report);
 		alert("3");
 		exit;
 	}

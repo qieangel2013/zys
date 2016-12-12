@@ -710,3 +710,24 @@ function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
 function logs($message,$destination='',$level='DEBUG'){
     Log::trance($message,$destination,$level);
 }
+
+
+/**
+ * 实例化一个没有模型文件的Model
+ * @param string $name Model名称 支持指定基础模型 例如 MongoModel:User
+ * @param string $tablePrefix 表前缀
+ * @param mixed $connection 数据库连接信息
+ * @return Model
+ */
+function Z($name='', $tablePrefix='',$connection='') {
+    static $_model  = array();
+    if(strpos($name,':')) {
+        list($class,$name)    =  explode(':',$name);
+    }else{
+        $class      =   'ZysModel';
+    }
+    $guid           =   (is_array($connection)?implode('',$connection):$connection).$tablePrefix . $name . '_' . $class;
+    if (!isset($_model[$guid]))
+        $_model[$guid] = new $class($name,$tablePrefix,$connection);
+    return $_model[$guid];
+}
