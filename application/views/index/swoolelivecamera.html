@@ -92,7 +92,7 @@
             //压缩
             var compression = parseInt(this.inputSampleRate / this.outputSampleRate);
             var length = data.length / compression;
-            console.log(length);
+            //console.log(length);
             var result = new Float32Array(parseInt(length));
             var index = 0, j = 0;
             while (index < length) {

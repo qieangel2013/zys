@@ -33,7 +33,7 @@
     </style>
 </head>
 <body>
-    <audio id="audio" src="">
+    <audio id="audio" autoplay="autoplay">
     </audio>
     <div id="chat"></div>
      <script src="/public/vue/vue.js"></script>
@@ -46,6 +46,32 @@
         //var receiver_socket = new WebSocket("wss://"+document.domain+":9503");
         var image = document.getElementById('receiver');
         var audio = document.querySelector('audio');
+        window.initPlayer = function(obj){        
+        obj.playlist = []; //播放列表        
+        obj.position = 0; //当前播放位置
+        //播放音乐(循环播放)
+        obj.start = function(){
+            if(jQuery.isArray(obj.playlist) && obj.playlist.length>=1){
+                $(obj).attr("src", obj.playlist[obj.position % obj.playlist.length]);    
+                obj.play();
+            } 
+        };
+        //播放一个列表
+        obj.playList = function(arr){
+            if(jQuery.isArray(arr) && arr.length>=1){
+                obj.playlist = arr;
+                obj.position = 0;
+                obj.start();  
+            }
+        };
+        //播放下一首
+        $(obj).on("ended",function(e){
+             obj.playlist.shift();
+            //obj.position++;
+            obj.start();           
+        });
+    };
+        initPlayer(audio);
         receiver_socket.onmessage = function(data)
         {
             zqfdata= jQuery.parseJSON(data.data);
@@ -60,10 +86,10 @@
                 //console.log(zqfdata.data);
                 //console.log(window.URL.createObjectURL(blob));
                 //$('#audio').attr('src',zqfdata.data);
-                
-                audio.src =zqfdata.data;
+                audio.playlist.push(zqfdata.data);
+                //audio.src =zqfdata.data;
                 if(audio.paused){ 
-                    audio.play(); 
+                    audio.start(); 
                 } 
                 /*g_audio.elems["id"] = '';
                 g_audio.push({
