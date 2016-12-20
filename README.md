@@ -121,7 +121,7 @@
 	首先安装php扩展zqf.so
 	phpize来安装
 	然后在php文件调用
-	dl('zqf.so');或者phpini里加载（[https://github.com/qieangel2013/zqf）
+	dl('zqf.so');或者phpini里加载（[https://github.com/qieangel2013/zqf]）
 	$obj=new zqf();
 	$counter= $obj->autoadd(0,1,0);（声明只针对多线程）
 	echo $counter;
@@ -143,7 +143,7 @@
 	vi /etc/ld.so.conf
 	文件末尾添加  /usr/local/lib
 	然后执行ldconfig
-	./phpize（[https://github.com/qieangel2013/zqfHB）
+	./phpize（[https://github.com/qieangel2013/zqfHB]）
 	./configure --with-php-config=/usr/local/php/bin/php-config
 	make
 	make install
