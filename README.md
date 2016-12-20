@@ -14,6 +14,7 @@
 	8.基于zqf提供高并发计数器、红包、二维码服务
 	9.很好的支持网页版console的shell服务
 	10.基于hprose提供rpc远程调用、推送等服务
+	11.基于zqfHB的php扩展统计php脚本执行时间的服务
 ###Nginx 下配置
 	location / {
         if (!-e $request_filename) {
