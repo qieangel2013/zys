@@ -133,6 +133,34 @@
 	var_dump($hongb);
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽
 	$obj->savefile('https://www.baidu.com/s?wd=昌平香堂','./test.png',500,1);第一个参数是url，第二参数是保存路径，第三个参数是二维码长或者宽，第四个参数是决定是否透明，默认是不透明的
+###php脚本执行时间统计扩展
+	wget https://github.com/redis/hiredis/archive/v0.13.3.tar.gz
+	tar zxvf v0.13.3.tar.gz
+	cd hiredis-0.13.3
+	make
+	make install
+	如果出现libhiredis.so.0.13: cannot open shared object file: No such file or directory in Unknown on line 0
+	vi /etc/ld.so.conf
+	文件末尾添加  /usr/local/lib
+	然后执行ldconfig
+	./phpize（[https://github.com/qieangel2013/zqfHB）
+	./configure --with-php-config=/usr/local/php/bin/php-config
+	make
+	make install
+	add zqfHB.so to php.ini
+	extension=zqfHB.so
+	[zqfHB]
+	zqfHB.slow_maxtime=10000(单位微妙1s=1000000us,改参数是页面加载超过这个时间会统计)
+	zqfHB.type=1（1代表redis 2代表memcache，由于memcache性能处理有点低，暂时不开放）
+	zqfHB.auth=123456(如果redis没有密码，此项不必配置，如果有密码，必须配置此项)
+	zqfHB.host=192.168.102.163
+	zqfHB.port=6379
+	使用：
+	把web里的所有文件复制到网站目录下或者放在其他目录下
+	直接执行http://localhost/web/
+	效果图：
+![](https://github.com/qieangel2013/zqfHB/blob/master/images/img1.png)
+![](https://github.com/qieangel2013/zqfHB/blob/master/images/img2.png)
 ###网页版console的shell使用如下
 	本地访问http://localhost/console/console.php
 ###hprose的使用如下
