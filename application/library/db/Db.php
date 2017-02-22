@@ -699,7 +699,7 @@ class db_Db {
                 $values[]   =  $val[1];
             }elseif(is_scalar($val) || is_null($val)) { // 过滤非标量数据
               $fields[]   =  $this->parseKey($key);
-              if(C('DB_BIND_PARAM') && 0 !== strpos($val,':')){
+              if(0 !== strpos($val,':')){
                 $name       =   md5($key);
                 $values[]   =   ':'.$name;
                 $this->bindParam($name,$val);
