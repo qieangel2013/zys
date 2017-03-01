@@ -699,6 +699,7 @@ class db_Db {
                 $values[]   =  $val[1];
             }elseif(is_scalar($val) || is_null($val)) { // 过滤非标量数据
               $fields[]   =  $this->parseKey($key);
+	      /*
               if(0 !== strpos($val,':')){
                 $name       =   md5($key);
                 $values[]   =   ':'.$name;
@@ -706,6 +707,8 @@ class db_Db {
               }else{
                 $values[]   =  $this->parseValue($val);
               }                
+	      */
+	      $values[]   =  $this->parseValue($val);
             }
         }
         $sql   =  ($replace?'REPLACE':'INSERT').' INTO '.$this->parseTable($options['table']).' ('.implode(',', $fields).') VALUES ('.implode(',', $values).')';
