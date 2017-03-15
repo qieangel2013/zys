@@ -72,13 +72,12 @@ class phpredis
     public function ping()  
     {  
         $return = null;  
-        
-       try {
-  			$return = $this->_REDIS->ping();  
+       	try {
+  		$return = $this->_REDIS->ping();  
         	return 'PONG' ? true : false;  
-		} catch (Exception $e) {
-			return false;  
-		} 
+	} catch (Exception $e) {
+		return false;  
+	} 
     }  
   
     /** 
