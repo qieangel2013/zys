@@ -54,7 +54,7 @@
                 $filename=uniqid().substr(time(),-4).'.'.$upname[1];
                 if(move_uploaded_file($_FILES['file']['tmp_name'],$dir_pre.date('Ymd').'/'.$filename)){  
                     echo "Stored in: " . $dir_pre.date('Ymd').'/'.$filename; 
-                    $fileinfo = array('type'=>'file','data'=>array('path' ']['size'],'ext'=>$upname[1]));
+                    $fileinfo = array('type'=>'file','data'=>array('path' =>'/public/uploads/'.date('Ymd').'/'.$filename,'size'=>$_FILES['file']['size'],'ext'=>$upname[1]));
                     var_dump(distributed::getInstance()->queryfile($fileinfo));
                 	}else{  
                     	echo 'Stored failed:file save error';  
