@@ -75,7 +75,7 @@ class phpredis
   
         $return = $this->_REDIS->ping();  
   
-        return 'PONG' ? true : false;  
+        return $return=='PONG' ? true : false;  
     }  
   
     /** 
