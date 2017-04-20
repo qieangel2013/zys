@@ -1,0 +1,17 @@
+{
+    "name": "qieangel2013/zys",
+    "description": "zys php Framework",
+    "type": "framework",
+    "keywords": ["swoole","yaf","thrift"],
+    "license": "Apache2",
+    "authors": [
+        {
+            "name": "qieangel2013",
+            "email": "904208360@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5"
+    },
+    "minimum-stability": "dev"
+}

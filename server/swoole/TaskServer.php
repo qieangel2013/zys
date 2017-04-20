@@ -1,22 +1,45 @@
 <?php
+/*
+|---------------------------------------------------------------
+|  Copyright (c) 2016
+|---------------------------------------------------------------
+| 作者：qieangel2013
+| 联系：qieangel2013@gmail.com
+| 版本：V1.0
+| 日期：2016/3/25
+|---------------------------------------------------------------
+*/
 class TaskServer
 {
 	public static $instance;
 	private $application;
 	public function __construct() {
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
+		define('MYPATH', dirname(APPLICATION_PATH));
 		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
-
-		$server = new swoole_server("0.0.0.0", 9503);
-
-		$server->set(
+		$config_obj=Yaf_Registry::get("config");
+		$task_config=$config_obj->task->toArray();
+		$server = new swoole_server($task_config['ServerIp'], $task_config['port']);
+		if(isset($task_config['logfile'])){
+			$server->set(
+			array(
+				'worker_num'  => 8,
+				'daemonize' => true,
+				'task_worker_num' => 8,
+				'log_file' => $task_config['logfile']
+			)
+			);
+		}else{
+			$server->set(
 			array(
 				'worker_num'  => 8,
 				'daemonize' => true,
 				'task_worker_num' => 8
 			)
-		);
+			);
+		}
+		
 
 		$server->on('Receive',array($this , 'onReceive'));
 

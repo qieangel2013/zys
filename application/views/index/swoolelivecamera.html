@@ -1,0 +1,275 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>录像页面</title>
+</head>
+<body>
+    <video autoplay id="sourcevid" style="width:320;height:240px"></video>
+    <br>
+    提示：最好用火狐测试，谷歌浏览器升级了安全策略，谷歌浏览器只能在https下才能利用html5打开摄像头。
+
+    <canvas id="output" style="display:none"></canvas>
+
+    <script type="text/javascript" charset="utf-8">
+    	var data;
+        var socket = new WebSocket("ws://"+document.domain+":9503");
+        var back = document.getElementById('output');
+        var backcontext = back.getContext('2d');
+        var video = document.getElementsByTagName('video')[0];
+        //音频
+        var audiostream;
+		var door = false;
+		var gRecorder = null;
+        var SRecorder = function(stream) {
+    config = {};
+ 
+    config.sampleBits = config.smapleBits || 8;
+    config.sampleRate = config.sampleRate || (44100 / 6);
+ 
+    var context = new AudioContext();
+    var audioInput = context.createMediaStreamSource(stream);
+    var recorder = context.createScriptProcessor(4096, 1, 1);
+ 
+    var audioData = {
+        size: 0          //录音文件长度
+        , buffer: []     //录音缓存
+        , inputSampleRate: context.sampleRate    //输入采样率
+        , inputSampleBits: 16       //输入采样数位 8, 16
+        , outputSampleRate: config.sampleRate    //输出采样率
+        , oututSampleBits: config.sampleBits       //输出采样数位 8, 16
+        , clear: function() {
+            this.buffer = [];
+            this.size = 0;
+        }
+        , input: function (data) {
+            this.buffer.push(new Float32Array(data));
+            this.size += data.length;
+        }
+        , compress: function () { //合并压缩
+            //合并
+            var data = new Float32Array(this.size);
+            var offset = 0;
+            for (var i = 0; i < this.buffer.length; i++) {
+                data.set(this.buffer[i], offset);
+                offset += this.buffer[i].length;
+            }
+            //压缩
+            var compression = parseInt(this.inputSampleRate / this.outputSampleRate);
+            var length = data.length / compression;
+            console.log(length);
+            var result = new Float32Array(parseInt(length));
+            var index = 0, j = 0;
+            while (index < length) {
+                result[index] = data[j];
+                j += compression;
+                index++;
+            }
+            return result;
+        }
+        , encodeWAV: function () {
+            var sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
+            var sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits);
+            var bytes = this.compress();
+            var dataLength = bytes.length * (sampleBits / 8);
+            var buffer = new ArrayBuffer(44 + dataLength);
+            var data = new DataView(buffer);
+ 
+            var channelCount = 1;//单声道
+            var offset = 0;
+ 
+            var writeString = function (str) {
+                for (var i = 0; i < str.length; i++) {
+                    data.setUint8(offset + i, str.charCodeAt(i));
+                }
+            };
+            
+            // 资源交换文件标识符 
+            writeString('RIFF'); offset += 4;
+            // 下个地址开始到文件尾总字节数,即文件大小-8 
+            data.setUint32(offset, 36 + dataLength, true); offset += 4;
+            // WAV文件标志
+            writeString('WAVE'); offset += 4;
+            // 波形格式标志 
+            writeString('fmt '); offset += 4;
+            // 过滤字节,一般为 0x10 = 16 
+            data.setUint32(offset, 16, true); offset += 4;
+            // 格式类别 (PCM形式采样数据) 
+            data.setUint16(offset, 1, true); offset += 2;
+            // 通道数 
+            data.setUint16(offset, channelCount, true); offset += 2;
+            // 采样率,每秒样本数,表示每个通道的播放速度 
+            data.setUint32(offset, sampleRate, true); offset += 4;
+            // 波形数据传输率 (每秒平均字节数) 单声道×每秒数据位数×每样本数据位/8 
+            data.setUint32(offset, channelCount * sampleRate * (sampleBits / 8), true); offset += 4;
+            // 快数据调整数 采样一次占用字节数 单声道×每样本的数据位数/8 
+            data.setUint16(offset, channelCount * (sampleBits / 8), true); offset += 2;
+            // 每样本数据位数 
+            data.setUint16(offset, sampleBits, true); offset += 2;
+            // 数据标识符 
+            writeString('data'); offset += 4;
+            // 采样数据总数,即数据总大小-44 
+            data.setUint32(offset, dataLength, true); offset += 4;
+            // 写入采样数据 
+            if (sampleBits === 8) {
+                for (var i = 0; i < bytes.length; i++, offset++) {
+                    var s = Math.max(-1, Math.min(1, bytes[i]));
+                    var val = s < 0 ? s * 0x8000 : s * 0x7FFF;
+                    val = parseInt(255 / (65535 / (val + 32768)));
+                    data.setInt8(offset, val, true);
+                }
+            } else {
+                for (var i = 0; i < bytes.length; i++, offset += 2) {
+                    var s = Math.max(-1, Math.min(1, bytes[i]));
+                    data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+                }
+            }
+ 
+            return new Blob([data], { type: 'audio/wav' });
+        }
+    };
+ 
+    this.start = function () {
+        audioInput.connect(recorder);
+        recorder.connect(context.destination);
+    }
+ 
+    this.stop = function () {
+        recorder.disconnect();
+    }
+ 
+    this.getBlob = function () {
+        return audioData.encodeWAV();
+    }
+ 
+    this.clear = function() {
+        audioData.clear();
+    }
+ 
+    recorder.onaudioprocess = function (e) {
+        audioData.input(e.inputBuffer.getChannelData(0));
+    }
+};
+        var success = function(stream){
+            video.src = window.URL.createObjectURL(stream);
+            audiostream = stream;
+            var rec = new SRecorder(stream);
+            gRecorder=rec;
+        }
+
+        socket.onopen = function(){
+            draw();
+            ly_start();
+        }
+
+        var draw = function(){
+            try{
+            	//gRecorder.start();
+            	//door = true;
+                backcontext.drawImage(video,0,0, back.width, back.height);
+            }catch(e){
+                if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                    return setTimeout(draw, 100);
+                } else {
+                    throw e;
+                }
+            }
+            if(video.src){
+            	data={data:back.toDataURL("image/jpeg", 0.5),type:'video'}
+                socket.send(JSON.stringify(data));
+               // data_mic={data:gRecorder.getBlob(),type:'mic'}
+               // socket.send(JSON.stringify(data_mic));
+                //gRecorder.clear();
+                //gRecorder.stop();
+                //door = false;
+            }
+            setTimeout(draw, 100);
+        }
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        navigator.getUserMedia({video:true,audio:true}, success, console.log);
+ 	
+ 	var ly_start= function(){
+            try{
+            	//gRecorder.start();
+            	//door = true;
+            if(gRecorder!=null){
+            if(!door) {
+            	
+            		gRecorder.start();
+                	door = true;
+            	
+            }
+        }
+            }catch(e){
+                if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                    return setTimeout(ly_end, 100);
+                } else {
+                    throw e;
+                }
+            }
+            
+            setTimeout(ly_end, 100);
+        }
+        var ly_end= function(){
+            try{
+            	//gRecorder.start();
+            	//door = true;
+           if(gRecorder!=null){
+            if(door) {
+            	var sd_gRecorder=gRecorder.getBlob();
+            	blobToDataURL(sd_gRecorder, function (dataurl){
+        		data={data:dataurl,type:'mic'};
+                socket.send(JSON.stringify(data));
+                //console.log(JSON.stringify(gRecorder.getBlob()));
+                //audio.src = window.URL.createObjectURL(gRecorder.getBlob());
+                gRecorder.clear();
+                gRecorder.stop();
+                door = false;
+    			});
+            	
+            }
+        }
+            }catch(e){
+                if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                    return setTimeout(ly_start, 100);
+                } else {
+                    throw e;
+                }
+            }
+            
+            setTimeout(ly_start, 100);
+        }
+    document.onkeydown = function(e) {
+        if(e.keyCode === 65) {
+            if(!door) {
+                gRecorder.start();
+                door = true;
+            }
+        }
+    };
+ 
+    document.onkeyup = function(e) {
+        if(e.keyCode === 65) {
+            if(door) {
+            	var sd_gRecorder=gRecorder.getBlob();
+            	blobToDataURL(sd_gRecorder, function (dataurl){
+        		data={data:dataurl,type:'mic'};
+                socket.send(JSON.stringify(data));
+                //console.log(JSON.stringify(gRecorder.getBlob()));
+                //audio.src = window.URL.createObjectURL(gRecorder.getBlob());
+                gRecorder.clear();
+                gRecorder.stop();
+                door = false;
+    			});
+            	
+            }
+        }
+    }
+    function blobToDataURL(blob, callback) {
+        var a = new FileReader();
+        a.onload = function (e) { callback(e.target.result); }
+        a.readAsDataURL(blob);
+    }
+    </script>
+</body>
+</html>

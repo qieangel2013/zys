@@ -679,3 +679,34 @@ function addtask($data){
         	return preg_replace_callback('/@E(.{6}==)/', function($r){return base64_decode($r[1]);},$str);
     }
 }
+//trance
+function trace($value='[yaf]',$label='',$level='DEBUG',$record=false) {
+    static $_trace =  array();
+    $config_obj=Yaf_Registry::get("config");
+    $log_config=$config_obj->log->toArray();
+    $record=isset($log_config['record'])?$log_config['record']:FALSE;
+    if('[yaf]' === $value){ // 获取trace信息
+        return $_trace;
+    }else{
+        $info   =   ($label?$label.':':'').print_r($value,true);
+        if($record) {
+            Log::write($info,$level);
+        }
+        if('ERR' == $level) {// 抛出异常
+            throw new Exception($info);
+        }
+        $level  =   strtoupper($level);
+        if(!isset($_trace[$level])) {
+                $_trace[$level] =   array();
+            }
+        $_trace[$level][]   = $info;
+
+    }
+}
+//log
+//第一个参数是要打印的内容
+//第二各参数是生成日志文件名
+//第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
+function logs($message,$destination='',$level='DEBUG'){
+    Log::trance($message,$destination,$level);
+}

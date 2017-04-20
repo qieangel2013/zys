@@ -19,7 +19,7 @@ class db_mongo extends db_Db{
     public function __construct($config=''){
         if ( !class_exists('mongoClient') ) {
             //E(L('_NOT_SUPPERT_').':mongoClient');
-            throw new Exception('_NOT_SUPPERT_').':mongoClient');
+            throw new Exception('_NOT_SUPPERT_:mongoClient');
         }
         if(!empty($config)) {
             $this->config   =   $config;
@@ -153,7 +153,7 @@ class db_mongo extends db_Db{
      */
     public function error() {
         $this->error = $this->_mongo->lastError();
-        //trace($this->error,'','ERR');
+        trace($this->error,'','ERR');
         return $this->error;
     }
 

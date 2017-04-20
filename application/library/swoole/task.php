@@ -91,8 +91,6 @@ class swoole_task{
        }
         mysql_close($con);
     }
-        }
-        }
 	}
 	public static function savefd($fd){
 		//$where=array('id' =>37936);

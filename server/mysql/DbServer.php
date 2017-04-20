@@ -28,6 +28,7 @@ class DbServer
     protected $wait_queue_max = 100; 
     public function __construct() {
         define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
+        define('MYPATH', dirname(APPLICATION_PATH));
         $this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
         $this->application->bootstrap();
         $config_obj=Yaf_Registry::get("config");
@@ -95,12 +96,18 @@ class DbServer
      public function onStart($serv)
     {
             for ($i = 0; $i < $this->pool_size; $i++) {
-            $db = new mysqli;
-            $db->connect($this->config['host'],$this->config['user'],$this->config['pwd'],$this->config['name']);
+            $db = new swoole_mysql;
+            $db->connect(array('host' => $this->config['host'],'user' => $this->config['user'],'password' => $this->config['pwd'],'database' => $this->config['name']),function($db,$result){
+                //var_dump($result);
+                //print_r($db);
+            });
             //设置数据库编码
-            $db->query("SET NAMES '".$this->config['charset']."'");
-            $db_sock = swoole_get_mysqli_sock($db);
-            swoole_event_add($db_sock, array(&$this, 'onSQLReady'));
+            $db_sock = $db->sock;
+            //print_r($db->sock);
+            //swoole_event_add($db_sock, array(&$this, 'onSQLReady'));
+            /*$db->query("SET NAMES '".$this->config['charset']."'",function($link,$result){
+                var_dump($result);
+            });*/
             $this->idle_pool[] = array(
                 'mysqli' => $db,
                 'db_sock' => $db_sock,
@@ -116,13 +123,41 @@ class DbServer
         //$this->idle_pool=json_decode($data,true);
 
     }
-    public function onSQLReady($db_sock)
+    public function doSQL($link,$result)
     {
-        $db_res = $this->busy_pool[$db_sock];
-        $mysqli = $db_res['mysqli'];
-        $fd = $db_res['fd'];
-        $data_select=array('status' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
-        if ($result = $mysqli->reap_async_query()) {
+            $data_select=array('status' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
+            $db_sock=$link->sock;
+            $db_res = $this->busy_pool[$db_sock];
+            $mysqli = $db_res['mysqli'];
+            $fd = $db_res['fd'];
+             if($result){
+                if(is_array($result)){
+                    $data_select['result']=$result;
+                    $this->http->send($fd,json_encode($data_select));
+                }else{
+                    $data_select['result']=$link->affected_rows;
+                    $this->http->send($fd,json_encode($data_select));
+                }
+            }else{
+                $data_select['error']=1;
+                $data_select['status']='error';
+                $data_select['result']=array();
+                $this->http->send($fd,json_encode($data_select));
+            }
+            array_unshift($this->idle_pool,$db_res);
+            unset($this->busy_pool[$db_sock]);
+            //$data_select=array('status' =>'ok','error'=>0,'errormsg'=>'','result'=>'');
+            //这里可以取出一个等待请求
+            if (count($this->wait_queue) > 0) {
+                $idle_n = count($this->idle_pool);
+                for ($i = 0; $i < $idle_n; $i++) {
+                    $req = array_shift($this->wait_queue);
+                    $this->doQuery($req['fd'], $req['sql']);
+                }
+            }
+       
+        
+        /*if ($result = $mysqli->reap_async_query()) {
              if (is_object($result)){
                         $data_result=$result->fetch_all(MYSQLI_ASSOC);
                         mysqli_free_result($result);
@@ -138,19 +173,11 @@ class DbServer
            // $data_select['errormsg']=sprintf("MySQLi Error: %s\n", mysqli_error($mysqli));
             $data_select['result']=array();
             $this->http->send($fd,json_encode($data_select));
-        }
+        }*/
         //release mysqli object
         //$this->idle_pool[] = $db_res;
-        array_unshift($this->idle_pool,$db_res);
-        unset($this->busy_pool[$db_sock]);
-        //这里可以取出一个等待请求
-        if (count($this->wait_queue) > 0) {
-            $idle_n = count($this->idle_pool);
-            for ($i = 0; $i < $idle_n; $i++) {
-                $req = array_shift($this->wait_queue);
-                $this->doQuery($req['fd'], $req['sql']);
-            }
-        }
+        
+        
     }
 
     public function onReceive($serv, $fd, $from_id, $data)
@@ -232,7 +259,8 @@ class DbServer
          * @var mysqli
          */
         $mysqli = $db['mysqli'];
-        for ($i = 0; $i < 2; $i++) {
+        $mysqli->query($sql,array(&$this, 'doSQL'));
+        /*for ($i = 0; $i < 2; $i++) {
             $result = $mysqli->query($sql, MYSQLI_ASYNC);
             if ($result === false) {
                 if ($mysqli->errno == 2013 or $mysqli->errno == 2006) {
@@ -242,7 +270,7 @@ class DbServer
                 }
             }
             break;
-        }
+        }*/
             $db['fd'] = $fd;
             //加入工作池中
             $this->busy_pool[$db['db_sock']] = $db;

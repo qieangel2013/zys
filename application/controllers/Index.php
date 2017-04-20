@@ -10,8 +10,56 @@ class IndexController extends Yaf_Controller_Abstract {
         ini_set("display_errors", "On");
         error_reporting(E_ALL | E_STRICT);
 	}
+	public function getpzAction() {
+        //注意：需要安装yaconf扩展，并且yaconf.directory=/tmp/yaconf 必须在php.ini里设置，不能动态加载
+        echo Yaconf::get("conf.zqf");
+        exit;
+    }
+    public function autoAction() {
+        //注意：需要安装yac扩展，用于存储共享变量，下面的实例作为高并发计数器
+        $yac = new Yac();
+        $count=$yac->get('zqf');
+        if(!$count){
+            $yac->set('zqf', 1);
+        }else{
+            $yac->set('zqf', $count+0.5);
+        }
+        echo $count;
+        exit;
+    }
+    public function distributedAction() {
+        //注意：type为sql、file，要是需要别的功能，自己定义
+        if($_FILES){
+        $sql = array('type'=>'sql','data'=>'show tables');
+        var_dump(distributed::getInstance()->query($sql));
+            $dir_pre=MYPATH.'/public/uploads/';
+            if(!is_dir($dir_pre.date('Ymd'))){
+                mkdir($dir_pre.date('Ymd'),0777,true);
+            }
+            if(is_uploaded_file($_FILES['file']['tmp_name'])){ 
+                $upname=explode('.',$_FILES['file']['name']);
+                $filename=uniqid().substr(time(),-4).'.'.$upname[1];
+                if(move_uploaded_file($_FILES['file']['tmp_name'],$dir_pre.date('Ymd').'/'.$filename)){  
+                    echo "Stored in: " . $dir_pre.date('Ymd').'/'.$filename; 
+                    $fileinfo = array('type'=>'file','data'=>array('path' =>'/public/uploads/'.date('Ymd').'/'.$filename,'size'=>$_FILES['file']['size'],'ext'=>$upname[1]));
+                    var_dump(distributed::getInstance()->queryfile($fileinfo));
+                }else{  
+                    echo 'Stored failed:file save error';  
+                }  
+            }else{
+                echo 'Stored failed:no post ';  
+            }
+       }
+       
+       //exit;
+       //distributed::getInstance()->close();
+    }
 	public function indexAction() {
     	$where=array('id' =>37936);
+        //第一个参数是要打印的内容
+        //第二各参数是生成日志文件名
+        //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
+        logs('zas');
    		//$user=new HbModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
 		//$result = $user->where($where)->select();
 		//echo $user->getlastsql();
@@ -236,4 +284,26 @@ class IndexController extends Yaf_Controller_Abstract {
         Yaf_Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolesocket.html");
     }
+    public function swoolelivecameraAction(){
+    	//直播视频录入
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $this->getView()->display("index/swoolelivecamera.html");
+    }
+    public function swooleliveAction(){
+    	//直播视频接受
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $this->getView()->display("index/swoolelive.html");
+}
+public function rpcAction(){
+    	//rpc调用
+        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        $sd=new RpcClient;
+		$datas=array('name' => 'userinfo','result'=>'{"id":3,"name"=>"zqf",email:"904208360@qq.comn"}');
+		$sd->send($datas);
+		$info=$sd->getresult();
+		print_r($info);
+		$sd->close();
+		exit;
+
+}
 }
