@@ -18,7 +18,8 @@ class phpredis
   
     //连接类型 1普通连接 2长连接  
     private $_CTYPE = 1;  
-  
+    //认证
+    private $_CAUTH = null;  
     //实例名  
     public $_REDIS = null;  
   
@@ -32,9 +33,15 @@ class phpredis
             $this->_config = Yaf_Registry::get("config");
             $config=$this->_config->redis->config->toArray();
             $this->_HOST = $config['server'];  
+            if(isset($config['auth'])){
+                 $this->_CAUTH=$config['auth'];
+            }
             $this->_PORT = $config['port']; 
         }else{
-            $this->_HOST = $rconfig['server'];  
+            $this->_HOST = $rconfig['server'];
+             if(isset($rconfig['auth'])){
+                 $this->_CAUTH=$rconfig['auth'];
+            }  
             $this->_PORT = $rconfig['port']; 
         }
         $this->_TIMEOUT = 0;  
@@ -43,7 +50,7 @@ class phpredis
   
         if (!isset($this->_REDIS)) {  
             $this->_REDIS = new Redis();  
-            $this->connect($this->_HOST, $this->_PORT, $this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
+            $this->connect($this->_HOST, $this->_PORT,$this->_CAUTH,$this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
             return $this->_REDIS; 
         }  
     }  
@@ -51,14 +58,20 @@ class phpredis
     /** 
      * 连接redis服务器 
      */  
-    private function connect($host,$port,$timeout,$dbname,$type)  
+    private function connect($host,$port,$cauth,$timeout,$dbname,$type)  
     {  
         switch ($type) {  
             case 1:  
                 $this->_REDIS->connect($host, $port, $timeout);  
+                if($cauth){
+                     $this->_REDIS->auth($cauth);
+                }
             break;  
             case 2:  
-                $this->_REDIS->pconnect($host, $port, $timeout);  
+                $this->_REDIS->pconnect($host, $port, $timeout);
+                if($cauth){
+                     $this->_REDIS->auth($cauth);
+                }  
             break;  
             default:  
             break;  
@@ -72,10 +85,13 @@ class phpredis
     public function ping()  
     {  
         $return = null;  
-  
-        $return = $this->_REDIS->ping();  
-  
-        return 'PONG' ? true : false;  
+        try {
+            $return = $this->_REDIS->ping();
+            return 'PONG' ? true : false;  
+        } catch (Exception $e) {
+            exit;
+            return false;  
+        } 
     }  
   
     /** 

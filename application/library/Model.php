@@ -670,7 +670,7 @@ class Model {
      */
     protected function _read_data($data) {
         // 检查字段映射
-        if (!empty($this->_map) && C('READ_DATA_MAP')) {
+        if (!empty($this->_map)) {
             foreach ($this->_map as $key => $val) {
                 if (isset($data[$val])) {
                     $data[$key] = $data[$val];
