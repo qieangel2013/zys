@@ -263,8 +263,7 @@ class IndexController extends Yaf_Controller_Abstract {
 	 public function uploadpicAction() {
         if (!empty($_FILES)) {
         	$config = Yaf_Application::app()->getConfig()->upload->config->toArray();
-        	$ftpconfig = Yaf_Application::app()->getConfig()->ftp->config->toArray();
-            $upload = new Upload($config, 'Ftp',$ftpconfig); 
+            $upload = new Upload($config); 
             $info = $upload->upload();
             if (!$info) {// 上传错误提示错误信息
                 echo $upload->getError();
