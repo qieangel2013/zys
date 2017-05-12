@@ -730,3 +730,11 @@ function Z($name='', $tablePrefix='',$connection='') {
         $_model[$guid] = new $class($name,$tablePrefix,$connection);
     return $_model[$guid];
 }
+/**
+ * 
+ * @return 
+ */
+function mongo($class='Mongodb') {
+    $_mongo = new $class();
+    return $_mongo;
+}
