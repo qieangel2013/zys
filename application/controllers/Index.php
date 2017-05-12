@@ -56,6 +56,15 @@ class IndexController extends Yaf_Controller_Abstract {
     }
 	public function indexAction() {
     	$where=array('id' =>37936);
+	//mongodb的使用，支持链式操作
+	 $result = mongo()->setCollection('topic')->findALL();
+         var_dump($result);
+
+		
+		
+		
+		
+		
         //第一个参数是要打印的内容
         //第二各参数是生成日志文件名
         //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
