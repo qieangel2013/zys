@@ -57,12 +57,23 @@ class IndexController extends Yaf_Controller_Abstract {
 	public function indexAction() {
     	$where=array('id' =>37936);
 	//mongodb的使用，支持链式操作
-	$result = mongo()->collection('topic')->findALL();
+	// $result = mongo()->collection('topic')->findALL();
         $result = mongo()->setcollection('topic')->findALL();
-        $result = mongo()->table('topic')->findALL();
-        $result = mongo()->table('topic')->where('topic_type','1')->find();
-        $result = mongo()->table('topic')->where('topic_type','1')->limit(2)->get();
+        //$result = mongo()->table('topic')->findALL();
+       // $result = mongo()->table('topic')->where('topic_type','1')->find();
+        //$result = mongo()->table('topic')->where('topic_type','1')->limit(2)->get();
+        //$data=[1,2,3];
+        //$result=mongo()->collection('bossd')->insert($data);
+        //$result=mongo()->collection('boss')->drop();
+        //$data=array('topic_id' =>'290');
+        //$where=array('topic_title' =>'村村UC');
+        $where=array('topic_id' =>'290');
+        //$result=mongo()->table('topic')->where($where)->set($data)->update();
+        //$result=mongo()->table('topic')->where($where)->set($data)->update();
+        //$result=mongo()->table('topic')->where($where)->delete();
+        //$result=mongo()->table('topic')->where('topic_id','290')->get();
         var_dump($result);
+
 
 		
 		
