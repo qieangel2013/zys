@@ -735,6 +735,5 @@ function Z($name='', $tablePrefix='',$connection='') {
  * @return 
  */
 function mongo($class='Mongodb') {
-    $_mongo = new $class();
-    return $_mongo;
+    return Mongodb::getInstance();
 }
