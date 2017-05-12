@@ -734,6 +734,6 @@ function Z($name='', $tablePrefix='',$connection='') {
  * 
  * @return 
  */
-function mongo($class='Mongodb') {
+function mongo() {
     return Mongodb::getInstance();
 }
