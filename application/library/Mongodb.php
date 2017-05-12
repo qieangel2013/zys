@@ -12,7 +12,7 @@ class Mongodb
     private $username;
     private $password;
     private $debug = false;
-
+    public static $instance;
     private $collection = '';
     private $selects;
     private $wheres;
@@ -1023,5 +1023,15 @@ class Mongodb
     {
         exit($e->getMessage());
     }
+    /**
+     * 实例化
+     * @param 
+     */
+    public static function getInstance() {
+		if (!self::$instance) {
+            self::$instance = new Mongodb;
+        }
+        return self::$instance;
+	}
 }
 ?>
