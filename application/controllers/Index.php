@@ -57,13 +57,12 @@ class IndexController extends Yaf_Controller_Abstract {
 	public function indexAction() {
     	$where=array('id' =>37936);
 	//mongodb的使用，支持链式操作
-	 $result = mongo()->collection('topic')->findALL();
+	$result = mongo()->collection('topic')->findALL();
         $result = mongo()->setcollection('topic')->findALL();
         $result = mongo()->table('topic')->findALL();
         $result = mongo()->table('topic')->where('topic_type','1')->find();
         $result = mongo()->table('topic')->where('topic_type','1')->limit(2)->get();
         var_dump($result);
-         var_dump($result);
 
 		
 		
