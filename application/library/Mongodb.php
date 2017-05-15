@@ -20,6 +20,7 @@ class Mongodb
     private $limit = 9999999;
     private $offset = 0;
     private $sorts;
+    private $insertid;
 
     private $manager;
     private $result;
@@ -165,6 +166,15 @@ class Mongodb
     }
 
     /**
+     * 获取inserid
+     * @return array
+     */
+    public function getInsertId()
+    {
+        return $this->insertid;
+    }
+
+    /**
      * @param mixed $collection
      */
     public function setCollection( $collection)
@@ -272,7 +282,7 @@ class Mongodb
         try {
             $wc = new \MongoDB\Driver\WriteConcern($wstring, $wtimeout);
             $bulk = new \MongoDB\Driver\BulkWrite();
-            $bulk->insert($document);
+            $this->insertid=(string)$bulk->insert($document);
             $dbc = $this->database . '.' . $this->collection;
             $result = $this->manager->executeBulkWrite($dbc, $bulk, $wc);
             $this->result = $result;
