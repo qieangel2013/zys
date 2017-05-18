@@ -77,12 +77,10 @@ class Mongodb
     {
         $this->prepareConfig();
         try {
-            $dsn = "mongodb://{$this->host}:{$this->port}/{$this->database}";
             if($this->username){
-                $options = array(
-                'username' => $this->username,
-                'password' => $this->password
-            );
+                $dsn = "mongodb://{$this->username}:{$this->password}@{$this->host}:{$this->port}/{$this->database}";
+            }else{
+                $dsn = "mongodb://{$this->host}:{$this->port}/{$this->database}";
             }
             $options = array('connect' => true,  "socketTimeoutMS" => 28800000000);
             $this->manager = new MongoDB\Driver\Manager($dsn, $options);
