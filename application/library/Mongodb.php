@@ -319,6 +319,38 @@ class Mongodb
         }
     }
 
+     /**
+     * 删
+     *
+     * @param null $id
+     * @return mixed
+     */
+    public function delid($id = null)
+    {
+        if ($id != null) {
+            $this->where('_id', new \MongoDB\BSON\ObjectID($id));
+        }else{
+             throw new \Exception('mongodbid is error!');
+        }
+        try {
+            $wstring = \MongoDB\Driver\WriteConcern::MAJORITY;
+            $wtimeout = 1000;
+            $wc = new \MongoDB\Driver\WriteConcern($wstring, $wtimeout);
+            $bulk = new \MongoDB\Driver\BulkWrite();
+            $filter = $this->wheres;
+            $deleteOptions['limit'] = 1;
+            $bulk->delete($filter, $deleteOptions);
+            $dbc = $this->database . '.' . $this->collection;
+            $result = $this->manager->executeBulkWrite($dbc, $bulk, $wc);
+            $this->result = $result;
+            //删除几条
+            return $result->getDeletedCount();
+        } catch
+        (\Exception $e) {
+            $this->showError($e);
+        }
+    }
+
     /**
      * 删
      * @param array $deleteOptions
