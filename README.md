@@ -99,6 +99,7 @@
 	录制视频页面 http://localhost/index/swoolelivecamera
 	接受视频页面 http://localhost/index/swoolelive
 	采用vue+html5实现的聊天ui界面
+	演示地址：[http://www.jduxiu.com:88/live/index/index](http://www.jduxiu.com:88/live/index/index)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ### vmstat服务器监控
 	本地访问http://localhost/vmstat/
