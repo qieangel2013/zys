@@ -103,7 +103,8 @@ http://www.jduxiu.com:88/live/index/index (演示地址)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
 ### liveim是一款直播平台，内置im聊天功能
 	由于未开源，需要授权可以获取源代码
-http://www.jduxiu.com:88/live/index/index (演示地址)
+http://www.jduxiu.com:88/live/index/index (演示地址1)
+http://www.weivq.com:88/live/index/index (演示地址2)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jt.png)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jtmobile.png)
 ### vmstat服务器监控
