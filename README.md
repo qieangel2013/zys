@@ -105,7 +105,7 @@ http://www.jduxiu.com:88/live/index/index (演示地址)
 	由于未开源，需要授权可以获取源代码
 http://www.weivq.com:88/live/index/index (演示地址1)<br/>
 http://www.jduxiu.com:88/live/index/index (演示地址2)<br/>
-http://www.weivq.com:88/public/uploads/LiveIm.apk(安卓演示)
+http://www.weivq.com:88/public/uploads/LiveIm.apk (安卓演示)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jt.png)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jtmobile.png)
 ### vmstat服务器监控
