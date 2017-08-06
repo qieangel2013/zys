@@ -108,7 +108,7 @@ http://www.weivq.com:88/public/uploads/LiveIm.apk (安卓演示)<br/>
 http://www.weivq.com:88/public/uploads/LiveImInstall.exe (pc端演示)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/windowspc.png)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/jt.png)
-![](https://github.com/qieangel2013/yaf/blob/master/public/images/jtmobile.png)
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/jtmobilet.png)
 ### vmstat服务器监控
 	本地访问http://localhost/vmstat/
 	执行如下：
