@@ -29,9 +29,9 @@ class phpredis
     //初始化  
     public function __construct($rconfig='')  
     {  
+        $this->_config = Yaf_Registry::get("config");
+        $config=$this->_config->redis->config->toArray();
         if(empty($rconfig)){
-            $this->_config = Yaf_Registry::get("config");
-            $config=$this->_config->redis->config->toArray();
             $this->_HOST = $config['server'];  
             if(isset($config['auth'])){
                  $this->_CAUTH=$config['auth'];
@@ -47,12 +47,20 @@ class phpredis
         $this->_TIMEOUT = 0;  
         $this->_DBNAME = null;  
         $this->_CTYPE = 1;  
-  
-        if (!isset($this->_REDIS)) {  
-            $this->_REDIS = new Redis();  
-            $this->connect($this->_HOST, $this->_PORT,$this->_CAUTH,$this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
-            return $this->_REDIS; 
-        }  
+        if(isset($config['cluster']['type'])&&$config['cluster']['type']){
+  			if (!isset($this->_REDIS)) {  
+  				$maparr=explode(',',$config['cluster']['map']);
+            	$this->_REDIS = new RedisCluster(NULL,$maparr);
+            	//$this->connect($this->_HOST, $this->_PORT,$this->_CAUTH,$this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
+            	return $this->_REDIS; 
+        	}
+  		}else{
+  			if (!isset($this->_REDIS)) {  
+            	$this->_REDIS = new Redis();  
+            	$this->connect($this->_HOST, $this->_PORT,$this->_CAUTH,$this->_TIMEOUT, $this->_DBNAME, $this->_CTYPE); 
+            	return $this->_REDIS; 
+        	}
+  		}  
     }  
   
     /** 
