@@ -665,7 +665,6 @@ function addtask($data){
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1); 
         curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));  
         $output=curl_exec($ch);  
-        if(curl_errno($ch))print_r(curl_error($ch));
         curl_close($ch) ; 
         if (empty($output)) { return ;}  
         $result = json_decode($output,true);  
@@ -730,4 +729,11 @@ function Z($name='', $tablePrefix='',$connection='') {
     if (!isset($_model[$guid]))
         $_model[$guid] = new $class($name,$tablePrefix,$connection);
     return $_model[$guid];
+}
+/**
+ * 
+ * @return 
+ */
+function mongo() {
+    return Mongodb::getInstance();
 }

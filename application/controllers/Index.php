@@ -56,6 +56,30 @@ class IndexController extends Yaf_Controller_Abstract {
     }
 	public function indexAction() {
     	$where=array('id' =>37936);
+	//mongodb的使用，支持链式操作
+	// $result = mongo()->collection('topic')->findALL();
+        $result = mongo()->setcollection('topic')->findALL();
+        //$result = mongo()->table('topic')->findALL();
+       // $result = mongo()->table('topic')->where('topic_type','1')->find();
+        //$result = mongo()->table('topic')->where('topic_type','1')->limit(2)->get();
+        //$data=[1,2,3];
+        //$result=mongo()->collection('bossd')->insert($data);
+        //$result=mongo()->collection('boss')->drop();
+        //$data=array('topic_id' =>'290');
+        //$where=array('topic_title' =>'村村UC');
+        $where=array('topic_id' =>'290');
+        //$result=mongo()->table('topic')->where($where)->set($data)->update();
+        //$result=mongo()->table('topic')->where($where)->set($data)->update();
+        //$result=mongo()->table('topic')->where($where)->delete();
+        //$result=mongo()->table('topic')->where('topic_id','290')->get();
+        var_dump($result);
+
+
+		
+		
+		
+		
+		
         //第一个参数是要打印的内容
         //第二各参数是生成日志文件名
         //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
@@ -263,8 +287,7 @@ class IndexController extends Yaf_Controller_Abstract {
 	 public function uploadpicAction() {
         if (!empty($_FILES)) {
         	$config = Yaf_Application::app()->getConfig()->upload->config->toArray();
-        	$ftpconfig = Yaf_Application::app()->getConfig()->ftp->config->toArray();
-            $upload = new Upload($config, 'Ftp',$ftpconfig); 
+            $upload = new Upload($config); 
             $info = $upload->upload();
             if (!$info) {// 上传错误提示错误信息
                 echo $upload->getError();

@@ -32,6 +32,8 @@
         		"qieangel2013/zys": "2.0.0.1"
 		}
 	}
+### 后台admin
+	后台admin访问http://www.51bixue.com:88/admin/user/index
 ### 分布式服务器通讯服务
 	建立多个服务器之间进行数据通信服务，服务自动连接在线服务器，支持热拔，启动服务后自动连接，无需人为干预
 	注意事项：
@@ -99,7 +101,16 @@
 	录制视频页面 http://localhost/index/swoolelivecamera
 	接受视频页面 http://localhost/index/swoolelive
 	采用vue+html5实现的聊天ui界面
+http://www.jduxiu.com:88/live/index/index (演示地址)
 ![](https://github.com/qieangel2013/yaf/blob/master/public/images/testlive.png)
+### liveim是一款直播平台，内置im聊天功能
+	由于未开源，需要授权可以获取源代码
+http://www.weivq.com:88/ (演示地址)<br/>
+http://www.weivq.com:88/public/uploads/LiveIm.apk (安卓演示)<br/>
+http://www.weivq.com:88/public/uploads/LiveImInstall.exe (pc端演示)
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/windowspc.png)
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/jt.png)
+![](https://github.com/qieangel2013/yaf/blob/master/public/images/jtmobilet.png)
 ### vmstat服务器监控
 	本地访问http://localhost/vmstat/
 	执行如下：
@@ -173,5 +184,6 @@
 
 Apache License Version 2.0 see http://www.apache.org/licenses/LICENSE-2.0.html
 ### 如果你对我的辛勤劳动给予肯定，请给我捐赠，你的捐赠是我最大的动力
+![](https://github.com/qieangel2013/zys/blob/master/public/images/pw.jpg)
 ![](https://github.com/qieangel2013/zys/blob/master/public/images/pay.png)
 [项目捐赠列表](https://github.com/qieangel2013/zys/wiki/%E9%A1%B9%E7%9B%AE%E6%8D%90%E8%B5%A0)

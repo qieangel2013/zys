@@ -5,7 +5,7 @@ class Local{
      * @var string
      */
     private $rootPath;
-    private $pathtype;
+    private $pathtype='';
     /**
      * 本地上传错误信息
      * @var string
@@ -17,7 +17,7 @@ class Local{
      */
     public function __construct($config = null){
         if(!empty($config)){
-            $this->pathtype=$config['pathtype'];
+            $this->pathtype=isset($config['pathtype'])?$config['pathtype']:'';
         }
     }
 

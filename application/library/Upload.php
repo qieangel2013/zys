@@ -8,7 +8,7 @@ class Upload {
     private $config = array(
         'mimes' => array(), //允许上传的文件MiMe类型
         'maxSize' => 0, //上传的文件大小限制 (0-不做限制)
-        'exts' => array('jpg', 'gif', 'png', 'jpeg', "bmp"), //允许上传的文件后缀
+        'exts' => array('jpg', 'gif', 'png', 'jpeg', "bmp",'pdf','doc','docx','xls','xlsx'), //允许上传的文件后缀
         'autoSub' => true, //自动子目录保存文件
         'subName' => array('date', 'Ymd'), //子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
         'rootPath' => './Uploads/', //保存根路径
@@ -39,12 +39,12 @@ class Upload {
      * @param array  $config 配置
      * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
      */
-    public function __construct($config = array(), $driver = '', $driverConfig = null) {
+    public function __construct($config = array(), $driver = 'Local', $driverConfig = null) {
         /* 获取配置 */
         $this->config = array_merge($this->config, $config);
         /* 设置上传驱动 */
+        if($driver)
         $this->setDriver($driver, $driverConfig);
-
         /* 调整配置，把字符串配置参数转换为数组 */
         if (!empty($this->config['mimes'])) {
             if (is_string($this->mimes)) {
@@ -253,8 +253,8 @@ class Upload {
      * @param array $config 驱动配置     
      */
     private function setDriver($driver = null, $config = null) {
-        $driver = $driver ? : ($this->driver ? : ftp);
-        $config = $config ? : ($this->driverConfig ? : ftp);
+        $driver = $driver ? : ($this->driver ? : 'Ftp');
+        $config = $config ? : ($this->driverConfig ? : 'Ftp');
         $class = strpos($driver, '\\') ? $driver :ucfirst(strtolower($driver));
         $this->uploader = new $class($config);
         if (!$this->uploader) {
