@@ -29,10 +29,10 @@ class DbServer
     public function __construct() {
         define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
         define('MYPATH', dirname(APPLICATION_PATH));
-        $this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+        $this->application = new \Yaf\Application(dirname(APPLICATION_PATH). "/conf/application.ini");
         $this->application->bootstrap();
-        $config_obj=Yaf_Registry::get("config");
-        $this->config=$config_obj->database->config->toArray();
+        $config_obj=\Yaf\Registry::get("config");
+        $this->config=$config_obj->tpdatabase->toArray();
         $this->Serconfig=$config_obj->DbServer->toArray();
         $this->pool_size=isset($this->Serconfig['pool_num'])?$this->Serconfig['pool_num']:20;
         $this->isasync=isset($this->Serconfig['async'])?$this->Serconfig['async']:true;
@@ -97,7 +97,7 @@ class DbServer
     {
             for ($i = 0; $i < $this->pool_size; $i++) {
             $db = new swoole_mysql;
-            $db->connect(array('host' => $this->config['host'],'user' => $this->config['user'],'password' => $this->config['pwd'],'database' => $this->config['name']),function($db,$result){
+            $db->connect(array('host' => $this->config['hostname'],'user' => $this->config['username'],'password' => $this->config['password'],'database' => $this->config['database']),function($db,$result){
                 //var_dump($result);
                 //print_r($db);
             });
@@ -223,7 +223,8 @@ class DbServer
     {
          if (!self::$link) {
             self::$link = new mysqli;
-            self::$link->connect($this->config['host'],$this->config['user'],$this->config['pwd'],$this->config['name']);
+            
+            self::$link->connect($this->config['hostname'],$this->config['username'],$this->config['password'],$this->config['database']);
             //设置数据库编码
             self::$link->query("SET NAMES '".$this->config['charset']."'");
         }

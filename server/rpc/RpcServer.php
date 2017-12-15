@@ -23,9 +23,9 @@ function rpcserver_call(swoole_process $worker)
 	$loader->registerDefinition('Bin',  THRIFT_DIR_PATH);
 	$loader->register();
 	define('MYPATH', dirname(APPLICATION_PATH));
-	$application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+	$application = new \Yaf\Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 	$application->bootstrap();
-	$config_obj=Yaf_Registry::get("config");
+	$config_obj=\Yaf\Registry::get("config");
 	$rpc_config=$config_obj->rpc->toArray();
 	define('SERVERIP',$rpc_config['ServerIp']);
 	define('SERVERPORT',$rpc_config['port']);

@@ -21,9 +21,9 @@ class VmStatServer
 	public function __construct() {
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
 		define('MYPATH', dirname(APPLICATION_PATH));
-		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+		$this->application = new \Yaf\Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
-		$config_obj=Yaf_Registry::get("config");
+		$config_obj=\Yaf\Registry::get("config");
 		$vmstat_config=$config_obj->vmstat->toArray();
 		$this->server = new swoole_websocket_server($vmstat_config['ServerIp'], $vmstat_config['port']);
 		if(isset($vmstat_config['logfile'])){

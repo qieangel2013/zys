@@ -18,7 +18,7 @@ class SwooleLiveServer
 		$this->table = new swoole_table(1024);
 		$this->table->column('id', swoole_table::TYPE_INT, 8);       //1,2,4,8
 		$this->table->create();
-		$config_obj=Yaf_Registry::get("config");
+		$config_obj=\Yaf\Registry::get("config");
 		$live_config=$config_obj->live->toArray();
 		$server = new swoole_websocket_server($live_config['ServerIp'], $live_config['port']);
 		if(isset($live_config['logfile'])){
