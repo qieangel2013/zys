@@ -20,9 +20,9 @@ function hproseserver_call(swoole_process $worker)
 {
     define('APPLICATION_PATH', dirname(__DIR__) . "/application");
     define('MYPATH', dirname(APPLICATION_PATH));
-    $application = new Yaf_Application(dirname(APPLICATION_PATH) . "/conf/application.ini");
+    $application = new \Yaf\Application(dirname(APPLICATION_PATH) . "/conf/application.ini");
     $application->bootstrap();
-    $config_obj    = Yaf_Registry::get("config");
+    $config_obj    = \Yaf\Registry::get("config");
     $hprose_config = $config_obj->hprose->toArray();
     $server        = new Server("tcp://" . $hprose_config['ServerIp'] . ":" . $hprose_config['port']);
     $server->setErrorTypes(E_ALL);

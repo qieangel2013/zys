@@ -45,7 +45,7 @@ class DistributedClient
             &$this,
             'onError'
         ));
-        $config_obj         = Yaf_Registry::get("config");
+        $config_obj         = \Yaf\Registry::get("config");
         $distributed_config = $config_obj->distributed->toArray();
         $client->connect($address, $distributed_config['port']);
         $this->cur_address = $address;
