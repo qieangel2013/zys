@@ -15,6 +15,7 @@
 	9.很好的支持网页版console的shell服务
 	10.基于hprose提供rpc远程调用、推送等服务
 	11.基于zqfHB的php扩展统计php脚本执行时间的服务
+	12.zys命名空间版本 以及添加了部分thinkphp5的ORM和部分工具类
 ### Nginx 下配置
 	location / {
         if (!-e $request_filename) {
