@@ -5,7 +5,7 @@
  * 当然, 默认的控制器, 动作, 模块都是可用通过配置修改的
  * 也可以通过$dispater->setDefault*Name来修改
  */
-class WeixinController extends Yaf_Controller_Abstract {
+class WeixinController extends \Yaf\Controller_Abstract {
 
     public function init() {
         date_default_timezone_set('PRC');

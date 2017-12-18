@@ -4,7 +4,7 @@
  * 当然, 默认的控制器, 动作, 模块都是可用通过配置修改的
  * 也可以通过$dispater->setDefault*Name来修改
  */
-class IndexController extends Yaf_Controller_Abstract {
+class IndexController extends \Yaf\Controller_Abstract {
 	public function init() {
 		$this->_req = $this->getRequest();
         ini_set("display_errors", "On");
@@ -55,55 +55,16 @@ class IndexController extends Yaf_Controller_Abstract {
        //distributed::getInstance()->close();
     }
 	public function indexAction() {
-    	$where=array('id' =>37936);
-	//mongodb的使用，支持链式操作
-	// $result = mongo()->collection('topic')->findALL();
-        $result = mongo()->setcollection('topic')->findALL();
-        //$result = mongo()->table('topic')->findALL();
-       // $result = mongo()->table('topic')->where('topic_type','1')->find();
-        //$result = mongo()->table('topic')->where('topic_type','1')->limit(2)->get();
-        //$data=[1,2,3];
-        //$result=mongo()->collection('bossd')->insert($data);
-        //$result=mongo()->collection('boss')->drop();
-        //$data=array('topic_id' =>'290');
-        //$where=array('topic_title' =>'村村UC');
-        $where=array('topic_id' =>'290');
-        //$result=mongo()->table('topic')->where($where)->set($data)->update();
-        //$result=mongo()->table('topic')->where($where)->set($data)->update();
-        //$result=mongo()->table('topic')->where($where)->delete();
-        //$result=mongo()->table('topic')->where('topic_id','290')->get();
-        var_dump($result);
-
-
-		
-		
-		
-		
-		
-        //第一个参数是要打印的内容
-        //第二各参数是生成日志文件名
-        //第三个参数$level分为：EMERG，ALERT，CRIT，ERR，WARN，NOTIC，INFO，DEBUG，SQL
-        logs('zas');
-        //第一种方法
-   		//$user=new ZysModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
-		//$result = $user->where($where)->select();
-		//echo $user->getlastsql();
-		//print_r($result);
-        ////第二种方法
-        //$user=Z()->query('select * from hb_users');
-        //print_r($user);
-         //第三种方法
-   		//$user= Z('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
-		//$result = $user->where($where)->select();
-		//echo $user->getlastsql();
-		//print_r($result);
-		alert("3");
-		exit;
+        //数据库操作完全和Thinkphp5一样，版本为V5.0.12
+        $data = \think\Db::table('user')->find();
+        $data2 = \think\Db::query('select * from user limit 1');
+        dump($data);
+        dump($data2);
 	}
     public function dbtestAction() {
         ini_set("display_errors", "On");
         error_reporting(E_ALL | E_STRICT);
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $dbclient=new mysql_dbclient;
         
         //print_r($data);
@@ -118,14 +79,11 @@ class IndexController extends Yaf_Controller_Abstract {
         exit;
     }
 	public function testAction() {
-		$where=array('id' =>353);
-   		$user=new ZysModel('hb_goods');
-		$result = $user->where($where)->select();
-		print_r($result);
-		exit;
+        $data = \think\Db::table('user')->find();
+        dump($data);
 	}
 	public function diyAction() {
-		Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+		\Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $id=$this->_req->getQuery('id',1);
 		if($this->_req->isPost()){
             $this->diy = new DiyModel();
@@ -286,7 +244,7 @@ class IndexController extends Yaf_Controller_Abstract {
 	//图片上传
 	 public function uploadpicAction() {
         if (!empty($_FILES)) {
-        	$config = Yaf_Application::app()->getConfig()->upload->config->toArray();
+        	$config = \Yaf\Application::app()->getConfig()->upload->config->toArray();
             $upload = new Upload($config); 
             $info = $upload->upload();
             if (!$info) {// 上传错误提示错误信息
@@ -304,7 +262,7 @@ class IndexController extends Yaf_Controller_Abstract {
         return $data;
     }
     public function swoolehttpAction(){
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $where=array('id' =>37936);
         $user=new ZysModel('hb_users');//直接实例化给表名就行了，其他跟操作thinkphp一样
         $result = $user->where($where)->select();
@@ -313,22 +271,22 @@ class IndexController extends Yaf_Controller_Abstract {
          echo json_encode($result);//返回结果{"id":37936}
     }
     public function swoolesocketAction(){
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolesocket.html");
     }
     public function swoolelivecameraAction(){
     	//直播视频录入
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolelivecamera.html");
     }
     public function swooleliveAction(){
     	//直播视频接受
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $this->getView()->display("index/swoolelive.html");
 }
 public function rpcAction(){
     	//rpc调用
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         $sd=new RpcClient;
 		$datas=array('name' => 'userinfo','result'=>'{"id":3,"name"=>"zqf",email:"904208360@qq.comn"}');
 		$sd->send($datas);
@@ -340,7 +298,7 @@ public function rpcAction(){
 }
 public function hproseAction(){
         //hprose调用
-        Yaf_Dispatcher::getInstance()->autoRender(FALSE);
+        \Yaf\Dispatcher::getInstance()->autoRender(FALSE);
         echo hprose::getInstance()->getdata();
         exit;
 

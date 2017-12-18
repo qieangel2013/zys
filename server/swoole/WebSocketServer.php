@@ -19,7 +19,7 @@ class WebSocketServer
 	private $application;
 	public function __construct() {
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
-		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+		$this->application = new \Yaf\Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
 
 		$server = new swoole_websocket_server("0.0.0.0", 9503);

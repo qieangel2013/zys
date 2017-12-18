@@ -6,7 +6,7 @@ class RpcClient {
 	private $transport;
 	public function __construct() {
 		$rpc_dir=dirname(dirname(__DIR__))."/thrift";
-		$yaf_load=Yaf_Loader::getInstance();
+		$yaf_load=\Yaf\Loader::getInstance();
 		$yaf_load->setLibraryPath($rpc_dir,true);
 		require_once $rpc_dir. "/Thrift/ClassLoader/ThriftClassLoader.php";
 		$loader = new Thrift\ClassLoader\ThriftClassLoader();
@@ -15,7 +15,7 @@ class RpcClient {
 		$loader->registerNamespace('Bin', $rpc_dir);
 		$loader->registerDefinition('Bin', $rpc_dir);
 		$loader->register();
-		$config_obj=Yaf_Registry::get("config");
+		$config_obj=\Yaf\Registry::get("config");
 		$rpc_config=$config_obj->rpc->toArray();
 		$socket = new Thrift\Transport\TSocket($rpc_config['host'],$rpc_config['port']);
 		$this->transport = new Thrift\Transport\TFramedTransport($socket);

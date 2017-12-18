@@ -32,9 +32,9 @@ class DistributedServer
         $this->table->create();
         define('APPLICATION_PATH', dirname(dirname(__DIR__)) . "/application");
         define('MYPATH', dirname(APPLICATION_PATH));
-        $this->application = new Yaf_Application(dirname(APPLICATION_PATH) . "/conf/application.ini");
+        $this->application = new \Yaf\Application(dirname(APPLICATION_PATH) . "/conf/application.ini");
         $this->application->bootstrap();
-        $config_obj         = Yaf_Registry::get("config");
+        $config_obj         = \Yaf\Registry::get("config");
         $distributed_config = $config_obj->distributed->toArray();
         $server             = new swoole_server($distributed_config['ServerIp'], $distributed_config['port'], SWOOLE_PROCESS, SWOOLE_SOCK_TCP);
         if (isset($distributed_config['logfile'])) {

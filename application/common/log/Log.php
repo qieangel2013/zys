@@ -66,7 +66,7 @@ class Log {
      * @return void
      */
     static function trance($message,$destination='',$level='ERR',$type=3,$extra='') {
-        $config_obj=Yaf_Registry::get("config");
+        $config_obj=\Yaf\Registry::get("config");
         $log_config=$config_obj->log->toArray();;
         $type = $type?$type:3;
         $log_config['record']=isset($log_config['record'])?$log_config['record']:false;

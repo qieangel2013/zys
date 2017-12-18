@@ -27,7 +27,7 @@ class Mongodb
 
     public function __construct()
     {
-    $this->_config = Yaf_Registry::get("config");
+    $this->_config = \Yaf\Registry::get("config");
     $config=$this->_config->mongodb->config->toArray();
     $this->config['username']=isset($config['user'])?$config['user']:'';
     $this->config['password']=isset($config['pwd'])?$config['pwd']:'';

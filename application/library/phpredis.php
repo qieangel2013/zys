@@ -29,7 +29,7 @@ class phpredis
     //初始化  
     public function __construct($rconfig='')  
     {  
-        $this->_config = Yaf_Registry::get("config");
+        $this->_config = \Yaf\Registry::get("config");
         $config=$this->_config->redis->config->toArray();
         if(empty($rconfig)){
             $this->_HOST = $config['server'];  

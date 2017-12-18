@@ -5,7 +5,7 @@ class distributed
     public static $instance;
     public function __construct() {
         $this->client = new swoole_client(SWOOLE_SOCK_TCP);
-        $config_obj=Yaf_Registry::get("config");
+        $config_obj=\Yaf\Registry::get("config");
         $distributed_config=$config_obj->distributed->toArray();
         $localinfo=swoole_get_local_ip();
           if (!$this->client->connect(current($localinfo),$distributed_config['port'], -1))

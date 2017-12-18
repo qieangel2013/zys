@@ -15,7 +15,7 @@ class HttpServer
 			)
 		);
 		define('APPLICATION_PATH', dirname(dirname(__DIR__)). "/application");
-		$this->application = new Yaf_Application(dirname(APPLICATION_PATH). "/conf/application.ini");
+		$this->application = new \Yaf\Application(dirname(APPLICATION_PATH). "/conf/application.ini");
 		$this->application->bootstrap();
 		$http->on('Request',array($this , 'onRequest'));
 		$http->start();
@@ -27,10 +27,10 @@ class HttpServer
 		$hea['host']=str_replace(':9501','',$hea['host']);//如果端口号是80，就不用要此句代码
 			ob_start();
 			try {
-				$yaf_request = new Yaf_Request_Http($ser['request_uri']);
+				$yaf_request = new \Yaf\Request_Http($ser['request_uri']);
 				$yaf_request->setBaseUri($hea['host']);
 			    	$this->application->getDispatcher()->dispatch($yaf_request);
-			} catch ( Yaf_Exception $e ) {
+			} catch ( \Yaf\Exception $e ) {
 				//var_dump( $e );
 			}
 			$result = ob_get_contents();

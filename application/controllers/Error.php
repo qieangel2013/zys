@@ -3,30 +3,31 @@
 /**
  * 当有未捕获的异常, 则控制流会流到这里
  */
-class ErrorController extends Yaf_Controller_Abstract {
-	public $actions = array(
-		"action" => "actions/index.php"
-	);
+class ErrorController extends \Yaf\Controller_Abstract {
 
-	public function init() {
-		Yaf_Dispatcher::getInstance()->disableView();
-	}
-	public function errorAction($exception) {
-		/* error occurs */
-		switch ($exception->getCode()) {
-		case YAF_ERR_NOTFOUND_MODULE:
-		case YAF_ERR_NOTFOUND_CONTROLLER:
-		case YAF_ERR_NOTFOUND_ACTION:
-		case YAF_ERR_NOTFOUND_VIEW:
-			echo 404, ":", $exception->getMessage();
-			break;
-		default :
-			$message = $exception->getMessage();
-			echo 0, ":", $exception->getMessage();
-			break;
+	public function errorAction($exception)
+	{
+		if ($exception->getCode() > 100000) {
+			//这里可以捕获到应用内抛出的异常
+			echo $exception->getCode();
+			echo $exception->getMessage();
+			die;
 		}
-	}
-
-	public function testAction() {
+		switch ($exception->getCode()) {
+			case 404://404
+			case 515:
+			case 516:
+			case 517:
+				//输出404
+				header(getHttpStatusCode(404));
+				echo '404';
+				//dump($exception->getTrace());
+				exit();
+				break;
+			default :
+				// dump($exception->getTrace());
+				break;
+		}
+		throw $exception;
 	}
 }

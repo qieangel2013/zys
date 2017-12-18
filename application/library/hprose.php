@@ -7,7 +7,7 @@ class hprose
     }
     public static function getdata()
     {
-    	$hprose_config = Yaf_Registry::get("config")->hprose->toArray();
+    	$hprose_config = \Yaf\Registry::get("config")->hprose->toArray();
         $client = new Client("tcp://" . $hprose_config['ServerIp'] . ":" . $hprose_config['port'],false);
         return $client->zys("zys");
     }
