@@ -33,6 +33,7 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
 		// 系统常量
 		defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 		defined('APP_DEBUG') or define('APP_DEBUG', false);
+		defined('APP_PATH') or define('APP_PATH', dirname($_SERVER['SCRIPT_FILENAME']) . DS);
 		defined('ROOT_PATH') or define('ROOT_PATH', dirname(APP_PATH) . DS);
 		defined('RUNTIME_PATH') or define('RUNTIME_PATH', ROOT_PATH . 'runtime' . DS);
 		defined('LOG_PATH') or define('LOG_PATH', RUNTIME_PATH . 'log' . DS);
