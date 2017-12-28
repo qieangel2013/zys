@@ -25,7 +25,7 @@ class ErrorController extends \Yaf\Controller_Abstract {
 				exit();
 				break;
 			default :
-				// dump($exception->getTrace());
+				echo $exception->getMessage();
 				break;
 		}
 		throw $exception;

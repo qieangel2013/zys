@@ -76,7 +76,7 @@ class Db
             }
             $class = false !== strpos($options['type'], '\\') ? $options['type'] : '\\think\\db\\connector\\' . ucwords($options['type']);
             // 记录初始化信息
-            if (DEBUG) {
+            if (APP_DEBUG) {
                 Log::record('[ DB ] INIT ' . $options['type'], 'info');
             }
             if (true === $name) {
