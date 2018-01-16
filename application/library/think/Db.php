@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -10,9 +10,6 @@
 // +----------------------------------------------------------------------
 
 namespace think;
-
-use think\db\Connection;
-use think\db\Query;
 
 /**
  * Class Db
@@ -36,7 +33,8 @@ use think\db\Query;
  * @method integer update(array $data) static 更新记录
  * @method integer delete(mixed $data = null) static 删除记录
  * @method boolean chunk(integer $count, callable $callback, string $column = null) static 分块获取数据
- * @method mixed query(string $sql, array $bind = [], boolean $fetch = false, boolean $master = false, mixed $class = null) static SQL查询
+ * @method \Generator cursor(mixed $data = null) static 使用游标查找记录
+ * @method mixed query(string $sql, array $bind = [], boolean $master = false, bool $pdo = false) static SQL查询
  * @method integer execute(string $sql, array $bind = [], boolean $fetch = false, boolean $getLastInsID = false, string $sequence = null) static SQL执行
  * @method Paginator paginate(integer $listRows = 15, mixed $simple = null, array $config = []) static 分页查询
  * @method mixed transaction(callable $callback) static 执行数据库事务
@@ -44,109 +42,109 @@ use think\db\Query;
  * @method void commit() static 用于非自动提交状态下面的查询提交
  * @method void rollback() static 事务回滚
  * @method boolean batchQuery(array $sqlArray) static 批处理执行SQL语句
+ * @method string getLastInsID($sequence = null) static 获取最近插入的ID
  */
 class Db
 {
-    //  数据库连接实例
-    private static $instance = [];
-    // 查询次数
+    /**
+     * 数据库配置
+     * @var array
+     */
+    protected static $config = [];
+
+    /**
+     * 查询类名
+     * @var string
+     */
+    protected static $query;
+
+    /**
+     * 查询类自动映射
+     * @var array
+     */
+    protected static $queryMap = [
+        'mongo' => '\\think\\db\Mongo',
+    ];
+
+    /**
+     * 查询次数
+     * @var integer
+     */
     public static $queryTimes = 0;
-    // 执行次数
+
+    /**
+     * 执行次数
+     * @var integer
+     */
     public static $executeTimes = 0;
 
     /**
-     * 数据库初始化 并取得数据库类实例
-     * @static
-     * @access public
-     * @param mixed         $config 连接配置
-     * @param bool|string   $name 连接标识 true 强制重新连接
-     * @return Connection
-     * @throws Exception
+     * 缓存对象
+     * @var object
      */
-    public static function connect($config = [], $name = false)
+    protected static $cacheHandler;
+
+    public static function setConfig($config = [])
     {
-        if (false === $name) {
-            $name = md5(serialize($config));
+        self::$config = array_merge(self::$config, $config);
+    }
+
+    public static function getConfig($name = null)
+    {
+        if ($name) {
+            return isset(self::$config[$name]) ? self::$config[$name] : null;
+        } else {
+            return self::$config;
         }
-        if (true === $name || !isset(self::$instance[$name])) {
-            // 解析连接参数 支持数组和字符串
-            $options = self::parseConfig($config);
-            if (empty($options['type'])) {
-                throw new \InvalidArgumentException('Underfined db type');
-            }
-            $class = false !== strpos($options['type'], '\\') ? $options['type'] : '\\think\\db\\connector\\' . ucwords($options['type']);
-            // 记录初始化信息
-            if (APP_DEBUG) {
-                Log::record('[ DB ] INIT ' . $options['type'], 'info');
-            }
-            if (true === $name) {
-                return new $class($options);
-            } else {
-                self::$instance[$name] = new $class($options);
-            }
-        }
-        return self::$instance[$name];
+    }
+
+    public static function setQuery($query)
+    {
+        self::$query = $query;
     }
 
     /**
-     * 数据库连接参数解析
-     * @static
-     * @access private
-     * @param mixed $config
-     * @return array
+     * 字符串命名风格转换
+     * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
+     * @param string  $name 字符串
+     * @param integer $type 转换类型
+     * @param bool    $ucfirst 首字母是否大写（驼峰规则）
+     * @return string
      */
-    private static function parseConfig($config)
+    public static function parseName($name, $type = 0, $ucfirst = true)
     {
-        if (empty($config)) {
-            // $config = Config::get('database');
-            $config = \Yaf\Application::app()->getConfig()->tpdatabase->toArray();
-        } elseif (is_string($config) && false === strpos($config, '/')) {
-            // 支持读取配置参数
-            $config = \Yaf\Application::app()->getConfig()->tpdatabase->toArray();;
-        }
-        if (is_string($config)) {
-            return self::parseDsn($config);
+        if ($type) {
+            $name = preg_replace_callback('/_([a-zA-Z])/', function ($match) {
+                return strtoupper($match[1]);
+            }, $name);
+            return $ucfirst ? ucfirst($name) : lcfirst($name);
         } else {
-            return $config;
+            return strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
         }
     }
 
-    /**
-     * DSN解析
-     * 格式： mysql://username:passwd@localhost:3306/DbName?param1=val1&param2=val2#utf8
-     * @static
-     * @access private
-     * @param string $dsnStr
-     * @return array
-     */
-    private static function parseDsn($dsnStr)
+    public static function setCacheHandler($cacheHandler)
     {
-        $info = parse_url($dsnStr);
-        if (!$info) {
-            return [];
-        }
-        $dsn = [
-            'type'     => $info['scheme'],
-            'username' => isset($info['user']) ? $info['user'] : '',
-            'password' => isset($info['pass']) ? $info['pass'] : '',
-            'hostname' => isset($info['host']) ? $info['host'] : '',
-            'hostport' => isset($info['port']) ? $info['port'] : '',
-            'database' => !empty($info['path']) ? ltrim($info['path'], '/') : '',
-            'charset'  => isset($info['fragment']) ? $info['fragment'] : 'utf8',
-        ];
-
-        if (isset($info['query'])) {
-            parse_str($info['query'], $dsn['params']);
-        } else {
-            $dsn['params'] = [];
-        }
-        return $dsn;
+        self::$cacheHandler = $cacheHandler;
     }
 
-    // 调用驱动类的方法
-    public static function __callStatic($method, $params)
+    public static function getCacheHandler()
     {
-        // 自动初始化数据库
-        return call_user_func_array([self::connect(), $method], $params);
+        return self::$cacheHandler;
+    }
+
+    public static function __callStatic($method, $args)
+    {
+        if (!self::$query) {
+            $type = strtolower(self::getConfig('type'));
+
+            $class = isset(self::$queryMap[$type]) ? self::$queryMap[$type] : '\\think\\db\\Query';
+
+            self::$query = $class;
+        }
+
+        $class = self::$query;
+
+        return call_user_func_array([new $class, $method], $args);
     }
 }

@@ -11,8 +11,6 @@
 
 namespace think\db\exception;
 
-use think\exception\DbException;
-
 class DataNotFoundException extends DbException
 {
     protected $table;

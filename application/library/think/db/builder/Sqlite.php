@@ -12,6 +12,7 @@
 namespace think\db\builder;
 
 use think\db\Builder;
+use think\db\Query;
 
 /**
  * Sqlite数据库驱动
@@ -22,11 +23,14 @@ class Sqlite extends Builder
     /**
      * limit
      * @access public
+     * @param Query     $query        查询对象
+     * @param mixed     $limit
      * @return string
      */
-    public function parseLimit($limit)
+    public function parseLimit(Query $query, $limit)
     {
         $limitStr = '';
+
         if (!empty($limit)) {
             $limit = explode(',', $limit);
             if (count($limit) > 1) {
@@ -35,15 +39,17 @@ class Sqlite extends Builder
                 $limitStr .= ' LIMIT ' . $limit[0] . ' ';
             }
         }
+
         return $limitStr;
     }
 
     /**
      * 随机排序
      * @access protected
+     * @param Query     $query        查询对象
      * @return string
      */
-    protected function parseRand()
+    protected function parseRand(Query $query)
     {
         return 'RANDOM()';
     }
@@ -51,25 +57,31 @@ class Sqlite extends Builder
     /**
      * 字段和表名处理
      * @access protected
-     * @param string $key
-     * @param array  $options
+     * @param Query     $query        查询对象
+     * @param string    $key
      * @return string
      */
-    protected function parseKey($key, $options = [])
+    protected function parseKey(Query $query, $key)
     {
         $key = trim($key);
         if (strpos($key, '.')) {
             list($table, $key) = explode('.', $key, 2);
+
+            $alias = $query->getOptions('alias');
+
             if ('__TABLE__' == $table) {
-                $table = $this->query->getTable();
+                $table = $query->getOptions('table');
             }
-            if (isset($options['alias'][$table])) {
-                $table = $options['alias'][$table];
+
+            if (isset($alias[$table])) {
+                $table = $alias[$table];
             }
         }
+
         if (isset($table)) {
             $key = $table . '.' . $key;
         }
+
         return $key;
     }
 }

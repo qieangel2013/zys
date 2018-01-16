@@ -13,7 +13,7 @@ namespace think\model\relation;
 
 use think\db\Query;
 use think\Exception;
-use think\Loader;
+use think\Db;
 use think\Model;
 use think\model\Relation;
 
@@ -30,6 +30,8 @@ abstract class OneToOne extends Relation
     protected $joinType;
     // 要绑定的属性
     protected $bindAttr = [];
+    // 关联名
+    protected $relation;
 
     /**
      * 设置join类型
@@ -55,19 +57,21 @@ abstract class OneToOne extends Relation
      */
     public function eagerly(Query $query, $relation, $subRelation, $closure, $first)
     {
-        $name  = Loader::parseName(basename(str_replace('\\', '/', $query->getModel())));
+        $name  = Db::parseName(basename(str_replace('\\', '/', $query->getModel())));
         $alias = $name;
+
         if ($first) {
             $table = $query->getTable();
             $query->table([$table => $alias]);
+
             if ($query->getOptions('field')) {
                 $field = $query->getOptions('field');
                 $query->removeOption('field');
             } else {
                 $field = true;
             }
+
             $query->field($field, false, $table, $alias);
-            $field = null;
         }
 
         // 预载入封装
@@ -83,17 +87,22 @@ abstract class OneToOne extends Relation
 
         if ($closure) {
             // 执行闭包查询
-            call_user_func_array($closure, [ & $query]);
+            $closure($query);
             // 使用withField指定获取关联的字段，如
             // $query->where(['id'=>1])->withField('id,name');
             if ($query->getOptions('with_field')) {
                 $field = $query->getOptions('with_field');
                 $query->removeOption('with_field');
+            } else {
+                $field = true;
             }
         } elseif (isset($this->option['field'])) {
             $field = $this->option['field'];
+        } else {
+            $field = true;
         }
-        $query->field(isset($field) ? $field : true, false, $joinTable, $joinAlias, $relation . '__');
+
+        $query->field($field, false, $joinTable, $joinAlias, $relation . '__');
     }
 
     /**
@@ -162,17 +171,19 @@ abstract class OneToOne extends Relation
      * 保存（新增）当前关联数据对象
      * @access public
      * @param mixed $data 数据 可以使用数组 关联模型对象 和 关联对象的主键
-     * @return integer
+     * @return Model|false
      */
     public function save($data)
     {
         if ($data instanceof Model) {
             $data = $data->getData();
         }
+
+        $model = new $this->model;
         // 保存关联表数据
         $data[$this->foreignKey] = $this->parent->{$this->localKey};
-        $model                   = new $this->model;
-        return $model->save($data);
+
+        return $model->save($data) ? $model : false;
     }
 
     /**
@@ -184,6 +195,7 @@ abstract class OneToOne extends Relation
     public function setEagerlyType($type)
     {
         $this->eagerlyType = $type;
+
         return $this;
     }
 
@@ -209,7 +221,18 @@ abstract class OneToOne extends Relation
             $attr = explode(',', $attr);
         }
         $this->bindAttr = $attr;
+
         return $this;
+    }
+
+    /**
+     * 获取绑定属性
+     * @access public
+     * @return array
+     */
+    public function getBindAttr()
+    {
+        return $this->bindAttr;
     }
 
     /**
@@ -220,8 +243,7 @@ abstract class OneToOne extends Relation
      * @return integer
      */
     public function relationCount($result, $closure)
-    {
-    }
+    {}
 
     /**
      * 一对一 关联模型预查询拼装
@@ -243,13 +265,20 @@ abstract class OneToOne extends Relation
                 }
             }
         }
+
         if (isset($list[$relation])) {
             $relationModel = new $model($list[$relation]);
+            $relationModel->setParent(clone $result);
+            $relationModel->isUpdate(true);
+
             if (!empty($this->bindAttr)) {
                 $this->bindAttr($relationModel, $result, $this->bindAttr);
             }
+        } else {
+            $relationModel = null;
         }
-        $result->setAttr(Loader::parseName($relation), !isset($relationModel) ? null : $relationModel->isUpdate(true));
+
+        $result->setRelation(Db::parseName($relation), $relationModel);
     }
 
     /**
@@ -257,18 +286,17 @@ abstract class OneToOne extends Relation
      * @access protected
      * @param Model $model    关联模型对象
      * @param Model $result   父模型对象
-     * @param array $bindAttr 绑定属性
      * @return void
      * @throws Exception
      */
-    protected function bindAttr($model, &$result, $bindAttr)
+    protected function bindAttr($model, &$result)
     {
-        foreach ($bindAttr as $key => $attr) {
+        foreach ($this->bindAttr as $key => $attr) {
             $key = is_numeric($key) ? $attr : $key;
             if (isset($result->$key)) {
                 throw new Exception('bind attr has exists:' . $key);
             } else {
-                $result->setAttr($key, $model->$attr);
+                $result->setAttr($key, $model ? $model->$attr : null);
             }
         }
     }
@@ -276,7 +304,6 @@ abstract class OneToOne extends Relation
     /**
      * 一对一 关联模型预查询（IN方式）
      * @access public
-     * @param object        $model       关联模型对象
      * @param array         $where       关联预查询条件
      * @param string        $key         关联键名
      * @param string        $relation    关联名
@@ -284,31 +311,27 @@ abstract class OneToOne extends Relation
      * @param bool|\Closure $closure
      * @return array
      */
-    protected function eagerlyWhere($model, $where, $key, $relation, $subRelation = '', $closure = false)
+    protected function eagerlyWhere($where, $key, $relation, $subRelation = '', $closure = false)
     {
         // 预载入关联查询 支持嵌套预载入
         if ($closure) {
-            call_user_func_array($closure, [ & $model]);
-            if ($field = $model->getOptions('with_field')) {
-                $model->field($field)->removeOption('with_field');
+            $closure($this->query);
+
+            if ($field = $this->query->getOptions('with_field')) {
+                $this->query->field($field)->removeOption('with_field');
             }
         }
-        $list = $model->where($where)->with($subRelation)->select();
+
+        $list = $this->query->where($where)->with($subRelation)->select();
 
         // 组装模型数据
         $data = [];
+
         foreach ($list as $set) {
             $data[$set->$key] = $set;
         }
+
         return $data;
     }
 
-    /**
-     * 执行基础查询（进执行一次）
-     * @access protected
-     * @return void
-     */
-    protected function baseQuery()
-    {
-    }
 }

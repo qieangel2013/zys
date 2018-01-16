@@ -17,6 +17,17 @@ use think\Model;
 class Collection extends BaseCollection
 {
     /**
+     * 返回数组中指定的一列
+     * @param string        $column_key
+     * @param string|null   $index_key
+     * @return array
+     */
+    public function column($column_key, $index_key = null)
+    {
+        return array_column($this->toArray(), $column_key, $index_key);
+    }
+
+    /**
      * 延迟预载入关联查询
      * @access public
      * @param mixed $relation 关联
@@ -26,6 +37,7 @@ class Collection extends BaseCollection
     {
         $item = current($this->items);
         $item->eagerlyResultSet($this->items, $relation);
+
         return $this;
     }
 
@@ -42,6 +54,7 @@ class Collection extends BaseCollection
             /** @var Model $model */
             $model->hidden($hidden, $override);
         });
+
         return $this;
     }
 
@@ -57,6 +70,7 @@ class Collection extends BaseCollection
             /** @var Model $model */
             $model->visible($visible, $override);
         });
+
         return $this;
     }
 
@@ -71,8 +85,9 @@ class Collection extends BaseCollection
     {
         $this->each(function ($model) use ($append, $override) {
             /** @var Model $model */
-            $model->append($append, $override);
+            $model && $model->append($append, $override);
         });
+
         return $this;
     }
 

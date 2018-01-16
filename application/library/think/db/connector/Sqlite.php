@@ -31,6 +31,7 @@ class Sqlite extends Connection
     protected function parseDsn($config)
     {
         $dsn = 'sqlite:' . $config['database'];
+
         return $dsn;
     }
 
@@ -42,16 +43,13 @@ class Sqlite extends Connection
      */
     public function getFields($tableName)
     {
-        $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
         $sql             = 'PRAGMA table_info( ' . $tableName . ' )';
-        // 调试开始
-        $this->debug(true);
-        $pdo = $this->linkID->query($sql);
-        // 调试结束
-        $this->debug(false, $sql);
+
+        $pdo    = $this->query($sql, [], false, true);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
+
         if ($result) {
             foreach ($result as $key => $val) {
                 $val                = array_change_key_case($val);
@@ -65,6 +63,7 @@ class Sqlite extends Connection
                 ];
             }
         }
+
         return $this->fieldCase($info);
     }
 
@@ -76,20 +75,18 @@ class Sqlite extends Connection
      */
     public function getTables($dbName = '')
     {
-        $this->initConnect(true);
         $sql = "SELECT name FROM sqlite_master WHERE type='table' "
             . "UNION ALL SELECT name FROM sqlite_temp_master "
             . "WHERE type='table' ORDER BY name";
-        // 调试开始
-        $this->debug(true);
-        $pdo = $this->linkID->query($sql);
-        // 调试结束
-        $this->debug(false, $sql);
+
+        $pdo    = $this->query($sql, [], false, true);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
+
         foreach ($result as $key => $val) {
             $info[$key] = current($val);
         }
+
         return $info;
     }
 

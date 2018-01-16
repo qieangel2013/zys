@@ -11,8 +11,6 @@
 
 namespace think\db\exception;
 
-use think\exception\DbException;
-
 /**
  * PDO参数绑定异常
  */
