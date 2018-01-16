@@ -2,6 +2,7 @@
 use Test\FooModel;
 class leslieModel
 {
+	//普通DAO
 	public function test()
 	{
 		return 'test';
