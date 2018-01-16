@@ -17,7 +17,7 @@ use think\Db;
 use think\Model;
 use think\model\Relation;
 
-class MorphMany extends Relation
+class MorphOne extends Relation
 {
     // 多态字段
     protected $morphKey;
@@ -26,7 +26,7 @@ class MorphMany extends Relation
     protected $type;
 
     /**
-     * 架构函数
+     * 构造函数
      * @access public
      * @param Model  $parent    上级模型对象
      * @param string $model     模型名
@@ -48,7 +48,7 @@ class MorphMany extends Relation
      * 延迟获取关联数据
      * @param string   $subRelation 子关联名
      * @param \Closure $closure     闭包查询条件
-     * @return \think\Collection
+     * @return Model
      */
     public function getRelation($subRelation = '', $closure = null)
     {
@@ -58,14 +58,13 @@ class MorphMany extends Relation
 
         $this->baseQuery();
 
-        $list   = $this->query->relation($subRelation)->select();
-        $parent = clone $this->parent;
+        $relationModel = $this->query->relation($subRelation)->find();
 
-        foreach ($list as &$model) {
-            $model->setParent($parent);
+        if ($relationModel) {
+            $relationModel->setParent(clone $this->parent);
         }
 
-        return $list;
+        return $relationModel;
     }
 
     /**
@@ -79,7 +78,7 @@ class MorphMany extends Relation
      */
     public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
     {
-        throw new Exception('relation not support: has');
+        return $this->parent;
     }
 
     /**
@@ -119,11 +118,10 @@ class MorphMany extends Relation
         }
 
         if (!empty($range)) {
-            $where = [
+            $data = $this->eagerlyMorphToOne([
                 [$morphKey, 'in', $range],
                 [$morphType, '=', $type],
-            ];
-            $data = $this->eagerlyMorphToMany($where, $relation, $subRelation, $closure);
+            ], $relation, $subRelation, $closure);
 
             // 关联属性名
             $attr = Db::parseName($relation);
@@ -131,15 +129,14 @@ class MorphMany extends Relation
             // 关联数据封装
             foreach ($resultSet as $result) {
                 if (!isset($data[$result->$pk])) {
-                    $data[$result->$pk] = [];
-                }
-
-                foreach ($data[$result->$pk] as &$relationModel) {
+                    $relationModel = null;
+                } else {
+                    $relationModel = $data[$result->$pk];
                     $relationModel->setParent(clone $result);
                     $relationModel->isUpdate(true);
                 }
 
-                $result->setRelation($attr, $this->resultSetBuild($data[$result->$pk]));
+                $result->setRelation($attr, $relationModel);
             }
         }
     }
@@ -158,77 +155,26 @@ class MorphMany extends Relation
         $pk = $result->getPk();
 
         if (isset($result->$pk)) {
-            $key   = $result->$pk;
-            $where = [
-                [$this->morphKey, '=', $key],
+            $pk   = $result->$pk;
+            $data = $this->eagerlyMorphToOne([
+                [$this->morphKey, '=', $pk],
                 [$this->morphType, '=', $this->type],
-            ];
-            $data = $this->eagerlyMorphToMany($where, $relation, $subRelation, $closure);
+            ], $relation, $subRelation, $closure);
 
-            if (!isset($data[$key])) {
-                $data[$key] = [];
-            }
-
-            foreach ($data[$key] as &$relationModel) {
+            if (isset($data[$pk])) {
+                $relationModel = $data[$pk];
                 $relationModel->setParent(clone $result);
                 $relationModel->isUpdate(true);
+            } else {
+                $relationModel = null;
             }
 
-            $result->setRelation(Db::parseName($relation), $this->resultSetBuild($data[$key]));
+            $result->setRelation(Db::parseName($relation), $relationModel);
         }
     }
 
     /**
-     * 关联统计
-     * @access public
-     * @param Model    $result  数据对象
-     * @param \Closure $closure 闭包
-     * @return integer
-     */
-    public function relationCount($result, $closure)
-    {
-        $pk    = $result->getPk();
-        $count = 0;
-
-        if (isset($result->$pk)) {
-            if ($closure) {
-                $closur($this->query);
-            }
-
-            $count = $this->query
-                ->where([
-                    [$this->morphKey, '=', $result->$pk],
-                    [$this->morphType, '=', $this->type],
-                ])
-                ->count();
-        }
-
-        return $count;
-    }
-
-    /**
-     * 获取关联统计子查询
-     * @access public
-     * @param \Closure $closure 闭包
-     * @return string
-     */
-    public function getRelationCountQuery($closure)
-    {
-        if ($closure) {
-            $closure($this->query);
-        }
-
-        return $this->query
-            ->where([
-                [$this->morphKey, 'exp', '=' . $this->parent->getTable() . '.' . $this->parent->getPk()],
-                [$this->morphType, '=', $this->type],
-            ])
-            ->fetchSql()
-            ->count();
-    }
-
-    /**
-     * 多态一对多 关联模型预查询
+     * 多态一对一 关联模型预查询
      * @access   public
      * @param array         $where       关联预查询条件
      * @param string        $relation    关联名
@@ -236,22 +182,21 @@ class MorphMany extends Relation
      * @param bool|\Closure $closure     闭包
      * @return array
      */
-    protected function eagerlyMorphToMany($where, $relation, $subRelation = '', $closure = false)
+    protected function eagerlyMorphToOne($where, $relation, $subRelation = '', $closure = false)
     {
         // 预载入关联查询 支持嵌套预载入
-        $this->query->removeOptions('where');
-
         if ($closure) {
             $closure($this->query);
         }
 
-        $list     = $this->query->where($where)->with($subRelation)->select();
+        $list     = $this->query->where($where)->with($subRelation)->find();
         $morphKey = $this->morphKey;
 
         // 组装模型数据
         $data = [];
+
         foreach ($list as $set) {
-            $data[$set->$morphKey][] = $set;
+            $data[$set->$morphKey] = $set;
         }
 
         return $data;
@@ -268,7 +213,6 @@ class MorphMany extends Relation
         if ($data instanceof Model) {
             $data = $data->getData();
         }
-
         // 保存关联表数据
         $pk = $this->parent->getPk();
 
@@ -276,29 +220,11 @@ class MorphMany extends Relation
 
         $data[$this->morphKey]  = $this->parent->$pk;
         $data[$this->morphType] = $this->type;
-
         return $model->save($data) ? $model : false;
     }
 
     /**
-     * 批量保存当前关联数据对象
-     * @access public
-     * @param array $dataSet 数据集
-     * @return array|false
-     */
-    public function saveAll(array $dataSet)
-    {
-        $result = [];
-
-        foreach ($dataSet as $key => $data) {
-            $result[] = $this->save($data);
-        }
-
-        return empty($result) ? false : $result;
-    }
-
-    /**
-     * 执行基础查询（仅执行一次）
+     * 执行基础查询（进执行一次）
      * @access protected
      * @return void
      */
@@ -311,7 +237,6 @@ class MorphMany extends Relation
                 [$this->morphKey, '=', $this->parent->$pk],
                 [$this->morphType, '=', $this->type],
             ]);
-
             $this->baseQuery = true;
         }
     }

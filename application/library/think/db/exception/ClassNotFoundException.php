@@ -1,41 +1,32 @@
 <?php
 // +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://zjzit.cn>
+// | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
 namespace think\db\exception;
 
-class ModelNotFoundException extends DbException
+class ClassNotFoundException extends \RuntimeException
 {
-    protected $model;
-
-    /**
-     * 构造方法
-     * @param string $message
-     * @param string $model
-     */
-    public function __construct($message, $model = '', array $config = [])
+    protected $class;
+    public function __construct($message, $class = '')
     {
         $this->message = $message;
-        $this->model   = $model;
-
-        $this->setData('Database Config', $config);
+        $this->class   = $class;
     }
 
     /**
-     * 获取模型类名
+     * 获取类名
      * @access public
      * @return string
      */
-    public function getModel()
+    public function getClass()
     {
-        return $this->model;
+        return $this->class;
     }
-
 }

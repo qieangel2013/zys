@@ -1,7 +1,7 @@
 <?php
 namespace Test;
 
-class FooModel extends \think\Model
+class FooModel
 {
 	public function test()
 	{
