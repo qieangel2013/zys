@@ -11,7 +11,6 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
 		$this->config = \Yaf\Application::app()->getConfig();
 		\Yaf\Registry::set("config", $this->config);
 		$dispatcher->returnResponse(true); // 开启后，不自动加载视图
-		$dispatcher->catchException(true);  //开启异常捕获处理
 		$dispatcher->setErrorHandler([$this,"myErrorHandler"]);
 	}
 
@@ -28,7 +27,7 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
 	public function _initBase()
 	{
 		// 环境常量
-		defined('DEBUG') or define('DEBUG', false);
+		defined('APPDEBUG') or define('APPDEBUG', $this->config->application->appdebug);
 		defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 		define('IS_CGI', strpos(PHP_SAPI, 'cgi') === 0 ? 1 : 0);
 		define('IS_WIN', strstr(PHP_OS, 'WIN') ? 1 : 0);
