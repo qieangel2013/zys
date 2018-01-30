@@ -15,7 +15,8 @@
 	9.很好的支持网页版console的shell服务
 	10.基于hprose提供rpc远程调用、推送等服务
 	11.基于zqfHB的php扩展统计php脚本执行时间的服务
-	12.支持zys命名空间版本 以及添加了部分thinkphp5的ORM和部分工具类
+	12.支持命名空间、thinkphp5的ORM和部分工具类
+	13.全新多进程同步数据库连接池支持高并发，响应迅速
 ### Nginx 下配置
 	location / {
         if (!-e $request_filename) {
@@ -26,7 +27,15 @@
 	需要php以cli模式运行/server/server.php
         php server.php start
         php server.php stop
-        php server.php restart
+        php server.php restart
+### mysql同步多进程数据库连接池
+	新增mysql同步多进程数据库连接池
+	采用redis存储未及时处理的sql，针对多进程并发采用排他锁控制
+	能够自动扩容mysql客户端，根据需要自己修改，当mysql客户端处理不过来会触发扩容机制
+	实时捕获运行中的错误，会及时返回给用户，针对执行错或者sql错误都会记录日志并且把sql书写错误的会返回给用户
+	使用方法：
+	$data=querysql('select * from user');//注意：querysql是全局函数，只能在apache/php-fpm下使用
+	var_dump($data);
 ### composer 安装
 	{
     		"require": {
