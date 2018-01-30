@@ -748,3 +748,8 @@ function dump($var, $echo = true, $label = null)
 		return $output;
 	}
 }
+//添加sql到数据库连接池
+function querysql($data){
+    $mysqlobj=new mysqlpool();
+    return $mysqlobj->connect($data);
+}
