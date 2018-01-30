@@ -59,8 +59,9 @@ class IndexController extends \Yaf\Controller_Abstract {
         //数据库操作完全和Thinkphp5一样，版本为V5.0.12
         // $model = new UserModel();
         // dump($model::get(1));die;
-        $data = \think\Db::table('user')->find();
-        $data2 = \think\Db::query('select * from user limit 1');
+        //$data = \think\Db::table('user')->find();
+        //$data2 = \think\Db::query('select * from user limit 1');
+	$data=querysql('select * from user ');
         dump($data);
         dump($data2);
 	}
