@@ -255,7 +255,7 @@ class MySQLPollServer
             $connectobj=$this;
             $redisdb = new Redis();
             $redisdb->connect($this->redisconfig['host'], $this->redisconfig['port']);
-            $db->connect($this->sqlconfig,function($db,$r) use($connectobj,$redisdb,$serv,$fd){
+            $db->connect($this->sqlconfig,function($db,$r) use($connectobj,$redisdb,$serv){
                 if ($r === false) {
                      $log = array(
                                 'path' => dirname(__DIR__) .'/log/'.date('Ymd',time()).'/'.date('Ymd',time()).'.log', 
