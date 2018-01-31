@@ -36,8 +36,9 @@
 	使用方法：
 	$data=querysql('select * from user');//注意：querysql是全局函数，只能在apache/php-fpm下使用
 	var_dump($data);
-	注意：如果服务器性能好一些，建议对https://github.com/qieangel2013/zys/blob/master/server/swoole/MySQLPollServer.php这个
-	文件里的poolsize_max和dilatationpool_max适当的调大一些，这样高并发下执行会很快，如果数据库配置特别差，建议按默认的参数走
+	注意：如果服务器性能好一些，建议对https://github.com/qieangel2013/zys/blob/master/server/swoole/MySQLPollServer.php
+	这个文件里的poolsize_max和dilatationpool_max适当的调大一些，这样高并发下执行会很快，如果数据库配置特别差，
+	建议按默认的参数走
 ### composer 安装
 	{
     		"require": {
