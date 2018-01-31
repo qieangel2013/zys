@@ -6,7 +6,7 @@
 | 作者：qieangel2013
 | 联系：qieangel2013@gmail.com
 | 版本：V1.0
-| 日期：2018/1/16
+| 日期：2018/1/4
 |---------------------------------------------------------------
 */
 
@@ -128,7 +128,7 @@ class MySQLPollServer
             swoole_timer_tick($tickobj->timetick,function() use($tickobj){ //定时检查是否还有未处理的sql
                     if($tickobj->countquerysql->get()>0){
                         if($tickobj->dilatationpool->get() <= $tickobj->dilatationpool_max){
-                           $tickobj->releasedata($tickobj->server);
+                           $tickobj->releasedata($tickobj->server,1);
                            $tickobj->dilatationpool->add(1);
                         }
                     }
@@ -169,7 +169,7 @@ class MySQLPollServer
                 }
                 $this->countquerysql->add(1);
                 $this->lock->unlock();
-                $this->tasksql($serv,$fd);
+                $this->tasksql($serv);
             }catch(Exception $e){
                 $errordata=array(
                 'error' =>'Server '. $e->getMessage()
@@ -230,16 +230,16 @@ class MySQLPollServer
      * 同步步执行sql
      */
 
-    private function tasksql($serv,$fd){
+    private function tasksql($serv){
          $poolsize=$this->busy_pool_size->get();
          if($poolsize>$this->poolsize_max){
             //自动扩容
             if($poolsize>$this->poolreease_max && $this->dilatationpool->get() <= $this->dilatationpool_max){
-                $this->releasedata($serv,$fd);
+                $this->releasedata($serv);
                 $this->dilatationpool->add(1);
             }
          }else{
-            $this->releasedata($serv,$fd);
+            $this->releasedata($serv);
          }
          
         
@@ -250,7 +250,7 @@ class MySQLPollServer
     *
     *扩容处理方式
      */
-    private function releasedata($serv,$fd){
+    private function releasedata($serv,$flag=0){
             $db = new swoole_mysql;
             $connectobj=$this;
             $redisdb = new Redis();
@@ -262,13 +262,20 @@ class MySQLPollServer
                                 'content' => "时间：".date('Ymd-H:i:s',time())."\r\n错误编号为:{$db->connect_errno},错误内容为：{$db->connect_error}\r\n"
                             );
                       $connectobj->log($log);
+                      if($flag==1){
+                      	$connectobj->dilatationpool->sub(1);
+                      }
                       $errordata=array(
                         'error' =>$log['content']
                         );
                     $connectobj->msgtable->set('errno',$errordata);
+                    $db->close();
+                    $redisdb->close();
+                    $db=NULL;
+                    $redisdb=NULL;
                 }else{
                     $connectobj->busy_pool_size->add(1);
-                    $connectobj->querydata($db,$redisdb,$serv,$fd);
+                    $connectobj->querydata($db,$redisdb,$serv);
                     };
                 });
     }
@@ -277,8 +284,7 @@ class MySQLPollServer
     *扩容处理sql数据
      */
 
-    private function querydata($db,$redisdb,$serv,$fd){
-        print_r($this->msgtable->get('errno','error'));
+    private function querydata($db,$redisdb,$serv){
         $obj=$this;
         if($redisdb!=NULL){
             if($redisdb->PING()=='+PONG'){
@@ -294,7 +300,7 @@ class MySQLPollServer
                 $redisdb->close();
                 $redisdb = new Redis();
                 $redisdb->connect($this->redisconfig['host'], $this->redisconfig['port']);
-                $this->querydata($db,$redisdb,$serv,$fd);
+                $this->querydata($db,$redisdb,$serv);
             }
             $tmpdata=$redisdb->RPOP('syncsql');
             if(isset($tmpdata) && $tmpdata){
@@ -306,7 +312,7 @@ class MySQLPollServer
         }
      
         if(isset($data) && $data){
-            $db->query($data['sql'], function(swoole_mysql $db, $r) use($obj,$data,$redisdb,$serv,$fd){
+            $db->query($data['sql'], function(swoole_mysql $db, $r) use($obj,$data,$redisdb,$serv){
                     if ($r === true){
                             $return_result['success']=true;
                             $return_result['insert_id']= $db->insert_id;
@@ -317,14 +323,16 @@ class MySQLPollServer
                                 'content' => "时间：".date('Ymd-H:i:s',time())."\r\n错误编号为:{$db->errno},错误内容为：{$db->error}\r\n打印数据为:".json_encode($param)."\r\n"
                             );
                             $obj->log($log);
-                                if($db->errno == 2006 || $db->errno == 2013 ){ //断线重连
-                                    // $pool->failure();
-                                    // $pool->remove($mysqli);
-                                    // $obj->PoolData($sql,$serv,$fd,$param);
-                                }else{
-                                    $return_result['success']=false;
-                                    $return_result['error']= $db->error;
-                                }
+                            if($db->errno == 2006 || $db->errno == 2013 ){ //mysql断线处理
+                            	$redisdb->RPUSH('syncsql',json_encode($data,true));//断线后重新插入sql，防止sql丢失
+                                $db->close();
+                                $redisdb->close();
+                                $db=NULL;
+                                $redisdb=NULL;
+                                $obj->taskcount->sub(1);
+                            }
+                            $return_result['success']=false;
+                            $return_result['error']= $db->error;
                         }else{
                             $return_result['success']= true;
                             $return_result['data']=$r;
@@ -355,8 +363,8 @@ class MySQLPollServer
                             $redisdb->close();
                             $obj->taskcount->set(0);
                         }
-                        $obj->querydata($db,$redisdb,$serv,$fd);
-                        $serv->send($fd,$obj->packmes(json_encode($return_result,true)));
+                        $obj->querydata($db,$redisdb,$serv);
+                        $serv->send($data['fd'],$obj->packmes(json_encode($return_result,true)));
                                                         
                 });
         }else{
