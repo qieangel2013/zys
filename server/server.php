@@ -50,7 +50,7 @@ function asyncCaller(Generator $gen)
                 asyncCaller($gen);
                 break;
             case 'mysqlpool':
-                 foreach(glob(__DIR__.'/swoole/SwooleLiveServer.php') as $start_file)
+                 foreach(glob(__DIR__.'/swoole/MySQLPollServer.php') as $start_file)
                 {
                     exec($cmd.' '.$start_file);
                 }
